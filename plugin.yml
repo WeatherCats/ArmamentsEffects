@@ -1,0 +1,37 @@
+name: Armaments Effects
+main: kipperorigin.armamentseffects.AE_Main
+author: KipperOrigin
+version: 0.3
+
+permissions:
+  ae.main:
+    description: All Armaments Effects Permissions.
+    default: op
+    children:
+      ae.drain: true
+      ae.explode: true
+      ae.potion: true
+      ae.instakill: true
+      ae.spawn: true
+      ae.velocity: true
+  ae.drain:
+    description: Able to use Drain.
+    default: op
+  ae.explode:
+    description: Able to use Explode.
+    default: op
+  ae.potion:
+    description: Able to use all Potion Effects.
+    default: op
+  ae.instakill:
+    description: Able to use Instakill Effect.
+    default: op
+  ae.velocity:
+    description: Able to use projectile velocity.
+    default: op
+  ae.spawn:
+    description: Able to use mob spawn effect.
+    default: op
+  ae.override:
+    description: Able to override event cancels.
+    default: op

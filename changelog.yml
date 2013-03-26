@@ -1,0 +1,22 @@
+Ver 0.1
+- Release
+- Effects Added:
+  - Drain
+  - Potions
+  - Instakill
+  - Explode
+  
+Ver 0.2
+- Fixed effects working outside of pvp areas
+- Added admin override to work outside of pvp areas
+- Fixed Explosions never working
+- Effects Added:
+  - Spawn/Summon
+  - Velocity
+  
+Ver 0.3
+- Added Effect Manager
+- Velocity now works on all projectiles rather than just thrown potions
+- Effects Added
+  - Web
+  - Disarm
