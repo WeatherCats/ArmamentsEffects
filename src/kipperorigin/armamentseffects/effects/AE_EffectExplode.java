@@ -1,9 +1,9 @@
 package kipperorigin.armamentseffects.effects;
 
+import kipperorigin.armamentseffects.event.AE_DamageEvent;
+
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class AE_EffectExplode extends AE_EffectParent {
 
@@ -11,21 +11,25 @@ public class AE_EffectExplode extends AE_EffectParent {
 		Location loc = exploded.getLocation();
 		exploded.getWorld().createExplosion(loc.getX(), loc.getY()+1.5, loc.getZ(), power, false, false);
 	}
-	
+
 	@Override
-	public void run(Player player, ItemStack item, LivingEntity target, String[] arg) {
+	public void run(AE_DamageEvent event) {
+		LivingEntity target = event.getVictim();
+		String[] args = event.getArgs();
+
 		float power = 0;
-		if (arg.length == 0 || arg[0].isEmpty()) {
+		if (args.length == 0 || args[0].isEmpty()) {
 			power = 1;
-		} else if (arg.length == 1) {
+		} else if (args.length == 1) {
 			try {
-				Integer.parseInt(arg[0]);
+				Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
 				return;
 			}
-			power = Integer.parseInt(arg[0]);
+			power = Integer.parseInt(args[0]);
 		}
 		createExplosion(target, power);
 		return;
 	}
+
 }

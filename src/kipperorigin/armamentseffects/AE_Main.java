@@ -13,46 +13,54 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class AE_Main extends JavaPlugin{
+public class AE_Main extends JavaPlugin {
+
 	private final AE_EffectManager listener = new AE_EffectManager();
 	private final PluginManager pm = Bukkit.getPluginManager();
+
+	@Override
 	public void onEnable(){
-		this.pm.registerEvents(listener, this);
-		System.out.println("AE_Main Enabled!");
-		
+		pm.registerEvents(listener, this);
+
 		//drain
-		listener.registerEffect("drain", new AE_EffectDrain(this));
-		listener.registerEffect("leech", new AE_EffectDrain(this));
-		
+		AE_EffectDrain drain = new AE_EffectDrain(this);
+		listener.registerEffect("drain", drain);
+		listener.registerEffect("leech", drain);
+
 		//disarm
-		listener.registerEffect("disarm", new AE_EffectDisarm());
-		listener.registerEffect("unarm", new AE_EffectDisarm());
-		
+		AE_EffectDisarm disarm = new AE_EffectDisarm();
+		listener.registerEffect("disarm", disarm);
+		listener.registerEffect("unarm", disarm);
+
 		//explode
-		listener.registerEffect("explode", new AE_EffectExplode());
-		listener.registerEffect("boom", new AE_EffectExplode());
-		
+		AE_EffectExplode explode = new AE_EffectExplode();
+		listener.registerEffect("explode", explode);
+		listener.registerEffect("boom", explode);
+
 		//instakill
-		listener.registerEffect("instakill", new AE_EffectInstakill());
-		listener.registerEffect("slay", new AE_EffectInstakill());
-		
+		AE_EffectInstakill instakill = new AE_EffectInstakill();
+		listener.registerEffect("instakill", instakill);
+		listener.registerEffect("slay", instakill);
+
 		//potions
-		listener.registerEffect("inflict", new AE_EffectPotions());
-		listener.registerEffect("apply", new AE_EffectPotions());
-		
+		AE_EffectPotions potions = new AE_EffectPotions();
+		listener.registerEffect("inflict", potions);
+		listener.registerEffect("apply", potions);
+
 		//spawnmob
-		listener.registerEffect("spawn", new AE_EffectSpawn());
-		listener.registerEffect("summon", new AE_EffectSpawn());
-		
+		AE_EffectSpawn spawn = new AE_EffectSpawn();
+		listener.registerEffect("spawn", spawn);
+		listener.registerEffect("summon", spawn);
+
 		//velocity
-		listener.registerEffect("velocity", new AE_EffectVelocity());
-		listener.registerEffect("speed", new AE_EffectVelocity());
-		
+		AE_EffectVelocity velocity = new AE_EffectVelocity();
+		listener.registerEffect("velocity", velocity);
+		listener.registerEffect("speed", velocity);
+
 		//web
-		//drain
-		listener.registerEffect("web", new AE_EffectWeb(this));
-		listener.registerEffect("trap", new AE_EffectWeb(this));
+		AE_EffectWeb web = new AE_EffectWeb(this);
+		listener.registerEffect("web", web);
+		listener.registerEffect("trap", web);
 	}
-	public void onDisable(){
-	}
+
 }

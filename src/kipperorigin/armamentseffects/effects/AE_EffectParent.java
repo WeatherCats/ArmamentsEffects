@@ -1,22 +1,21 @@
 package kipperorigin.armamentseffects.effects;
 
-import org.bukkit.Location;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.inventory.ItemStack;
+import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.event.AE_InteractEvent;
+import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 
 public class AE_EffectParent {
 
-	public void run(Player player, ItemStack item, Location loc, String[] arg) {
-		
+	public void run(AE_DamageEvent event) {
+
 	}
-	
-	public void run(Player player, ItemStack item, Projectile projectile, String[] arg) {
-		
+
+	public void run(AE_InteractEvent event) {
+
 	}
-	
-	public void run(Player player, ItemStack item, LivingEntity target, String[] arg) {
-		
+
+	public void run(AE_ProjectileEvent event) {
+
 	}
+
 }

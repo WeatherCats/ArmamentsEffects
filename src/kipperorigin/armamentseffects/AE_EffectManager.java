@@ -5,14 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 import kipperorigin.armamentseffects.effects.AE_EffectParent;
+import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.event.AE_InteractEvent;
+import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -22,138 +25,159 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class AE_EffectManager implements Listener {
-	
+
 	public String stripColors(String line) {
 		return line.replaceAll("(\u00A7|&)[0-9A-Fa-fK-Ok-oRr]", "");
 	}
-	
+
 	Map<String, AE_EffectParent> effects = new HashMap<String, AE_EffectParent>();
-	
+
 	public void registerEffect(String name, AE_EffectParent effect) {
 		name = name.toLowerCase();
 		effects.put(name, effect);
 	}
+
 	private AE_EffectParent getEffect(String name) {
 		name = name.toLowerCase();
 		return effects.get(name);
 	}
-	
-	@EventHandler
+
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void process(EntityDamageByEntityEvent event) {
-		Entity assailant = event.getDamager();
-		
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
-		
+
+	    LivingEntity injured = (LivingEntity)event.getEntity();
+		Entity assailant = event.getDamager();
+
 		if ((assailant instanceof Projectile))
 			assailant = ((Projectile)assailant).getShooter();
-		
+
 		if (!(assailant instanceof Player))
 			return;
-		
+
 		Player damager = (Player)assailant;
-		
+
+		if (event.isCancelled() && !damager.hasPermission("ae.admin"))
+			return;
+
 		ItemStack item = damager.getItemInHand();
 		if (item == null || item.getType() == Material.AIR)
 				return;
-		
-		if (event.isCancelled() && !damager.hasPermission("ae.admin"))
-			return;
-		
-	    LivingEntity injured = (LivingEntity)event.getEntity();
-	    
-	    runEffects(damager, damager.getItemInHand(), injured);
+
+		runEvent(new AE_DamageEvent(damager, injured, event));
 	}
-	
+
 	@EventHandler
 	public void process(PlayerInteractEvent event) {
-
 		Player player = event.getPlayer();
-		
-		Location loc;
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) 
-				loc = event.getClickedBlock().getLocation().add(0, 1, 0);
-		else
-			return;
-		
+
 		if (event.isCancelled() && !player.hasPermission("ae.admin"))
 			return;
-		
-		runEffects(player, player.getItemInHand(), loc);
+
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+			return;
+
+		runEvent(new AE_InteractEvent(player, event.getClickedBlock().getLocation(), event));
 	}
-	
+
 	@EventHandler
 	public void process(ProjectileLaunchEvent event) {
 		Projectile projectile = event.getEntity();
-		
-		Player attacker = (Player)projectile.getShooter();
-		
+		LivingEntity entity = projectile.getShooter();
+
+		if (!(entity instanceof Player))
+			return;
+
+		Player attacker = (Player)entity;
+
 		if (event.isCancelled() && !attacker.hasPermission("ae.admin"))
 			return;
 
-		runEffects(attacker, attacker.getItemInHand(), projectile);
+		runEvent(new AE_ProjectileEvent(attacker, projectile, event));
 	}
-	
-	private void runEffects(Player player, ItemStack item, Location loc) {
+
+	private void runEvent(AE_DamageEvent data) {
+		ItemStack item = data.getItem();
+
 		if (!item.hasItemMeta()) return;
 		ItemMeta meta = item.getItemMeta();
 		if (!meta.hasLore()) return;
 		List<String> lore = meta.getLore();
+
 		for (String line : lore) {
 			line = stripColors(line);
-			String[] parts = line.split(" ", 2);
+
+			String[] parts = line.split(" +", 2);
 			String name = parts[0];
-			String args;
-			if(parts.length == 2)
-				args = parts[1];
-			else
-				args = "";
-			String[] arg = args.split(" ");
-			AE_EffectParent effect = this.getEffect(name);
+
+			AE_EffectParent effect = getEffect(name);
 			if (effect == null) continue;
-			effect.run(player, item, loc, arg);
+
+			String[] args;
+			if (parts.length == 2)
+				args = parts[1].split(" +");
+			else
+				args = new String[0];
+
+			data.setArgs(args);
+			effect.run(data);
 		}
 	}
-	
-	private void runEffects(Player player, ItemStack item, Projectile projectile) {
+
+	private void runEvent(AE_InteractEvent data) {
+		ItemStack item = data.getItem();
+
 		if (!item.hasItemMeta()) return;
 		ItemMeta meta = item.getItemMeta();
 		if (!meta.hasLore()) return;
 		List<String> lore = meta.getLore();
+
 		for (String line : lore) {
 			line = stripColors(line);
-			String[] parts = line.split(" ", 2);
+
+			String[] parts = line.split(" +", 2);
 			String name = parts[0];
-			String args;
-			if(parts.length == 2)
-				args = parts[1];
-			else
-				args = "";
-			String[] arg = args.split(" ");
-			AE_EffectParent effect = this.getEffect(name);
+
+			AE_EffectParent effect = getEffect(name);
 			if (effect == null) continue;
-			effect.run(player, item, projectile, arg);
+
+			String[] args;
+			if (parts.length == 2)
+				args = parts[1].split(" +");
+			else
+				args = new String[0];
+
+			data.setArgs(args);
+			effect.run(data);
 		}
 	}
-	
-	private void runEffects(Player player, ItemStack item, LivingEntity target) {
+
+	private void runEvent(AE_ProjectileEvent data) {
+		ItemStack item = data.getItem();
+
 		if (!item.hasItemMeta()) return;
 		ItemMeta meta = item.getItemMeta();
 		if (!meta.hasLore()) return;
 		List<String> lore = meta.getLore();
+
 		for (String line : lore) {
 			line = stripColors(line);
-			String[] parts = line.split(" ", 2);
+
+			String[] parts = line.split(" +", 2);
 			String name = parts[0];
-			String args;
-			if(parts.length == 2)
-				args = parts[1];
-			else
-				args = "";
-			String[] arg = args.split(" ");
-			AE_EffectParent effect = this.getEffect(name);
+
+			AE_EffectParent effect = getEffect(name);
 			if (effect == null) continue;
-			effect.run(player, item, target, arg);
+
+			String[] args;
+			if (parts.length == 2)
+				args = parts[1].split(" +");
+			else
+				args = new String[0];
+
+			data.setArgs(args);
+			effect.run(data);
 		}
 	}
 }

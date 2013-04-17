@@ -1,13 +1,12 @@
 package kipperorigin.armamentseffects.effects;
 
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import kipperorigin.armamentseffects.event.AE_DamageEvent;
 
 public class AE_EffectInstakill extends AE_EffectParent {
 
 	@Override
-	public void run(final Player player, ItemStack item, final LivingEntity target, String[] arg) {
-		target.setHealth(0);
+	public void run(AE_DamageEvent event) {
+		event.getVictim().setHealth(0);
 	}
+
 }

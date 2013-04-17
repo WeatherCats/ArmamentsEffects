@@ -5,7 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class AE_RemoveItem {
-	
+
+	@SuppressWarnings("deprecation")
 	public void removeItem(Player player) {
 		ItemStack inhand = player.getItemInHand();
 		Material mat = inhand.getType();
