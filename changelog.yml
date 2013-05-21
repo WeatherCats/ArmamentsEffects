@@ -20,3 +20,19 @@ Ver 0.3
 - Effects Added
   - Web
   - Disarm
+  
+Ver 0.4
+- Added Event System
+- Events Added
+  - Main Event
+  - Projectile Launch
+  - Damage Event
+  - Interact Event
+
+Ver 0.5
+- Fixed Instakill doublekill and missannouncing
+- Events Added
+  - Projectile Hit
+- Effects Added
+  - Sound
+  - Particle
