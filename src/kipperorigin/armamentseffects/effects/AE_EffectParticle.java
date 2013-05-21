@@ -36,7 +36,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 
 		String particle = args[0].toUpperCase();
 		try {
-			Effect localEffect1 = Effect.valueOf(particle);
+			Effect.valueOf(particle);
 		} catch (IllegalArgumentException e) {
 			player.sendMessage("Invalid Particle!");
 			return;
@@ -73,8 +73,6 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		Projectile projectile = event.getProjectile();
 		String[] args = event.getArgs();
 		Location loc = event.getProjectile().getLocation();
-		Player player = event.getPlayer();
-
 		if ((args.length == 0) || (args[0].isEmpty()))
 			return;
 		if (args.length != 2) {
@@ -83,7 +81,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 
 		String particle = args[0].toUpperCase();
 		try {
-			Effect localEffect1 = Effect.valueOf(particle);
+			Effect.valueOf(particle);
 		} catch (IllegalArgumentException e) {
 			return;
 		} catch (NullPointerException e) {
@@ -112,7 +110,6 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		LivingEntity victim = event.getVictim();
 		String[] args = event.getArgs();
 		Location loc = victim.getLocation();
-		Player player = event.getPlayer();
 
 		if ((args.length == 0) || (args[0].isEmpty()))
 			return;
@@ -122,7 +119,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 
 		String particle = args[0].toUpperCase();
 		try {
-			Effect localEffect1 = Effect.valueOf(particle);
+			Effect.valueOf(particle);
 		} catch (IllegalArgumentException e) {
 			return;
 		} catch (NullPointerException e) {
