@@ -37,5 +37,6 @@ public class AE_EffectSpawn extends AE_EffectParent {
 		}
 
 		AE_RI.removeItem(player);
+		return;
 	}
 }

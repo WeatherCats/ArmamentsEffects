@@ -4,8 +4,11 @@ import kipperorigin.armamentseffects.effects.AE_EffectDisarm;
 import kipperorigin.armamentseffects.effects.AE_EffectDrain;
 import kipperorigin.armamentseffects.effects.AE_EffectExplode;
 import kipperorigin.armamentseffects.effects.AE_EffectInstakill;
+import kipperorigin.armamentseffects.effects.AE_EffectParticle;
 import kipperorigin.armamentseffects.effects.AE_EffectPotions;
+import kipperorigin.armamentseffects.effects.AE_EffectSound;
 import kipperorigin.armamentseffects.effects.AE_EffectSpawn;
+import kipperorigin.armamentseffects.effects.AE_EffectTeleport;
 import kipperorigin.armamentseffects.effects.AE_EffectVelocity;
 import kipperorigin.armamentseffects.effects.AE_EffectWeb;
 
@@ -19,48 +22,63 @@ public class AE_Main extends JavaPlugin {
 	private final PluginManager pm = Bukkit.getPluginManager();
 
 	@Override
-	public void onEnable(){
+	public void onEnable() {
 		pm.registerEvents(listener, this);
 
-		//drain
+		// drain
 		AE_EffectDrain drain = new AE_EffectDrain(this);
 		listener.registerEffect("drain", drain);
 		listener.registerEffect("leech", drain);
 
-		//disarm
+		// disarm
 		AE_EffectDisarm disarm = new AE_EffectDisarm();
 		listener.registerEffect("disarm", disarm);
 		listener.registerEffect("unarm", disarm);
 
-		//explode
+		// explode
 		AE_EffectExplode explode = new AE_EffectExplode();
 		listener.registerEffect("explode", explode);
 		listener.registerEffect("boom", explode);
 
-		//instakill
+		// instakill
 		AE_EffectInstakill instakill = new AE_EffectInstakill();
 		listener.registerEffect("instakill", instakill);
 		listener.registerEffect("slay", instakill);
 
-		//potions
+		// potions
 		AE_EffectPotions potions = new AE_EffectPotions();
 		listener.registerEffect("inflict", potions);
 		listener.registerEffect("apply", potions);
 
-		//spawnmob
+		// sound
+		AE_EffectSound sound = new AE_EffectSound(this);
+		listener.registerEffect("playsound", sound);
+		listener.registerEffect("play", sound);
+
+		// spawnmob
 		AE_EffectSpawn spawn = new AE_EffectSpawn();
 		listener.registerEffect("spawn", spawn);
 		listener.registerEffect("summon", spawn);
 
-		//velocity
+		// velocity
 		AE_EffectVelocity velocity = new AE_EffectVelocity();
 		listener.registerEffect("velocity", velocity);
 		listener.registerEffect("speed", velocity);
 
-		//web
+		// web
 		AE_EffectWeb web = new AE_EffectWeb(this);
 		listener.registerEffect("web", web);
 		listener.registerEffect("trap", web);
+
+		// particle
+		AE_EffectParticle particle = new AE_EffectParticle(this);
+		listener.registerEffect("particle", particle);
+		listener.registerEffect("display", particle);
+
+		// disarm
+		AE_EffectTeleport teleport = new AE_EffectTeleport();
+		listener.registerEffect("teleport", teleport);
+		listener.registerEffect("move", teleport);
 	}
 
 }

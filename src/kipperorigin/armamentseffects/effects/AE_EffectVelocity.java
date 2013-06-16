@@ -1,11 +1,14 @@
 package kipperorigin.armamentseffects.effects;
 
+import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 
 import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;
 
 public class AE_EffectVelocity extends AE_EffectParent {
+
+	AE_RemoveItem AE_RI = new AE_RemoveItem();
 
 	@Override
 	public void run(AE_ProjectileEvent event) {
@@ -23,8 +26,9 @@ public class AE_EffectVelocity extends AE_EffectParent {
 		}
 
 		Vector v = projectile.getVelocity();
-		Vector z = v.multiply(new Vector(vec, (vec/2), vec));
+		Vector z = v.multiply(new Vector(vec, (vec / 2), vec));
 		projectile.setVelocity(z);
+		AE_RI.removeItem(event.getPlayer());
+		return;
 	}
-
 }

@@ -1,6 +1,7 @@
 package kipperorigin.armamentseffects.effects;
 
 import kipperorigin.armamentseffects.AE_Main;
+import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
@@ -16,27 +17,35 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
 public class AE_EffectParticle extends AE_EffectParent implements Listener {
+
 	int running;
+
 	private AE_Main plugin;
 
 	public AE_EffectParticle(AE_Main plugin) {
+
 		this.plugin = plugin;
 	}
 
+	AE_RemoveItem AE_RI = new AE_RemoveItem();
+
+	@Override
 	public void run(final AE_ProjectileEvent event) {
-		Player player = event.getPlayer();
+
+		final Player player = event.getPlayer();
 		final Projectile projectile = event.getProjectile();
 		String[] args = event.getArgs();
 
-		if ((args.length == 0) || (args[0].isEmpty()))
+		if (args.length == 0 || args[0].isEmpty())
 			return;
-		if (args.length != 2) {
+		else if (args.length != 2) {
 			return;
 		}
 
-		String particle = args[0].toUpperCase();
+		final String particle = args[0].toUpperCase();
+
 		try {
-			Effect.valueOf(particle);
+			final Effect effect = Effect.valueOf(particle);
 		} catch (IllegalArgumentException e) {
 			player.sendMessage("Invalid Particle!");
 			return;
@@ -46,6 +55,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		}
 
 		final Effect effect = Effect.valueOf(particle);
+
 		try {
 			Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
@@ -53,90 +63,101 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		}
 
 		final int data = Integer.parseInt(args[1]);
-		if (data == 0) {
+		if (data == 0)
 			return;
-		}
-		int taskId = Bukkit.getScheduler()
-				.runTaskTimer(this.plugin, new Runnable() {
-					public void run() {
-						Location loc = event.getProjectile().getLocation();
-						projectile.getWorld()
-								.playEffect(loc, effect, data, 100);
-					}
-				}, 0L, 1L).getTaskId();
-		MetadataValue x = new FixedMetadataValue(this.plugin,
-				Integer.valueOf(taskId));
+
+		final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+			@Override
+			public void run() {
+				final Location loc = event.getProjectile().getLocation();
+				projectile.getWorld().playEffect(loc, effect, data, 100);
+			}
+		}, 0L, 1L).getTaskId();
+		MetadataValue x = new FixedMetadataValue(plugin, taskId);
 		projectile.setMetadata("Data", x);
 	}
 
+	@Override
 	public void run(AE_ProjectileHitEvent event) {
-		Projectile projectile = event.getProjectile();
+		final Projectile projectile = event.getProjectile();
 		String[] args = event.getArgs();
-		Location loc = event.getProjectile().getLocation();
-		if ((args.length == 0) || (args[0].isEmpty()))
+		final Location loc = event.getProjectile().getLocation();
+		final Player player = event.getPlayer();
+
+		if (args.length == 0 || args[0].isEmpty())
 			return;
-		if (args.length != 2) {
+		else if (args.length != 2) {
 			return;
 		}
 
-		String particle = args[0].toUpperCase();
+		final String particle = args[0].toUpperCase();
+
 		try {
-			Effect.valueOf(particle);
+			final Effect effect = Effect.valueOf(particle);
 		} catch (IllegalArgumentException e) {
 			return;
 		} catch (NullPointerException e) {
 			return;
 		}
 
-		Effect effect = Effect.valueOf(particle);
+		final Effect effect = Effect.valueOf(particle);
+
 		try {
 			Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
 			return;
 		}
 
-		int data = Integer.parseInt(args[1]);
+		final int data = Integer.parseInt(args[1]);
 
 		if (projectile.hasMetadata("Data")) {
-			Bukkit.getScheduler().cancelTasks(this.plugin);
+			Bukkit.getScheduler().cancelTasks(plugin);
 		}
 
 		if (data == 0)
 			return;
 		projectile.getWorld().playEffect(loc, effect, data, 100);
+		AE_RI.removeItem(event.getPlayer());
+		return;
 	}
 
+	@Override
 	public void run(AE_DamageEvent event) {
-		LivingEntity victim = event.getVictim();
+		final LivingEntity victim = event.getVictim();
 		String[] args = event.getArgs();
-		Location loc = victim.getLocation();
+		final Location loc = victim.getLocation();
+		final Player player = event.getPlayer();
 
-		if ((args.length == 0) || (args[0].isEmpty()))
+		if (args.length == 0 || args[0].isEmpty())
 			return;
-		if (args.length != 2) {
+		else if (args.length != 2) {
 			return;
 		}
 
-		String particle = args[0].toUpperCase();
+		final String particle = args[0].toUpperCase();
+
 		try {
-			Effect.valueOf(particle);
+			final Effect effect = Effect.valueOf(particle);
 		} catch (IllegalArgumentException e) {
 			return;
 		} catch (NullPointerException e) {
 			return;
 		}
 
-		Effect effect = Effect.valueOf(particle);
+		final Effect effect = Effect.valueOf(particle);
+
 		try {
 			Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
 			return;
 		}
 
-		int data = Integer.parseInt(args[1]);
+		final int data = Integer.parseInt(args[1]);
 
 		if (data == 0)
 			return;
 		victim.getWorld().playEffect(loc, effect, data, 100);
+		AE_RI.removeItem(event.getPlayer());
+		return;
 	}
 }

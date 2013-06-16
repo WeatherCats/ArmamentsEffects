@@ -1,18 +1,20 @@
 package kipperorigin.armamentseffects.effects;
 
+import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class AE_EffectPotions extends AE_EffectParent{
+public class AE_EffectPotions extends AE_EffectParent {
+
+	AE_RemoveItem AE_RI = new AE_RemoveItem();
 
 	@Override
 	public void run(AE_DamageEvent event) {
 		LivingEntity target = event.getVictim();
 		String[] args = event.getArgs();
-
 		String potion;
 		int amp = 1;
 		int time = 5;
@@ -41,7 +43,8 @@ public class AE_EffectPotions extends AE_EffectParent{
 		if (type.isInstant())
 			time = 1;
 
-		target.addPotionEffect(new PotionEffect(type, time*20, amp-1));
+		target.addPotionEffect(new PotionEffect(type, time * 20, amp - 1));
+		AE_RI.removeItem(event.getPlayer());
+		return;
 	}
-
 }

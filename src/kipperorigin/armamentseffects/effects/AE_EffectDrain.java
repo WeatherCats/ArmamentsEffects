@@ -1,18 +1,22 @@
 package kipperorigin.armamentseffects.effects;
 
 import kipperorigin.armamentseffects.AE_Main;
+import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-public class AE_EffectDrain extends AE_EffectParent{
+public class AE_EffectDrain extends AE_EffectParent {
 
 	private AE_Main plugin;
+
 	public AE_EffectDrain(AE_Main plugin) {
 		this.plugin = plugin;
 	}
+
+	AE_RemoveItem AE_RI = new AE_RemoveItem();
 
 	@Override
 	public void run(AE_DamageEvent event) {
@@ -26,11 +30,11 @@ public class AE_EffectDrain extends AE_EffectParent{
 				@Override
 				public void run() {
 					int healx = target.getHealth();
-					int healy = heal-healx;
-					if (player.getHealth()+healy > 20)
+					int healy = heal - healx;
+					if (player.getHealth() + healy > 20)
 						player.setHealth(20);
 					else
-						player.setHealth(player.getHealth()+healy);
+						player.setHealth(player.getHealth() + healy);
 				}
 			}, 1L);
 		} else if (args.length == 1) {
@@ -40,10 +44,12 @@ public class AE_EffectDrain extends AE_EffectParent{
 				return;
 			}
 			int amp = Integer.parseInt(args[0]);
-			if (player.getHealth()+amp > 20)
+			if (player.getHealth() + amp > 20)
 				player.setHealth(20);
 			else
 				player.setHealth(player.getHealth() + amp);
 		}
+		AE_RI.removeItem(event.getPlayer());
+		return;
 	}
 }

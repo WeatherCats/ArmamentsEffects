@@ -1,6 +1,7 @@
 package kipperorigin.armamentseffects.effects;
 
 import kipperorigin.armamentseffects.AE_Main;
+import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 
 import org.bukkit.Bukkit;
@@ -11,12 +12,15 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-public class AE_EffectWeb extends AE_EffectParent{
+public class AE_EffectWeb extends AE_EffectParent {
 
 	private AE_Main plugin;
+
 	public AE_EffectWeb(AE_Main plugin) {
 		this.plugin = plugin;
 	}
+
+	AE_RemoveItem AE_RI = new AE_RemoveItem();
 
 	private String color(String message) {
 		return ChatColor.translateAlternateColorCodes('&', message);
@@ -65,14 +69,16 @@ public class AE_EffectWeb extends AE_EffectParent{
 			y = null;
 
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-		    @Override
-		    public void run() {
-		    	if (x != null)
-		    		x.setType(matx);
-		    	if (y != null)
-		    		y.setType(maty);
-		    }
-		}, timer*20L);
+			@Override
+			public void run() {
+				if (x != null)
+					x.setType(matx);
+				if (y != null)
+					y.setType(maty);
+			}
+		}, timer * 20L);
+		AE_RI.removeItem(event.getPlayer());
+		return;
 	}
 
 }
