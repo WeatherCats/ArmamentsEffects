@@ -8,6 +8,7 @@ import kipperorigin.armamentseffects.effects.AE_EffectParticle;
 import kipperorigin.armamentseffects.effects.AE_EffectPotions;
 import kipperorigin.armamentseffects.effects.AE_EffectSound;
 import kipperorigin.armamentseffects.effects.AE_EffectSpawn;
+import kipperorigin.armamentseffects.effects.AE_EffectStun;
 import kipperorigin.armamentseffects.effects.AE_EffectTeleport;
 import kipperorigin.armamentseffects.effects.AE_EffectVelocity;
 import kipperorigin.armamentseffects.effects.AE_EffectWeb;
@@ -79,6 +80,11 @@ public class AE_Main extends JavaPlugin {
 		AE_EffectTeleport teleport = new AE_EffectTeleport();
 		listener.registerEffect("teleport", teleport);
 		listener.registerEffect("move", teleport);
+
+		// stun
+		AE_EffectStun stun = new AE_EffectStun();
+		listener.registerEffect("stun", stun);
+		listener.registerEffect("freeze", stun);
 	}
 
 }
