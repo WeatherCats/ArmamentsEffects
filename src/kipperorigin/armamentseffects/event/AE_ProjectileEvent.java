@@ -24,4 +24,7 @@ public class AE_ProjectileEvent extends AE_Event {
 		return event;
 	}
 
+	public void cancel() {
+		event.setCancelled(true);
+	}
 }

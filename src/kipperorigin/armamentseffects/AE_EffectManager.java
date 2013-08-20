@@ -65,12 +65,31 @@ public class AE_EffectManager implements Listener {
 
 		Player damager = (Player) assailant;
 
-		if (event.isCancelled() && !damager.hasPermission("ae.admin"))
-			return;
-
 		ItemStack item = damager.getItemInHand();
+
+		if (!item.hasItemMeta())
+			return;
+		ItemMeta meta = item.getItemMeta();
+		if (!meta.hasLore())
+			return;
+		List<String> lore = meta.getLore();
+
+		String exempt = "false";
+
+		for (String line : lore) {
+			line = stripColors(line);
+			if ((line.contains("play")) || (line.contains("playsound"))) {
+				exempt = "true";
+				break;
+			}
+		}
+
 		if (item.getType().equals(Material.BOW) && (y == 1))
 			return;
+
+		if (event.isCancelled() && !damager.hasPermission("ae.admin") && !exempt.equalsIgnoreCase("false"))
+			return;
+
 		if ((assailant instanceof Projectile)) {
 			int x = damager.getInventory().first(Material.ARROW);
 			item = damager.getInventory().getItem(x);

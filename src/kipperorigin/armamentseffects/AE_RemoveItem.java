@@ -33,6 +33,7 @@ public class AE_RemoveItem {
 			String[] partsx = linex.split(" +", 2);
 			String name = parts[0];
 			if (name.equalsIgnoreCase("Durability") || name.equalsIgnoreCase("Uses")) {
+				System.out.println("debug1");
 				if (parts.length != 2) {
 					return;
 				} else {
@@ -44,11 +45,13 @@ public class AE_RemoveItem {
 					}
 					x = Integer.parseInt(parts[1]);
 					x = x - 1;
+					System.out.println("debug2");
 					if (x <= 0) {
 						player.setItemInHand(null);
 					} else {
+						System.out.println("debug3");
 						String num = String.valueOf(x);
-						lore.set(i, color("&r" + partsx[i] + " " + num));
+						lore.set(i, color("&r" + partsx[0] + " " + num));
 						meta.setLore(lore);
 						item.setItemMeta(meta);
 					}

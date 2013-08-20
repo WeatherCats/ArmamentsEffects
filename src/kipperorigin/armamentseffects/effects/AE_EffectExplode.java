@@ -25,7 +25,6 @@ public class AE_EffectExplode extends AE_EffectParent {
 	public void run(AE_DamageEvent event) {
 		LivingEntity target = event.getVictim();
 		String[] args = event.getArgs();
-
 		float power = 0;
 		if (args.length == 0 || args[0].isEmpty()) {
 			power = 1;
@@ -38,7 +37,7 @@ public class AE_EffectExplode extends AE_EffectParent {
 			power = Integer.parseInt(args[0]);
 		}
 		createExplosion(target, power);
-		if (power < 25)
+		if (power > 25)
 			return;
 		AE_RI.removeItem(event.getPlayer());
 		return;

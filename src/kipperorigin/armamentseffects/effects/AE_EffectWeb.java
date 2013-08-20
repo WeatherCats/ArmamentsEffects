@@ -52,6 +52,18 @@ public class AE_EffectWeb extends AE_EffectParent {
 
 		if (matx != null) {
 			x = loc.getBlock();
+			if (matx.equals(Material.WEB))
+				return;
+			if (matx.equals(Material.SIGN))
+				return;
+			if (matx.equals(Material.TORCH))
+				return;
+			if (matx.equals(Material.CHEST))
+				return;
+			if (matx.equals(Material.WOOD_DOOR))
+				return;
+			if (matx.equals(Material.LADDER))
+				return;
 			x.setType(Material.WEB);
 			if (target instanceof Player) {
 				((Player) target).sendMessage(color("&4You've been caught in a web!"));
@@ -62,6 +74,18 @@ public class AE_EffectWeb extends AE_EffectParent {
 
 		if (maty != null) {
 			y = loc2.getBlock();
+			if (maty.equals(Material.WEB))
+				return;
+			if (maty.equals(Material.SIGN))
+				return;
+			if (maty.equals(Material.TORCH))
+				return;
+			if (maty.equals(Material.CHEST))
+				return;
+			if (maty.equals(Material.WOOD_DOOR))
+				return;
+			if (maty.equals(Material.LADDER))
+				return;
 			y.setType(Material.WEB);
 			if (target instanceof Player && !messageSent)
 				((Player) target).sendMessage(color("&4You've been caught in a web!"));

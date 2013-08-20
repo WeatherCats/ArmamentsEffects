@@ -5,7 +5,10 @@ import kipperorigin.armamentseffects.effects.AE_EffectDrain;
 import kipperorigin.armamentseffects.effects.AE_EffectExplode;
 import kipperorigin.armamentseffects.effects.AE_EffectInstakill;
 import kipperorigin.armamentseffects.effects.AE_EffectParticle;
+import kipperorigin.armamentseffects.effects.AE_EffectPotionRightClick;
 import kipperorigin.armamentseffects.effects.AE_EffectPotions;
+import kipperorigin.armamentseffects.effects.AE_EffectRemoveAilment;
+import kipperorigin.armamentseffects.effects.AE_EffectShoot;
 import kipperorigin.armamentseffects.effects.AE_EffectSound;
 import kipperorigin.armamentseffects.effects.AE_EffectSpawn;
 import kipperorigin.armamentseffects.effects.AE_EffectStun;
@@ -46,10 +49,21 @@ public class AE_Main extends JavaPlugin {
 		listener.registerEffect("instakill", instakill);
 		listener.registerEffect("slay", instakill);
 
+		// instapotion
+		AE_EffectPotionRightClick potright = new AE_EffectPotionRightClick();
+		listener.registerEffect("Instapot", potright);
+		listener.registerEffect("Poteffect", potright);
+
 		// potions
 		AE_EffectPotions potions = new AE_EffectPotions();
 		listener.registerEffect("inflict", potions);
 		listener.registerEffect("apply", potions);
+
+		// shoot
+		AE_EffectShoot shoot = new AE_EffectShoot();
+		listener.registerEffect("shoot", shoot);
+		listener.registerEffect("launch", shoot);
+		listener.registerEffect("cast", shoot);
 
 		// sound
 		AE_EffectSound sound = new AE_EffectSound(this);
@@ -60,6 +74,11 @@ public class AE_Main extends JavaPlugin {
 		AE_EffectSpawn spawn = new AE_EffectSpawn();
 		listener.registerEffect("spawn", spawn);
 		listener.registerEffect("summon", spawn);
+
+		// stun
+		AE_EffectStun stun = new AE_EffectStun();
+		listener.registerEffect("stun", stun);
+		listener.registerEffect("freeze", stun);
 
 		// velocity
 		AE_EffectVelocity velocity = new AE_EffectVelocity();
@@ -76,15 +95,15 @@ public class AE_Main extends JavaPlugin {
 		listener.registerEffect("particle", particle);
 		listener.registerEffect("display", particle);
 
-		// disarm
+		// remove ailment
+		AE_EffectRemoveAilment heal = new AE_EffectRemoveAilment();
+		listener.registerEffect("heal", heal);
+		listener.registerEffect("cure", heal);
+
+		// teleport
 		AE_EffectTeleport teleport = new AE_EffectTeleport();
 		listener.registerEffect("teleport", teleport);
 		listener.registerEffect("move", teleport);
-
-		// stun
-		AE_EffectStun stun = new AE_EffectStun();
-		listener.registerEffect("stun", stun);
-		listener.registerEffect("freeze", stun);
 	}
 
 }
