@@ -1,7 +1,7 @@
 package kipperorigin.armamentseffects.effects;
 
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 public class AE_EffectInstakill extends AE_EffectParent {
 
@@ -9,7 +9,7 @@ public class AE_EffectInstakill extends AE_EffectParent {
 
 	@Override
 	public void run(AE_DamageEvent event) {
-		event.getRawEvent().setDamage(9001);
+		event.getRawEvent().setDamage(9001d);
 		AE_RI.removeItem(event.getPlayer());
 		return;
 	}

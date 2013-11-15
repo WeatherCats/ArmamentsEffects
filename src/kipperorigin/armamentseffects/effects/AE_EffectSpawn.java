@@ -1,7 +1,7 @@
 package kipperorigin.armamentseffects.effects;
 
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_InteractEvent;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,7 +23,7 @@ public class AE_EffectSpawn extends AE_EffectParent {
 			return;
 
 		String mob = args[0];
-		EntityType type = EntityType.fromName(mob);
+		EntityType type = EntityType.valueOf(mob);
 		World world = location.getWorld();
 
 		if (type == null || !type.isSpawnable())

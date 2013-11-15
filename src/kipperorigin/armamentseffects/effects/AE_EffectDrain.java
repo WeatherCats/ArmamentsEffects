@@ -1,8 +1,8 @@
 package kipperorigin.armamentseffects.effects;
 
 import kipperorigin.armamentseffects.AE_Main;
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
@@ -24,15 +24,15 @@ public class AE_EffectDrain extends AE_EffectParent {
 		final LivingEntity target = event.getVictim();
 		String[] args = event.getArgs();
 
-		final int heal = target.getHealth();
+		final double heal = target.getHealth();
 		if (args.length == 0 || args[0].isEmpty()) {
 			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 				@Override
 				public void run() {
-					int healx = target.getHealth();
-					int healy = heal - healx;
+					double healx = target.getHealth();
+					double healy = heal - healx;
 					if (player.getHealth() + healy > 20)
-						player.setHealth(20);
+						player.setHealth(20d);
 					else
 						player.setHealth(player.getHealth() + healy);
 				}
@@ -45,7 +45,7 @@ public class AE_EffectDrain extends AE_EffectParent {
 			}
 			int amp = Integer.parseInt(args[0]);
 			if (player.getHealth() + amp > 20)
-				player.setHealth(20);
+				player.setHealth(20d);
 			else
 				player.setHealth(player.getHealth() + amp);
 		}

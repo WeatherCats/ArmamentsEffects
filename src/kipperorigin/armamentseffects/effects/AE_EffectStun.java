@@ -3,8 +3,8 @@ package kipperorigin.armamentseffects.effects;
 import java.util.ArrayList;
 import java.util.List;
 
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;

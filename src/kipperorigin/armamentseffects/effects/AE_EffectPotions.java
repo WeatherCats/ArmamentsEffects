@@ -1,14 +1,13 @@
 package kipperorigin.armamentseffects.effects;
 
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.Potion;
@@ -58,7 +57,6 @@ public class AE_EffectPotions extends AE_EffectParent {
 
 	@Override
 	public void run(AE_ProjectileHitEvent event) {
-		Projectile projectile = event.getProjectile();
 		Location location = event.getLocation();
 		String[] args = event.getArgs();
 		String potion;
@@ -100,7 +98,6 @@ public class AE_EffectPotions extends AE_EffectParent {
 		ItemStack item = new ItemStack(Material.POTION);
 		Potion potionx = Potion.fromItemStack(item);
 		potionx.getEffects().add((new PotionEffect(type, time * 20, amp - 1)));
-		System.out.println(potionx.getNameId());
 		event.getProjectile().setPassenger(pot);
 		pot.leaveVehicle();
 		pot.setVelocity(event.getProjectile().getVelocity());

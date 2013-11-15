@@ -1,7 +1,7 @@
 package kipperorigin.armamentseffects.effects;
 
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.entity.Projectile;
 import org.bukkit.util.Vector;

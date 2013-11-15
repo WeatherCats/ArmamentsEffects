@@ -3,7 +3,9 @@ package kipperorigin.armamentseffects;
 import kipperorigin.armamentseffects.effects.AE_EffectDisarm;
 import kipperorigin.armamentseffects.effects.AE_EffectDrain;
 import kipperorigin.armamentseffects.effects.AE_EffectExplode;
+import kipperorigin.armamentseffects.effects.AE_EffectFireworkParticle;
 import kipperorigin.armamentseffects.effects.AE_EffectInstakill;
+import kipperorigin.armamentseffects.effects.AE_EffectManager;
 import kipperorigin.armamentseffects.effects.AE_EffectParticle;
 import kipperorigin.armamentseffects.effects.AE_EffectPotionRightClick;
 import kipperorigin.armamentseffects.effects.AE_EffectPotions;
@@ -13,6 +15,8 @@ import kipperorigin.armamentseffects.effects.AE_EffectSound;
 import kipperorigin.armamentseffects.effects.AE_EffectSpawn;
 import kipperorigin.armamentseffects.effects.AE_EffectStun;
 import kipperorigin.armamentseffects.effects.AE_EffectTeleport;
+import kipperorigin.armamentseffects.effects.AE_EffectTnT;
+import kipperorigin.armamentseffects.effects.AE_EffectUnbreakable;
 import kipperorigin.armamentseffects.effects.AE_EffectVelocity;
 import kipperorigin.armamentseffects.effects.AE_EffectWeb;
 
@@ -43,6 +47,11 @@ public class AE_Main extends JavaPlugin {
 		AE_EffectExplode explode = new AE_EffectExplode();
 		listener.registerEffect("explode", explode);
 		listener.registerEffect("boom", explode);
+		
+		// firework particle
+		AE_EffectFireworkParticle firework = new AE_EffectFireworkParticle(this);
+		listener.registerEffect("firework", firework);
+		listener.registerEffect("fireworkparticle", firework);
 
 		// instakill
 		AE_EffectInstakill instakill = new AE_EffectInstakill();
@@ -66,7 +75,7 @@ public class AE_Main extends JavaPlugin {
 		listener.registerEffect("cast", shoot);
 
 		// sound
-		AE_EffectSound sound = new AE_EffectSound(this);
+		AE_EffectSound sound = new AE_EffectSound();
 		listener.registerEffect("playsound", sound);
 		listener.registerEffect("play", sound);
 
@@ -78,7 +87,17 @@ public class AE_Main extends JavaPlugin {
 		// stun
 		AE_EffectStun stun = new AE_EffectStun();
 		listener.registerEffect("stun", stun);
-		listener.registerEffect("freeze", stun);
+		listener.registerEffect("stop", stun);
+		
+		// tnt
+		AE_EffectTnT tnt = new AE_EffectTnT(this);
+		listener.registerEffect("tnt", tnt);
+		listener.registerEffect("primedtnt", tnt);
+		
+		// unbreakable
+		AE_EffectUnbreakable unbreakable = new AE_EffectUnbreakable();
+		listener.registerEffect("unbreakable", unbreakable);
+		listener.registerEffect("unbreaking", unbreakable);
 
 		// velocity
 		AE_EffectVelocity velocity = new AE_EffectVelocity();

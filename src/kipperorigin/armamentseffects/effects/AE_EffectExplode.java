@@ -1,8 +1,9 @@
 package kipperorigin.armamentseffects.effects;
 
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
+import kipperorigin.armamentseffects.resources.AE_Explode;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
@@ -11,15 +12,7 @@ import org.bukkit.entity.Player;
 public class AE_EffectExplode extends AE_EffectParent {
 
 	AE_RemoveItem AE_RI = new AE_RemoveItem();
-
-	private void createExplosion(LivingEntity exploded, float power) {
-		Location loc = exploded.getLocation();
-		exploded.getWorld().createExplosion(loc.getX(), loc.getY() + 1.5, loc.getZ(), power, false, false);
-	}
-
-	private void createExplosion(Location loc, float power) {
-		loc.getWorld().createExplosion(loc.getX(), loc.getY() + 1.5, loc.getZ(), power, false, false);
-	}
+	AE_Explode explode = new AE_Explode();
 
 	@Override
 	public void run(AE_DamageEvent event) {
@@ -36,7 +29,7 @@ public class AE_EffectExplode extends AE_EffectParent {
 			}
 			power = Integer.parseInt(args[0]);
 		}
-		createExplosion(target, power);
+		explode.createExplosion(target, power);
 		if (power > 25)
 			return;
 		AE_RI.removeItem(event.getPlayer());
@@ -71,7 +64,7 @@ public class AE_EffectExplode extends AE_EffectParent {
 		}
 		if (power < 25)
 			return;
-		createExplosion(loc, power);
+		explode.createExplosion(loc, power);
 		AE_RI.removeItem(event.getPlayer());
 		return;
 	}

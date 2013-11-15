@@ -1,21 +1,18 @@
 package kipperorigin.armamentseffects.effects;
 
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.resources.AE_Color;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 public class AE_EffectDisarm extends AE_EffectParent {
-
-	private String color(String message) {
-		return ChatColor.translateAlternateColorCodes('&', message);
-	}
-
+	
 	private AE_RemoveItem AE_RI = new AE_RemoveItem();
+	AE_Color color = new AE_Color();
 
 	@Override
 	public void run(AE_DamageEvent event) {
@@ -33,7 +30,7 @@ public class AE_EffectDisarm extends AE_EffectParent {
 		int newSlot = inv.firstEmpty();
 		inv.setItem(newSlot, item);
 		inv.setItem(oldSlot, null);
-		victim.sendMessage(color("&4You have been disarmed!"));
+		victim.sendMessage(color.color("&4You have been disarmed!"));
 		AE_RI.removeItem(event.getPlayer());
 	}
 }

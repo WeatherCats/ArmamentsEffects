@@ -1,11 +1,11 @@
 package kipperorigin.armamentseffects.effects;
 
 import kipperorigin.armamentseffects.AE_Main;
-import kipperorigin.armamentseffects.AE_RemoveItem;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.resources.AE_Color;
+import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,10 +21,7 @@ public class AE_EffectWeb extends AE_EffectParent {
 	}
 
 	AE_RemoveItem AE_RI = new AE_RemoveItem();
-
-	private String color(String message) {
-		return ChatColor.translateAlternateColorCodes('&', message);
-	}
+	AE_Color color = new AE_Color();
 
 	@Override
 	public void run(AE_DamageEvent event) {
@@ -66,7 +63,7 @@ public class AE_EffectWeb extends AE_EffectParent {
 				return;
 			x.setType(Material.WEB);
 			if (target instanceof Player) {
-				((Player) target).sendMessage(color("&4You've been caught in a web!"));
+				((Player) target).sendMessage(color.color("&4You've been caught in a web!"));
 				messageSent = true;
 			}
 		} else
@@ -88,7 +85,7 @@ public class AE_EffectWeb extends AE_EffectParent {
 				return;
 			y.setType(Material.WEB);
 			if (target instanceof Player && !messageSent)
-				((Player) target).sendMessage(color("&4You've been caught in a web!"));
+				((Player) target).sendMessage(color.color("&4You've been caught in a web!"));
 		} else
 			y = null;
 

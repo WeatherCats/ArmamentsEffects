@@ -4,35 +4,43 @@ import kipperorigin.armamentseffects.AE_Main;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
+import kipperorigin.armamentseffects.resources.AE_CheckFireworkColor;
+import kipperorigin.armamentseffects.resources.AE_FireworkEffectPlayer;
 import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.Location;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Listener;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 
-public class AE_EffectParticle extends AE_EffectParent implements Listener {
-
-	int running;
+public class AE_EffectFireworkParticle extends AE_EffectParent implements Listener {
 
 	private AE_Main plugin;
 
-	public AE_EffectParticle(AE_Main plugin) {
+	public AE_EffectFireworkParticle(AE_Main plugin) {
 
 		this.plugin = plugin;
 	}
 
 	AE_RemoveItem AE_RI = new AE_RemoveItem();
-
+	AE_FireworkEffectPlayer fplayer = new AE_FireworkEffectPlayer();
+	AE_CheckFireworkColor colorCheck = new AE_CheckFireworkColor();
+	
+	/* return FireworkEffect.builder().withType(Type.BALL).withColor(Color.RED).build();
+	fplayer.playFirework(event.getPlayer().getWorld(), event.getPlayer.getLocation(), Util.getRandomFireworkEffect());
+	*/
+	
+	private FireworkEffect getEffect(Type type, Color finalColor) {
+		return FireworkEffect.builder().with(type).withColor(finalColor).build();
+	}
+	
 	@Override
 	public void run(final AE_ProjectileEvent event) {
-
-		final Player player = event.getPlayer();
 		final Projectile projectile = event.getProjectile();
 		String[] args = event.getArgs();
 
@@ -42,20 +50,21 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 			return;
 		}
 
-		final String particle = args[0].toUpperCase();
-
 		try {
-			Effect.valueOf(particle);
-		} catch (IllegalArgumentException e) {
-			player.sendMessage("Invalid Particle!");
+			Type.valueOf(args[0].toUpperCase());
+		} catch  (IllegalArgumentException e) {
 			return;
+		}
+		
+		try {
+			colorCheck.getFireworkColorByString(args[1]);
 		} catch (NullPointerException e) {
-			player.sendMessage("Invalid Particle!");
 			return;
 		}
 
-		final Effect effect = Effect.valueOf(particle);
-
+		final Type type = Type.valueOf(args[0].toUpperCase());
+		final Color color = colorCheck.getFireworkColorByString(args[1]);
+		
 		try {
 			Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
@@ -69,8 +78,11 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
 			@Override
 			public void run() {
-				final Location loc = event.getProjectile().getLocation();
-				projectile.getWorld().playEffect(loc, effect, data, 100);
+				try {
+					fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
+				} catch (Exception e) {
+					return;
+				}
 			}
 		}, 0L, 1L).getTaskId();
 		MetadataValue x = new FixedMetadataValue(plugin, taskId);
@@ -81,7 +93,6 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 	public void run(AE_ProjectileHitEvent event) {
 		final Projectile projectile = event.getProjectile();
 		String[] args = event.getArgs();
-		final Location loc = event.getProjectile().getLocation();
 
 		if (args.length == 0 || args[0].isEmpty())
 			return;
@@ -89,18 +100,21 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 			return;
 		}
 
-		final String particle = args[0].toUpperCase();
-
 		try {
-			Effect.valueOf(particle);
-		} catch (IllegalArgumentException e) {
+			Type.valueOf(args[0].toUpperCase());
+		} catch  (IllegalArgumentException e) {
 			return;
+		}
+		
+		try {
+			colorCheck.getFireworkColorByString(args[1]);
 		} catch (NullPointerException e) {
 			return;
 		}
 
-		final Effect effect = Effect.valueOf(particle);
-
+		final Type type = Type.valueOf(args[0].toUpperCase());
+		final Color color = colorCheck.getFireworkColorByString(args[1]);
+		
 		try {
 			Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
@@ -108,14 +122,14 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		}
 
 		final int data = Integer.parseInt(args[1]);
-
-		if (projectile.hasMetadata("Data")) {
-			Bukkit.getScheduler().cancelTasks(plugin);
-		}
-
 		if (data == 0)
 			return;
-		projectile.getWorld().playEffect(loc, effect, data, 100);
+		
+		try {
+			fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
+		} catch (Exception e) {
+			return;
+		}
 		AE_RI.removeItem(event.getPlayer());
 		return;
 	}
@@ -124,7 +138,6 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 	public void run(AE_DamageEvent event) {
 		final LivingEntity victim = event.getVictim();
 		String[] args = event.getArgs();
-		final Location loc = victim.getLocation();
 
 		if (args.length == 0 || args[0].isEmpty())
 			return;
@@ -132,18 +145,21 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 			return;
 		}
 
-		final String particle = args[0].toUpperCase();
-
 		try {
-			Effect.valueOf(particle);
-		} catch (IllegalArgumentException e) {
+			Type.valueOf(args[0].toUpperCase());
+		} catch  (IllegalArgumentException e) {
 			return;
+		}
+		
+		try {
+			colorCheck.getFireworkColorByString(args[1]);
 		} catch (NullPointerException e) {
 			return;
 		}
 
-		final Effect effect = Effect.valueOf(particle);
-
+		final Type type = Type.valueOf(args[0].toUpperCase());
+		final Color color = colorCheck.getFireworkColorByString(args[1]);
+		
 		try {
 			Integer.parseInt(args[1]);
 		} catch (NumberFormatException e) {
@@ -151,10 +167,14 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		}
 
 		final int data = Integer.parseInt(args[1]);
-
 		if (data == 0)
 			return;
-		victim.getWorld().playEffect(loc, effect, data, 100);
+		
+		try {
+			fplayer.playFirework(event.getPlayer().getWorld(), victim.getLocation(), getEffect(type, color));
+		} catch (Exception e) {
+			return;
+		}
 		AE_RI.removeItem(event.getPlayer());
 		return;
 	}

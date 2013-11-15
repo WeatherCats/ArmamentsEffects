@@ -1,6 +1,5 @@
 package kipperorigin.armamentseffects.effects;
 
-import kipperorigin.armamentseffects.event.AE_InteractEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 
 import org.bukkit.entity.Arrow;
@@ -35,9 +34,5 @@ public class AE_EffectShoot extends AE_EffectParent {
 				return;
 		} else
 			return;
-	}
-
-	public void run(AE_InteractEvent event) {
-		Player player = event.getPlayer();
 	}
 }
