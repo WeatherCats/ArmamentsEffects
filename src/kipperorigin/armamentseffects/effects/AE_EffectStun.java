@@ -23,11 +23,12 @@ public class AE_EffectStun extends AE_EffectParent {
 		if (args.length >= 1) {
 			try {
 				length = Integer.parseInt(args[0]);
-			} catch (NumberFormatException ignore) { }
+			} catch (NumberFormatException ignore) {
+			}
 		}
 
 		// 20 ticks per sec
-		length *= 20;
+		length *= 10;
 
 		List<PotionEffect> stuns = new ArrayList<PotionEffect>();
 		stuns.add(new PotionEffect(PotionEffectType.SLOW, length, 5));

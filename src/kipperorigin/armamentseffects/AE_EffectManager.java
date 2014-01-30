@@ -104,14 +104,16 @@ public class AE_EffectManager implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void process(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
+		Location loc = player.getLocation();
 
 		if (event.isCancelled() && !player.hasPermission("ae.admin"))
 			return;
 
-		if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
-			return;
-
-		runEvent(new AE_InteractEvent(player, event.getClickedBlock().getLocation(), event));
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			runEvent(new AE_InteractEvent(player, event.getClickedBlock().getLocation(), event));
+		} else if (event.getAction() == Action.RIGHT_CLICK_AIR) {
+			runEvent(new AE_InteractEvent(player, loc, event));
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR)
