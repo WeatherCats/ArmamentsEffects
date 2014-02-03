@@ -28,22 +28,41 @@ public class AE_EffectTnT extends AE_EffectParent {
 		Player player = event.getPlayer();
 		Location loc = player.getLocation();
 		World world = loc.getWorld();
+		int multiply = 1;
+		int timer = 0;
 
-		if (args.length != 1)
-			return;
+		if (args.length >= 1) {
+			try {
+				multiply = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				return;
+			}
+		}
 
-		try {
-			Integer.parseInt(args[0]);
-		} catch (NumberFormatException e) {
+		if (args.length >= 2) {
+			try {
+				timer = Integer.parseInt(args[1]);
+			} catch (NumberFormatException e) {
+				return;
+			}
+		}
+
+		if (args.length >= 3) {
 			return;
 		}
 
-		final int multiply = Integer.parseInt(args[0]);
+		timer *= 20;
 
 		if ((event.getAction() == Action.RIGHT_CLICK_AIR) || (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+			loc = loc.add(0, 1, 0);
 			TNTPrimed tnt = world.spawn(loc, TNTPrimed.class);
+			Vector x = new Vector(0, .35, 0);
 			Vector v = (event.getPlayer().getEyeLocation().getDirection()).multiply(multiply);
+			v.add(x);
 			tnt.setVelocity(v);
+			if (timer >= 1) {
+				tnt.setFuseTicks(timer);
+			}
 			AE_RI.removeItem(event.getPlayer());
 		}
 	}

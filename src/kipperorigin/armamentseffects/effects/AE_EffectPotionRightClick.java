@@ -22,9 +22,7 @@ public class AE_EffectPotionRightClick extends AE_EffectParent {
 		int time = 5;
 		if (args.length == 0)
 			return;
-		System.out.println("Debugx1");
-		if ((event.getAction() == Action.RIGHT_CLICK_AIR) && (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-			System.out.println("Debugx2");
+		if ((event.getAction() == Action.RIGHT_CLICK_AIR) || (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 			potion = args[0];
 			if (args.length > 1) {
 				try {
@@ -41,16 +39,13 @@ public class AE_EffectPotionRightClick extends AE_EffectParent {
 				}
 			}
 
-			System.out.println("Debug1");
 			PotionEffectType type = PotionEffectType.getByName(potion);
 			if (type == null)
 				return;
 			if (type.isInstant())
 				time = 1;
-			System.out.println("Debug2");
 			player.addPotionEffect(new PotionEffect(type, time * 20, amp - 1));
 			AE_RI.removeItem(event.getPlayer());
-			System.out.println("Debug3");
 			return;
 		}
 	}

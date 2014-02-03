@@ -22,14 +22,14 @@ public class AE_EffectSpawn extends AE_EffectParent {
 		if (args.length == 0)
 			return;
 
-		String mob = args[0];
+		String mob = args[0].toUpperCase();
 		EntityType type = EntityType.valueOf(mob);
 		World world = location.getWorld();
 
 		if (type == null || !type.isSpawnable())
 			return;
 
-		if (Tameable.class.isAssignableFrom(type.getClass())) {
+		if (Tameable.class.isAssignableFrom(type.getEntityClass())) {
 			Tameable entity = (Tameable) world.spawnEntity(location, type);
 			entity.setOwner(player);
 		} else {
