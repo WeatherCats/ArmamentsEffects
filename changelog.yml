@@ -23,7 +23,7 @@ Ver 0.3
   
 Ver 0.4
 - Added Event System
-- Events Added
+- Events Added:
   - Main Event
   - Projectile Launch
   - Damage Event
@@ -31,7 +31,7 @@ Ver 0.4
 
 Ver 0.5
 - Fixed Instakill doublekill and missannouncing
-- Events Added
+- Events Added:
   - Projectile Hit
 - Effects Added:
   - Sound
