@@ -28,7 +28,7 @@ public class AE_EffectStun extends AE_EffectParent {
 		}
 
 		// 20 ticks per sec
-		length *= 10;
+		length *= 20;
 
 		List<PotionEffect> stuns = new ArrayList<PotionEffect>();
 		stuns.add(new PotionEffect(PotionEffectType.SLOW, length, 5));

@@ -2,7 +2,10 @@ package kipperorigin.armamentseffects.resources;
 
 import java.lang.reflect.Method;
 
+import org.bukkit.EntityEffect;
 import org.bukkit.FireworkEffect;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.Location;
@@ -49,6 +52,27 @@ public class AE_FireworkEffectPlayer {
      * @param fe
      * @throws Exception
      */
+    public void playFirework(World world, Location loc, FireworkEffect fe, EntityType type) {
+    	if (type == EntityType.FIREWORK) {
+			Entity entity = world.spawnEntity(loc, EntityType.FIREWORK);
+			Firework fw = (Firework) entity;
+	        FireworkMeta data = (FireworkMeta) fw.getFireworkMeta();
+	        // clear existing
+	        data.clearEffects();
+	        // power of one
+	        data.setPower(5);
+	        // add the effect
+	        data.addEffect(fe);
+	        // set the meta
+	        fw.setFireworkMeta(data);
+	        
+	        fw.playEffect(EntityEffect.FIREWORK_EXPLODE);
+	        
+	        fw.detonate();
+    	}
+    }
+    
+    
     public void playFirework(World world, Location loc, FireworkEffect fe) throws Exception {
         // Bukkity load (CraftFirework)
         Firework fw = (Firework) world.spawn(loc, Firework.class);
@@ -79,17 +103,19 @@ public class AE_FireworkEffectPlayer {
         // clear existing
         data.clearEffects();
         // power of one
-        data.setPower(1);
+        data.setPower(5);
         // add the effect
         data.addEffect(fe);
         // set the meta
         fw.setFireworkMeta(data);
+        fw.detonate();
         /*
          * Finally, we broadcast the entity effect then kill our fireworks object
          */
         // invoke with arguments
         nms_world_broadcastEntityEffect.invoke(nms_world, new Object[] {nms_firework, (byte) 17});
         // remove from the game
+        fw.playEffect(EntityEffect.FIREWORK_EXPLODE);
         fw.remove();
     }
     

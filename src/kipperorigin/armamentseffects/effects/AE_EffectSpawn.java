@@ -1,7 +1,6 @@
 package kipperorigin.armamentseffects.effects;
 
 import kipperorigin.armamentseffects.event.AE_InteractEvent;
-import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -10,8 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 
 public class AE_EffectSpawn extends AE_EffectParent {
-
-	AE_RemoveItem AE_RI = new AE_RemoveItem();
 
 	@Override
 	public void run(AE_InteractEvent event) {
@@ -36,7 +33,6 @@ public class AE_EffectSpawn extends AE_EffectParent {
 			world.spawnEntity(location, type);
 		}
 
-		AE_RI.removeItem(player);
 		return;
 	}
 }

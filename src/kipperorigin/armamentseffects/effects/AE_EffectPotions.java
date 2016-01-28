@@ -2,7 +2,6 @@ package kipperorigin.armamentseffects.effects;
 
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
-import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,8 +14,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class AE_EffectPotions extends AE_EffectParent {
-
-	AE_RemoveItem AE_RI = new AE_RemoveItem();
 
 	@Override
 	public void run(AE_DamageEvent event) {
@@ -51,7 +48,6 @@ public class AE_EffectPotions extends AE_EffectParent {
 			time = 1;
 
 		target.addPotionEffect(new PotionEffect(type, time * 20, amp - 1));
-		AE_RI.removeItem(event.getPlayer());
 		return;
 	}
 
@@ -101,7 +97,6 @@ public class AE_EffectPotions extends AE_EffectParent {
 		event.getProjectile().setPassenger(pot);
 		pot.leaveVehicle();
 		pot.setVelocity(event.getProjectile().getVelocity());
-		AE_RI.removeItem(event.getPlayer());
 		return;
 	}
 }

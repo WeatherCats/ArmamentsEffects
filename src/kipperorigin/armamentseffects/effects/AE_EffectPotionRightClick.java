@@ -2,7 +2,6 @@ package kipperorigin.armamentseffects.effects;
 
 import kipperorigin.armamentseffects.event.AE_InteractEvent;
 import kipperorigin.armamentseffects.event.AE_PlayerInteractEntityEvent;
-import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -10,8 +9,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class AE_EffectPotionRightClick extends AE_EffectParent {
-
-	AE_RemoveItem AE_RI = new AE_RemoveItem();
 
 	@Override
 	public void run(AE_InteractEvent event) {
@@ -45,7 +42,6 @@ public class AE_EffectPotionRightClick extends AE_EffectParent {
 			if (type.isInstant())
 				time = 1;
 			player.addPotionEffect(new PotionEffect(type, time * 20, amp - 1));
-			AE_RI.removeItem(event.getPlayer());
 			return;
 		}
 	}
@@ -83,7 +79,6 @@ public class AE_EffectPotionRightClick extends AE_EffectParent {
 			time = 1;
 
 		player.addPotionEffect(new PotionEffect(type, time * 20, amp - 1));
-		AE_RI.removeItem(event.getPlayer());
 		return;
 	}
 }

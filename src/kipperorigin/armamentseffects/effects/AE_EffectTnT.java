@@ -3,7 +3,6 @@ package kipperorigin.armamentseffects.effects;
 import kipperorigin.armamentseffects.AE_Main;
 import kipperorigin.armamentseffects.event.AE_InteractEvent;
 import kipperorigin.armamentseffects.resources.AE_LaunchTnT;
-import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -17,8 +16,7 @@ public class AE_EffectTnT extends AE_EffectParent {
 	public AE_EffectTnT(AE_Main plugin) {
 		this.plugin = plugin;
 	}
-
-	AE_RemoveItem AE_RI = new AE_RemoveItem();
+	
 	AE_LaunchTnT tnt = new AE_LaunchTnT();
 
 	@Override
@@ -149,7 +147,6 @@ public class AE_EffectTnT extends AE_EffectParent {
 				tnt.fireTnTNoTimer(v, loc);
 			else
 				tnt.fireTnT(v, loc, timer);
-			AE_RI.removeItem(event.getPlayer());
 		}
 	}
 }

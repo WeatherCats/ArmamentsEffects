@@ -4,7 +4,6 @@ import kipperorigin.armamentseffects.AE_Main;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
-import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -27,21 +26,29 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		this.plugin = plugin;
 	}
 
-	AE_RemoveItem AE_RI = new AE_RemoveItem();
-
 	@Override
 	public void run(final AE_ProjectileEvent event) {
 
 		final Player player = event.getPlayer();
 		final Projectile projectile = event.getProjectile();
 		String[] args = event.getArgs();
-
+		int timer = 1;
+		
 		if (args.length == 0 || args[0].isEmpty())
 			return;
-		else if (args.length != 2) {
+		else if (args.length > 4) {
 			return;
 		}
 
+		if (args.length == 3) {
+			try {
+				Integer.parseInt(args[2]);
+			} catch (NumberFormatException e) {
+				return;
+			}
+			timer = Integer.parseInt(args[2]);	
+		}
+		
 		final String particle = args[0].toUpperCase();
 
 		try {
@@ -55,26 +62,38 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		}
 
 		final Effect effect = Effect.valueOf(particle);
-
-		try {
-			Integer.parseInt(args[1]);
-		} catch (NumberFormatException e) {
+		
+		if (effect == Effect.ITEM_BREAK || effect == Effect.TILE_BREAK || effect == Effect.TILE_DUST) {
 			return;
+		} else {
+			try {
+				Integer.parseInt(args[1]);
+			} catch (NumberFormatException e) {
+				return;
+			}
+
+			int data = Integer.parseInt(args[1]);
+			
+			if (data == 0)
+				return;
+			
+			final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+				@Override
+				public void run() {
+					final Location loc = event.getProjectile().getLocation();
+					projectile.getWorld().playEffect(loc, effect, data, 100);
+				}
+			}, 0L, timer).getTaskId();
+			MetadataValue x = new FixedMetadataValue(plugin, taskId);
+			if (args.length == 4) {
+				if (!args[3].equalsIgnoreCase("permanent"))
+					projectile.setMetadata("Data", x);
+			} else {
+				projectile.setMetadata("Data", x);
+			}
 		}
 
-		final int data = Integer.parseInt(args[1]);
-		if (data == 0)
-			return;
 
-		final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
-			@Override
-			public void run() {
-				final Location loc = event.getProjectile().getLocation();
-				projectile.getWorld().playEffect(loc, effect, data, 100);
-			}
-		}, 0L, 1L).getTaskId();
-		MetadataValue x = new FixedMetadataValue(plugin, taskId);
-		projectile.setMetadata("Data", x);
 	}
 
 	@Override
@@ -85,7 +104,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 
 		if (args.length == 0 || args[0].isEmpty())
 			return;
-		else if (args.length != 2) {
+		else if (args.length != 2 && args.length != 3) {
 			return;
 		}
 
@@ -97,27 +116,28 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 			return;
 		} catch (NullPointerException e) {
 			return;
-		}
+		}	
 
 		final Effect effect = Effect.valueOf(particle);
-
-		try {
-			Integer.parseInt(args[1]);
-		} catch (NumberFormatException e) {
+		
+		if (effect == Effect.ITEM_BREAK || effect == Effect.TILE_BREAK || effect == Effect.TILE_DUST) {
 			return;
+			
+		} else {
+			try {
+				Integer.parseInt(args[1]);
+			} catch (NumberFormatException e) {
+				return;
+			}
+
+			int data = Integer.parseInt(args[1]);
+			
+			if (data == 0)
+				return;
+			
+			projectile.getWorld().playEffect(loc, effect, data, 100);
 		}
 
-		final int data = Integer.parseInt(args[1]);
-
-		if (projectile.hasMetadata("Data")) {
-			Bukkit.getScheduler().cancelTasks(plugin);
-		}
-
-		if (data == 0)
-			return;
-		projectile.getWorld().playEffect(loc, effect, data, 100);
-		AE_RI.removeItem(event.getPlayer());
-		return;
 	}
 
 	@Override
@@ -128,7 +148,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 
 		if (args.length == 0 || args[0].isEmpty())
 			return;
-		else if (args.length != 2) {
+		else if (args.length != 2 && args.length != 3) {
 			return;
 		}
 
@@ -144,18 +164,21 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 
 		final Effect effect = Effect.valueOf(particle);
 
-		try {
-			Integer.parseInt(args[1]);
-		} catch (NumberFormatException e) {
-			return;
+		if (effect == Effect.ITEM_BREAK || effect == Effect.TILE_BREAK || effect == Effect.TILE_DUST) {
+			return;	
+		} else {
+			try {
+				Integer.parseInt(args[1]);
+			} catch (NumberFormatException e) {
+				return;
+			}
+
+			int data = Integer.parseInt(args[1]);
+			
+			if (data == 0)
+				return;
+			
+			victim.getWorld().playEffect(loc, effect, data, 100);
 		}
-
-		final int data = Integer.parseInt(args[1]);
-
-		if (data == 0)
-			return;
-		victim.getWorld().playEffect(loc, effect, data, 100);
-		AE_RI.removeItem(event.getPlayer());
-		return;
 	}
 }

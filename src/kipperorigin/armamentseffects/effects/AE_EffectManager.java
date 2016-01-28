@@ -9,6 +9,7 @@ import kipperorigin.armamentseffects.event.AE_InteractEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -26,6 +27,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+@SuppressWarnings("deprecation")
 public class AE_EffectManager implements Listener {
 
 	public String stripColors(String line) {
@@ -105,9 +107,6 @@ public class AE_EffectManager implements Listener {
 		Player player = event.getPlayer();
 		Location loc = player.getLocation();
 
-		if (event.isCancelled() && !player.hasPermission("ae.admin"))
-			return;
-
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			runEvent(new AE_InteractEvent(player, event.getClickedBlock().getLocation(), event));
 		} else if (event.getAction() == Action.RIGHT_CLICK_AIR) {
@@ -146,6 +145,12 @@ public class AE_EffectManager implements Listener {
 		Player attacker = (Player) entity;
 
 		Location location = event.getEntity().getLocation();
+
+		if (projectile.hasMetadata("Data")) {
+			Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
+		}
+
+		projectile.eject();
 
 		runEvent(new AE_ProjectileHitEvent(attacker, projectile, event, location));
 	}
