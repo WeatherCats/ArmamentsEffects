@@ -28,9 +28,17 @@ public class AE_EffectLightning extends AE_EffectParent implements Listener {
 		String[] args = event.getArgs();
 		int timer = 1;
 		
-		if (!(args.length == 2) && !args[0].equalsIgnoreCase("effect"))
+		if (args.length > 2 && !args[0].equalsIgnoreCase("effect"))
 			return;
-			
+		
+		if (args.length == 2) {
+			try {
+				Integer.parseInt(args[1]);
+			} catch (NumberFormatException e) {
+				
+			}
+		}
+		
 		final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -49,7 +57,7 @@ public class AE_EffectLightning extends AE_EffectParent implements Listener {
 		String[] args = event.getArgs();
 		if (args.length == 0)
 			event.getLocation().getWorld().strikeLightning(event.getLocation());
-		else if (args.length == 1 && args[0].equalsIgnoreCase("effect"))
+		else if (args.length <= 2 && args[0].equalsIgnoreCase("effect"))
 			event.getLocation().getWorld().strikeLightningEffect(event.getLocation());
 		else return;
 
@@ -60,7 +68,7 @@ public class AE_EffectLightning extends AE_EffectParent implements Listener {
 		String[] args = event.getArgs();
 		if (args.length == 0)
 			event.getVictim().getLocation().getWorld().strikeLightning(event.getVictim().getLocation());
-		else if (args.length == 1 && args[0].equalsIgnoreCase("effect"))
+		else if (args.length <= 2 && args[0].equalsIgnoreCase("effect"))
 			event.getVictim().getLocation().getWorld().strikeLightningEffect(event.getVictim().getLocation());
 		else return;
 	}

@@ -72,7 +72,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 				return;
 			}
 
-			int data = Integer.parseInt(args[1]);
+			final int data = Integer.parseInt(args[1]);
 			
 			if (data == 0)
 				return;
@@ -85,13 +85,9 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 				}
 			}, 0L, timer).getTaskId();
 			MetadataValue x = new FixedMetadataValue(plugin, taskId);
-			if (event.getRawEvent().isCancelled())
-			if (args.length == 4) {
-				if (!args[3].equalsIgnoreCase("permanent")) {
-					projectile.setMetadata("Data", x);
-					if (event.getRawEvent().isCancelled() && projectile.hasMetadata("Data"))
-						Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
-				}
+
+			if (args.length == 4 && args[3].equalsIgnoreCase("permanent")) {
+				
 			} else {
 				projectile.setMetadata("Data", x);
 				if (event.getRawEvent().isCancelled() && projectile.hasMetadata("Data"))
@@ -126,6 +122,12 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 
 		final Effect effect = Effect.valueOf(particle);
 		
+		
+		if (projectile.hasMetadata("Data")) {
+			Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
+		}
+		
+		
 		if (effect == Effect.ITEM_BREAK || effect == Effect.TILE_BREAK || effect == Effect.TILE_DUST) {
 			return;
 			
@@ -140,7 +142,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 			
 			if (data == 0)
 				return;
-			
+
 			projectile.getWorld().playEffect(loc, effect, data, 100);
 		}
 
