@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.event.AE_Event;
 import kipperorigin.armamentseffects.event.AE_InteractEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
@@ -23,6 +24,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -51,22 +53,32 @@ public class AE_EffectManager implements Listener {
 		if (!(event.getEntity() instanceof LivingEntity))
 			return;
 
-		int y = 1;
+		boolean sourceIsPlayer = true; // Source was a player?
 
 		LivingEntity injured = (LivingEntity) event.getEntity();
-		Entity assailant = event.getDamager();
 
-		if ((assailant instanceof Projectile)) {
-			assailant = ((Projectile) assailant).getShooter();
-			y = 0;
-		}
-
-		if (!(assailant instanceof Player))
+		Player damager;
+		{
+		    Entity assailant = event.getDamager();
+		    if ((assailant instanceof Projectile)) {
+			ProjectileSource source = ((Projectile)assailant).getShooter();
+			if(!(source instanceof Player)) {
+			    return;
+			}
+			damager = (Player)source;
+			sourceIsPlayer = false;
+		    }
+		    
+		    else if(assailant instanceof Player) {
+			damager = (Player)assailant;
+		    }
+		    
+		    else {
 			return;
-
-		Player damager = (Player) assailant;
-
-		ItemStack item = damager.getItemInHand();
+		    }
+		}
+		
+		ItemStack item = damager.getItemInHand(); // TODO: Test: this might have changed since a projectile started it's journey? Opportunity to cheat for the player?
 
 		if (!item.hasItemMeta())
 			return;
@@ -75,23 +87,23 @@ public class AE_EffectManager implements Listener {
 			return;
 		List<String> lore = meta.getLore();
 
-		String exempt = "false";
+		boolean exempt = false;
 
 		for (String line : lore) {
 			line = stripColors(line);
 			if ((line.contains("play")) || (line.contains("playsound"))) {
-				exempt = "true";
+				exempt = true;
 				break;
 			}
 		}
 
-		if (item.getType().equals(Material.BOW) && (y == 1))
+		if (item.getType().equals(Material.BOW) && sourceIsPlayer)
 			return;
 
-		if (event.isCancelled() && !damager.hasPermission("ae.admin") && !exempt.equalsIgnoreCase("false"))
+		if (event.isCancelled() && !damager.hasPermission("ae.admin") && exempt)
 			return;
 
-		if ((assailant instanceof Projectile)) {
+		if (!sourceIsPlayer) {
 			int x = damager.getInventory().first(Material.ARROW);
 			item = damager.getInventory().getItem(x);
 		}
@@ -120,12 +132,12 @@ public class AE_EffectManager implements Listener {
 	public void process(ProjectileLaunchEvent event) {
 		Projectile projectile = event.getEntity();
 
-		LivingEntity entity = projectile.getShooter();
+		ProjectileSource source = projectile.getShooter();
 
-		if (!(entity instanceof Player))
+		if (!(source instanceof Player))
 			return;
 
-		Player attacker = (Player) entity;
+		Player attacker = (Player) source;
 
 		if (event.isCancelled() && !attacker.hasPermission("ae.admin"))
 			return;
@@ -137,12 +149,12 @@ public class AE_EffectManager implements Listener {
 	public void process(ProjectileHitEvent event) {
 		Projectile projectile = event.getEntity();
 
-		LivingEntity entity = projectile.getShooter();
+		ProjectileSource source = projectile.getShooter();
 
-		if (!(entity instanceof Player))
+		if (!(source instanceof Player))
 			return;
 
-		Player attacker = (Player) entity;
+		Player attacker = (Player) source;
 
 		Location location = event.getEntity().getLocation();
 
@@ -155,127 +167,43 @@ public class AE_EffectManager implements Listener {
 		runEvent(new AE_ProjectileHitEvent(attacker, projectile, event, location));
 	}
 
-	private void runEvent(AE_DamageEvent data) {
-		ItemStack item = data.getItem();
-
-		if (!item.hasItemMeta())
-			return;
-		ItemMeta meta = item.getItemMeta();
-		if (!meta.hasLore())
-			return;
-		List<String> lore = meta.getLore();
-
-		for (String line : lore) {
-			line = stripColors(line);
-
-			String[] parts = line.split(" +", 2);
-			String name = parts[0];
-
-			AE_EffectParent effect = getEffect(name);
-			if (effect == null)
-				continue;
-
-			String[] args;
-			if (parts.length == 2)
-				args = parts[1].split(" +");
-			else
-				args = new String[0];
-
-			data.setArgs(args);
-			effect.run(data);
-		}
+    private void runEvent(AE_Event data) {
+	ItemStack item = data.getItem();
+	
+	if (!item.hasItemMeta())
+	    return;
+	ItemMeta meta = item.getItemMeta();
+	if (!meta.hasLore())
+	    return;
+	List<String> lore = meta.getLore();
+	
+	for (String line : lore) {
+	    line = stripColors(line);
+	    
+	    String[] parts = line.split(" +", 2);
+	    String name = parts[0];
+	    
+	    AE_EffectParent effect = getEffect(name);
+	    if (effect == null)
+		continue;
+	    
+	    String[] args;
+	    if (parts.length == 2)
+		args = parts[1].split(" +");
+	    else
+		args = new String[0];
+	    
+	    data.setArgs(args);
+	    if(data instanceof AE_DamageEvent) {
+		effect.run((AE_DamageEvent)data);
+	    }
+	    else if(data instanceof AE_ProjectileEvent) {
+		effect.run((AE_ProjectileEvent)data);
+	    }
+	    else if(data instanceof AE_ProjectileHitEvent) {
+		effect.run((AE_ProjectileHitEvent)data);
+	    }
 	}
-
-	private void runEvent(AE_InteractEvent data) {
-		ItemStack item = data.getItem();
-
-		if (!item.hasItemMeta())
-			return;
-		ItemMeta meta = item.getItemMeta();
-		if (!meta.hasLore())
-			return;
-		List<String> lore = meta.getLore();
-
-		for (String line : lore) {
-			line = stripColors(line);
-
-			String[] parts = line.split(" +", 2);
-			String name = parts[0];
-
-			AE_EffectParent effect = getEffect(name);
-			if (effect == null)
-				continue;
-
-			String[] args;
-			if (parts.length == 2)
-				args = parts[1].split(" +");
-			else
-				args = new String[0];
-
-			data.setArgs(args);
-			effect.run(data);
-		}
-	}
-
-	private void runEvent(AE_ProjectileEvent data) {
-		ItemStack item = data.getItem();
-
-		if (!item.hasItemMeta())
-			return;
-		ItemMeta meta = item.getItemMeta();
-		if (!meta.hasLore())
-			return;
-		List<String> lore = meta.getLore();
-
-		for (String line : lore) {
-			line = stripColors(line);
-
-			String[] parts = line.split(" +", 2);
-			String name = parts[0];
-
-			AE_EffectParent effect = getEffect(name);
-			if (effect == null)
-				continue;
-
-			String[] args;
-			if (parts.length == 2)
-				args = parts[1].split(" +");
-			else
-				args = new String[0];
-
-			data.setArgs(args);
-			effect.run(data);
-		}
-	}
-
-	private void runEvent(AE_ProjectileHitEvent data) {
-		ItemStack item = data.getItem();
-
-		if (!item.hasItemMeta())
-			return;
-		ItemMeta meta = item.getItemMeta();
-		if (!meta.hasLore())
-			return;
-		List<String> lore = meta.getLore();
-
-		for (String line : lore) {
-			line = stripColors(line);
-
-			String[] parts = line.split(" +", 2);
-			String name = parts[0];
-
-			AE_EffectParent effect = getEffect(name);
-			if (effect == null)
-				continue;
-
-			String[] args;
-			if (parts.length == 2)
-				args = parts[1].split(" +");
-			else
-				args = new String[0];
-
-			data.setArgs(args);
-			effect.run(data);
-		}
-	}
-}
+	
+    }    
+ }
