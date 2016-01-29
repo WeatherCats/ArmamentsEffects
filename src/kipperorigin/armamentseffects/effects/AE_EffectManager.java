@@ -211,7 +211,9 @@ public class AE_EffectManager implements Listener {
 	    else if(data instanceof AE_ProjectileHitEvent) {
 		effect.run((AE_ProjectileHitEvent)data);
 	    }
+	    else if(data instanceof AE_InteractEvent) {
+		effect.run((AE_ProjectileHitEvent)data);
+	    }
 	}
-	
     }    
  }
