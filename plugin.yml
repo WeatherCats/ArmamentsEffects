@@ -32,6 +32,6 @@ permissions:
   ae.spawn:
     description: Able to use mob spawn effect.
     default: op
-  ae.override:
+  ae.admin:
     description: Able to override event cancels.
     default: op

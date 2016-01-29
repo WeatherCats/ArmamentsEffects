@@ -17,13 +17,13 @@ Ver 0.2
 Ver 0.3
 - Added Effect Manager
 - Velocity now works on all projectiles rather than just thrown potions
-- Effects Added
+- Effects Added:
   - Web
   - Disarm
   
 Ver 0.4
 - Added Event System
-- Events Added
+- Events Added:
   - Main Event
   - Projectile Launch
   - Damage Event
@@ -31,8 +31,8 @@ Ver 0.4
 
 Ver 0.5
 - Fixed Instakill doublekill and missannouncing
-- Events Added
+- Events Added:
   - Projectile Hit
-- Effects Added
+- Effects Added:
   - Sound
   - Particle
