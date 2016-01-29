@@ -6,12 +6,12 @@ import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
 import kipperorigin.armamentseffects.resources.AE_CheckFireworkColor;
 import kipperorigin.armamentseffects.resources.AE_FireworkEffectPlayer;
-import kipperorigin.armamentseffects.resources.AE_RemoveItem;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Listener;
@@ -27,7 +27,6 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 		this.plugin = plugin;
 	}
 
-	AE_RemoveItem AE_RI = new AE_RemoveItem();
 	AE_FireworkEffectPlayer fplayer = new AE_FireworkEffectPlayer();
 	AE_CheckFireworkColor colorCheck = new AE_CheckFireworkColor();
 	
@@ -43,37 +42,49 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 	public void run(final AE_ProjectileEvent event) {
 		final Projectile projectile = event.getProjectile();
 		String[] args = event.getArgs();
-
+		int timer = 1;
+		
+		System.out.print("debug1");
+		
 		if (args.length == 0 || args[0].isEmpty())
 			return;
-		else if (args.length != 2) {
+		else if (args.length != 2 && args.length != 3) {
 			return;
 		}
 
+		System.out.print("debug2");
+		
 		try {
 			Type.valueOf(args[0].toUpperCase());
 		} catch  (IllegalArgumentException e) {
 			return;
 		}
 		
+		System.out.print("debug3");
+		
+		System.out.print("debug4");
+
+		if (args.length == 3) {
+			try {
+				Integer.parseInt(args[2]);
+			} catch (NumberFormatException e) {
+				return;
+			}
+			timer = Integer.parseInt(args[2]);	
+		}
+		
+		System.out.print("debug5");
+		
 		try {
 			colorCheck.getFireworkColorByString(args[1]);
 		} catch (NullPointerException e) {
 			return;
 		}
+		
+		System.out.print("debug6");
 
 		final Type type = Type.valueOf(args[0].toUpperCase());
 		final Color color = colorCheck.getFireworkColorByString(args[1]);
-		
-		try {
-			Integer.parseInt(args[1]);
-		} catch (NumberFormatException e) {
-			return;
-		}
-
-		final int data = Integer.parseInt(args[1]);
-		if (data == 0)
-			return;
 
 		final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
 			@Override
@@ -84,7 +95,7 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 					return;
 				}
 			}
-		}, 0L, 1L).getTaskId();
+		}, 5L, timer).getTaskId();
 		MetadataValue x = new FixedMetadataValue(plugin, taskId);
 		projectile.setMetadata("Data", x);
 	}
@@ -96,7 +107,7 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 
 		if (args.length == 0 || args[0].isEmpty())
 			return;
-		else if (args.length != 2) {
+		else if (args.length != 2 && args.length != 3) {
 			return;
 		}
 
@@ -116,21 +127,10 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 		final Color color = colorCheck.getFireworkColorByString(args[1]);
 		
 		try {
-			Integer.parseInt(args[1]);
-		} catch (NumberFormatException e) {
-			return;
-		}
-
-		final int data = Integer.parseInt(args[1]);
-		if (data == 0)
-			return;
-		
-		try {
 			fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
 		} catch (Exception e) {
 			return;
 		}
-		AE_RI.removeItem(event.getPlayer());
 		return;
 	}
 
@@ -141,7 +141,7 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 
 		if (args.length == 0 || args[0].isEmpty())
 			return;
-		else if (args.length != 2) {
+		else if (args.length != 2 && args.length != 3) {
 			return;
 		}
 
@@ -175,7 +175,6 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 		} catch (Exception e) {
 			return;
 		}
-		AE_RI.removeItem(event.getPlayer());
 		return;
 	}
 }

@@ -39,6 +39,9 @@ public class AE_EffectLightning extends AE_EffectParent implements Listener {
 		}, 0L, timer).getTaskId();
 		MetadataValue x = new FixedMetadataValue(plugin, taskId);
 		projectile.setMetadata("Data", x);
+		
+		if (event.getRawEvent().isCancelled() && projectile.hasMetadata("Data"))
+				Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
 	}
 
 	@Override

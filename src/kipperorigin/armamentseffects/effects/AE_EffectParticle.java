@@ -85,11 +85,17 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 				}
 			}, 0L, timer).getTaskId();
 			MetadataValue x = new FixedMetadataValue(plugin, taskId);
+			if (event.getRawEvent().isCancelled())
 			if (args.length == 4) {
-				if (!args[3].equalsIgnoreCase("permanent"))
+				if (!args[3].equalsIgnoreCase("permanent")) {
 					projectile.setMetadata("Data", x);
+					if (event.getRawEvent().isCancelled() && projectile.hasMetadata("Data"))
+						Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
+				}
 			} else {
 				projectile.setMetadata("Data", x);
+				if (event.getRawEvent().isCancelled() && projectile.hasMetadata("Data"))
+					Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
 			}
 		}
 
