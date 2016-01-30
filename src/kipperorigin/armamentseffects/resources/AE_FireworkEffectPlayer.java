@@ -60,11 +60,6 @@ public class AE_FireworkEffectPlayer {
         fwm.addEffect(fe);
         fwm.setPower(0);
         fw.setFireworkMeta(fwm);
-        try {
-        	TimeUnit.MILLISECONDS.sleep(50);
-        } catch (InterruptedException e) {
-        }
-    	fw.playEffect(EntityEffect.FIREWORK_EXPLODE);
     }
     
     
