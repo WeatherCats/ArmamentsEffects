@@ -37,7 +37,6 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 	
     @Override
     public void run(final AE_ProjectileEvent event) {
-	Bukkit.getServer().broadcastMessage("Fireworks Projectile Event");
 	try {
 	    final Projectile projectile = event.getProjectile();
 	    String[] args = event.getArgs();
@@ -76,7 +75,6 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 
     @Override
     public void run(AE_ProjectileHitEvent event) {
-	Bukkit.getServer().broadcastMessage("Fireworks Projectile Hit Event");
 	final Projectile projectile = event.getProjectile();
 	String[] args = event.getArgs();
 
@@ -110,7 +108,6 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 
     @Override
     public void run(AE_DamageEvent event) {
-	Bukkit.getServer().broadcastMessage("Fireworks Damage Event");	
 	final LivingEntity victim = event.getVictim();
 	String[] args = event.getArgs();
 
