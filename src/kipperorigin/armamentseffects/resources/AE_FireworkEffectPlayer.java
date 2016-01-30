@@ -1,7 +1,9 @@
 package kipperorigin.armamentseffects.resources;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
 
+import org.bukkit.Color;
 import org.bukkit.EntityEffect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Entity;
@@ -52,72 +54,21 @@ public class AE_FireworkEffectPlayer {
      * @param fe
      * @throws Exception
      */
-    public void playFirework(World world, Location loc, FireworkEffect fe, EntityType type) {
-    	if (type == EntityType.FIREWORK) {
-			Entity entity = world.spawnEntity(loc, EntityType.FIREWORK);
-			Firework fw = (Firework) entity;
-	        FireworkMeta data = (FireworkMeta) fw.getFireworkMeta();
-	        // clear existing
-	        data.clearEffects();
-	        // power of one
-	        data.setPower(5);
-	        // add the effect
-	        data.addEffect(fe);
-	        // set the meta
-	        fw.setFireworkMeta(data);
-	        
-	        fw.playEffect(EntityEffect.FIREWORK_EXPLODE);
-	        
-	        fw.detonate();
-    	}
+    public void playFirework(World world, Location loc, FireworkEffect fe) {
+    	Firework fw = (Firework) world.spawnEntity(loc, EntityType.FIREWORK);
+        FireworkMeta fwm = fw.getFireworkMeta();
+        fwm.addEffect(fe);
+        fwm.setPower(0);
+        fw.setFireworkMeta(fwm);
+        try {
+        	TimeUnit.MILLISECONDS.sleep(50);
+        } catch (InterruptedException e) {
+        }
+    	fw.playEffect(EntityEffect.FIREWORK_EXPLODE);
     }
     
     
-    public void playFirework(World world, Location loc, FireworkEffect fe) throws Exception {
-        // Bukkity load (CraftFirework)
-        Firework fw = (Firework) world.spawn(loc, Firework.class);
-        // the net.minecraft.server.World
-        Object nms_world = null;
-        Object nms_firework = null;
-        /*
-         * The reflection part, this gives us access to funky ways of messing around with things
-         */
-        if(world_getHandle == null) {
-            // get the methods of the craftbukkit objects
-            world_getHandle = getMethod(world.getClass(), "getHandle");
-            firework_getHandle = getMethod(fw.getClass(), "getHandle");
-        }
-        // invoke with no arguments
-        nms_world = world_getHandle.invoke(world, (Object[]) null);
-        nms_firework = firework_getHandle.invoke(fw, (Object[]) null);
-        // null checks are fast, so having this seperate is ok
-        if(nms_world_broadcastEntityEffect == null) {
-            // get the method of the nms_world
-            nms_world_broadcastEntityEffect = getMethod(nms_world.getClass(), "broadcastEntityEffect");
-        }
-        /*
-         * Now we mess with the metadata, allowing nice clean spawning of a pretty firework (look, pretty lights!)
-         */
-        // metadata load
-        FireworkMeta data = (FireworkMeta) fw.getFireworkMeta();
-        // clear existing
-        data.clearEffects();
-        // power of one
-        data.setPower(5);
-        // add the effect
-        data.addEffect(fe);
-        // set the meta
-        fw.setFireworkMeta(data);
-        fw.detonate();
-        /*
-         * Finally, we broadcast the entity effect then kill our fireworks object
-         */
-        // invoke with arguments
-        nms_world_broadcastEntityEffect.invoke(nms_world, new Object[] {nms_firework, (byte) 17});
-        // remove from the game
-        fw.playEffect(EntityEffect.FIREWORK_EXPLODE);
-        fw.remove();
-    }
+
     
     /**
      * Internal method, used as shorthand to grab our method in a nice friendly manner
