@@ -106,8 +106,12 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 
 		if (args.length == 0 || args[0].isEmpty())
 			return;
-		else if (args.length != 2 && args.length != 3) {
+		else if (args.length > 4) {
 			return;
+		}
+		
+		if (projectile.hasMetadata("Data")) {
+			Bukkit.getScheduler().cancelTasks(plugin);
 		}
 
 		final String particle = args[0].toUpperCase();
@@ -123,9 +127,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
 		final Effect effect = Effect.valueOf(particle);
 		
 		
-		if (projectile.hasMetadata("Data")) {
-			Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
-		}
+
 		
 		
 		if (effect == Effect.ITEM_BREAK || effect == Effect.TILE_BREAK || effect == Effect.TILE_DUST) {
