@@ -78,10 +78,10 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 	final Projectile projectile = event.getProjectile();
 	String[] args = event.getArgs();
 
+	Bukkit.getScheduler().cancelTasks(plugin);
+	
 	if (args.length != 2 || args[0].isEmpty())
 	    return;
-	
-	Bukkit.getScheduler().cancelTasks(plugin);
 
 	final Type type;
 	try {
@@ -96,7 +96,7 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 	} catch (NullPointerException e) {
 	    return;
 	}
-		
+
 	//try {
 	    // fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
 	//} catch (Exception e) {

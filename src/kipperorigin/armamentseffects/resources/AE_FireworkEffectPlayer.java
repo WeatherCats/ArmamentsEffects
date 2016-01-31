@@ -62,7 +62,6 @@ public class AE_FireworkEffectPlayer {
         fw.setFireworkMeta(fwm);
     }
     
-    
 
     
     /**

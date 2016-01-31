@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kipperorigin.armamentseffects.AE_Main;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 import kipperorigin.armamentseffects.event.AE_InteractEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
@@ -30,6 +31,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 @SuppressWarnings("deprecation")
 public class AE_EffectManager implements Listener {
 
+	private AE_Main plugin;
+	
+    public AE_EffectManager(AE_Main plugin) {
+
+	this.plugin = plugin;
+    }
+	
 	public String stripColors(String line) {
 		return line.replaceAll("(\u00A7|&)[0-9A-Fa-fK-Ok-oRr]", "");
 	}
@@ -147,7 +155,7 @@ public class AE_EffectManager implements Listener {
 		Location location = event.getEntity().getLocation();
 
 		if (projectile.hasMetadata("Data")) {
-			Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
+			Bukkit.getScheduler().cancelTasks(plugin);
 		}
 
 		projectile.eject();
