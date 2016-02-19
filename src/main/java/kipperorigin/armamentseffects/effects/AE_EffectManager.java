@@ -155,6 +155,7 @@ public class AE_EffectManager implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void process(ProjectileHitEvent event) {
+
         Projectile projectile = event.getEntity();
 
         ProjectileSource source = projectile.getShooter();
@@ -176,44 +177,44 @@ public class AE_EffectManager implements Listener {
     }
 
     private void runEvent(AE_Event data) {
-    ItemStack item = data.getItem();
-    
-    if (!item.hasItemMeta())
-        return;
-    ItemMeta meta = item.getItemMeta();
-    if (!meta.hasLore())
-        return;
-    List<String> lore = meta.getLore();
-    
-    for (String line : lore) {
-        line = stripColors(line);
+        ItemStack item = data.getItem();
         
-        String[] parts = line.split(" +", 2);
-        String name = parts[0];
+        if (!item.hasItemMeta())
+            return;
+        ItemMeta meta = item.getItemMeta();
+        if (!meta.hasLore())
+            return;
+        List<String> lore = meta.getLore();
         
-        AE_EffectParent effect = getEffect(name);
-        if (effect == null)
-        continue;
-        
-        String[] args;
-        if (parts.length == 2)
-        args = parts[1].split(" +");
-        else
-        args = new String[0];
-        
-        data.setArgs(args);
-        if(data instanceof AE_DamageEvent) {
-        effect.run((AE_DamageEvent)data);
+        for (String line : lore) {
+            line = stripColors(line);
+            
+            String[] parts = line.split(" +", 2);
+            String name = parts[0];
+            
+            AE_EffectParent effect = getEffect(name);
+            if (effect == null)
+                continue;
+
+            String[] args;
+            if (parts.length == 2)
+                args = parts[1].split(" +");
+            else
+                args = new String[0];
+            
+            data.setArgs(args);
+            if(data instanceof AE_DamageEvent) {
+                effect.run((AE_DamageEvent)data);
+            }
+            else if(data instanceof AE_ProjectileEvent) {
+                effect.run((AE_ProjectileEvent)data);
+            }
+            else if(data instanceof AE_ProjectileHitEvent) {
+                effect.run((AE_ProjectileHitEvent)data);
+            }
+            else if(data instanceof AE_InteractEvent) {
+                effect.run((AE_InteractEvent)data);
+            }
         }
-        else if(data instanceof AE_ProjectileEvent) {
-        effect.run((AE_ProjectileEvent)data);
-        }
-        else if(data instanceof AE_ProjectileHitEvent) {
-        effect.run((AE_ProjectileHitEvent)data);
-        }
-        else if(data instanceof AE_InteractEvent) {
-        effect.run((AE_ProjectileHitEvent)data);
-        }
-    }
     }    
- }
+}

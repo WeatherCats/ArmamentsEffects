@@ -1,7 +1,7 @@
 name: ArmamentsEffects
 main: kipperorigin.armamentseffects.AE_Main
 author: KipperOrigin
-version: 0.3
+version: 0.6
 
 permissions:
   ae.main:
