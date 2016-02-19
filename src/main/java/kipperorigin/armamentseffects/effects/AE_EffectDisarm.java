@@ -10,24 +10,24 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class AE_EffectDisarm extends AE_EffectParent {
 
-	AE_Color color = new AE_Color();
+    AE_Color color = new AE_Color();
 
-	@Override
-	public void run(AE_DamageEvent event) {
-		if (!(event.getVictim() instanceof Player))
-			return;
+    @Override
+    public void run(AE_DamageEvent event) {
+        if (!(event.getVictim() instanceof Player))
+            return;
 
-		Player victim = (Player)event.getVictim();
+        Player victim = (Player)event.getVictim();
 
-		ItemStack item = victim.getItemInHand();
-		if (item == null || item.getType() == Material.AIR)
-			return;
+        ItemStack item = victim.getItemInHand();
+        if (item == null || item.getType() == Material.AIR)
+            return;
 
-		PlayerInventory inv = victim.getInventory();
-		int oldSlot = inv.getHeldItemSlot();
-		int newSlot = inv.firstEmpty();
-		inv.setItem(newSlot, item);
-		inv.setItem(oldSlot, null);
-		victim.sendMessage(color.color("&4You have been disarmed!"));
-	}
+        PlayerInventory inv = victim.getInventory();
+        int oldSlot = inv.getHeldItemSlot();
+        int newSlot = inv.firstEmpty();
+        inv.setItem(newSlot, item);
+        inv.setItem(oldSlot, null);
+        victim.sendMessage(color.color("&4You have been disarmed!"));
+    }
 }

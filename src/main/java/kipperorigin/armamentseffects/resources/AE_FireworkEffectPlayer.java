@@ -55,7 +55,7 @@ public class AE_FireworkEffectPlayer {
      * @throws Exception
      */
     public void playFirework(World world, Location loc, FireworkEffect fe) {
-    	Firework fw = (Firework) world.spawnEntity(loc, EntityType.FIREWORK);
+        Firework fw = (Firework) world.spawnEntity(loc, EntityType.FIREWORK);
         FireworkMeta fwm = fw.getFireworkMeta();
         fwm.addEffect(fe);
         fwm.setPower(0);

@@ -24,116 +24,116 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 
     public AE_EffectFireworkParticle(AE_Main plugin) {
 
-	this.plugin = plugin;
+    this.plugin = plugin;
     }
 
     AE_RemoveItem AE_RI = new AE_RemoveItem();
     AE_FireworkEffectPlayer fplayer = new AE_FireworkEffectPlayer();
     AE_CheckFireworkColor colorCheck = new AE_CheckFireworkColor();
-	
+    
     private FireworkEffect getEffect(Type type, Color finalColor) {
-	return FireworkEffect.builder().with(type).withColor(finalColor).build();
+    return FireworkEffect.builder().with(type).withColor(finalColor).build();
     }
-	
+    
     @Override
     public void run(final AE_ProjectileEvent event) {
-	try {
-	    final Projectile projectile = event.getProjectile();
-	    String[] args = event.getArgs();
-	    int timer = 1;
-	    
-	    if (args.length > 3 || args[0].isEmpty())
-	    	return;
-	    
-	    final Type type = Type.valueOf(args[0].toUpperCase());
-	    final Color color = colorCheck.getFireworkColorByString(args[1]);
-	    
-	    if (args.length == 3) {
-	    	try {
-	    		timer = Integer.parseInt(args[2]);
-	    	} catch (NumberFormatException e) {
-	    		return;
-	    	}
-	    }
-	    final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
-		    @Override
-		    public void run() {
-			try {
-			    fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
-			} catch (Exception e) {
-			    return;
-			}
-		    }
-		}, 0L, timer).getTaskId();
-	    MetadataValue x = new FixedMetadataValue(plugin, taskId);
-	    projectile.setMetadata("Data", x);
-	}
-	catch(RuntimeException e) {
-	    return;
-	}
+    try {
+        final Projectile projectile = event.getProjectile();
+        String[] args = event.getArgs();
+        int timer = 1;
+        
+        if (args.length > 3 || args[0].isEmpty())
+            return;
+        
+        final Type type = Type.valueOf(args[0].toUpperCase());
+        final Color color = colorCheck.getFireworkColorByString(args[1]);
+        
+        if (args.length == 3) {
+            try {
+                timer = Integer.parseInt(args[2]);
+            } catch (NumberFormatException e) {
+                return;
+            }
+        }
+        final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+            @Override
+            public void run() {
+            try {
+                fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
+            } catch (Exception e) {
+                return;
+            }
+            }
+        }, 0L, timer).getTaskId();
+        MetadataValue x = new FixedMetadataValue(plugin, taskId);
+        projectile.setMetadata("Data", x);
+    }
+    catch(RuntimeException e) {
+        return;
+    }
     }
 
     @Override
     public void run(AE_ProjectileHitEvent event) {
-	final Projectile projectile = event.getProjectile();
-	String[] args = event.getArgs();
+    final Projectile projectile = event.getProjectile();
+    String[] args = event.getArgs();
 
-	Bukkit.getScheduler().cancelTasks(plugin);
-	
-	if (args.length != 2 || args[0].isEmpty())
-	    return;
+    Bukkit.getScheduler().cancelTasks(plugin);
+    
+    if (args.length != 2 || args[0].isEmpty())
+        return;
 
-	final Type type;
-	try {
-	    type = Type.valueOf(args[0].toUpperCase());
-	} catch  (IllegalArgumentException e) {
-	    return;
-	}
+    final Type type;
+    try {
+        type = Type.valueOf(args[0].toUpperCase());
+    } catch  (IllegalArgumentException e) {
+        return;
+    }
 
-	final Color color;
-	try {
-	    color = colorCheck.getFireworkColorByString(args[1]);
-	} catch (NullPointerException e) {
-	    return;
-	}
+    final Color color;
+    try {
+        color = colorCheck.getFireworkColorByString(args[1]);
+    } catch (NullPointerException e) {
+        return;
+    }
 
-	//try {
-	    // fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
-	//} catch (Exception e) {
-	//    return;
-	//}
-	AE_RI.removeItem(event.getPlayer());
-	return;
+    //try {
+        // fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
+    //} catch (Exception e) {
+    //    return;
+    //}
+    AE_RI.removeItem(event.getPlayer());
+    return;
     }
 
     @Override
     public void run(AE_DamageEvent event) {
-	final LivingEntity victim = event.getVictim();
-	String[] args = event.getArgs();
+    final LivingEntity victim = event.getVictim();
+    String[] args = event.getArgs();
 
-	if (args.length != 2 || args[0].isEmpty())
-	    return;
+    if (args.length != 2 || args[0].isEmpty())
+        return;
 
-	final Type type;
-	try {
-	    type = Type.valueOf(args[0].toUpperCase());
-	} catch  (IllegalArgumentException e) {
-	    return;
-	}
-		
-	final Color color;
-	try {
-	    color = colorCheck.getFireworkColorByString(args[1]);
-	} catch (NullPointerException e) {
-	    return;
-	}
-		
-	try {
-	    fplayer.playFirework(event.getPlayer().getWorld(), victim.getLocation(), getEffect(type, color));
-	} catch (Exception e) {
-	    return;
-	}
-	AE_RI.removeItem(event.getPlayer());
-	return;
+    final Type type;
+    try {
+        type = Type.valueOf(args[0].toUpperCase());
+    } catch  (IllegalArgumentException e) {
+        return;
+    }
+        
+    final Color color;
+    try {
+        color = colorCheck.getFireworkColorByString(args[1]);
+    } catch (NullPointerException e) {
+        return;
+    }
+        
+    try {
+        fplayer.playFirework(event.getPlayer().getWorld(), victim.getLocation(), getEffect(type, color));
+    } catch (Exception e) {
+        return;
+    }
+    AE_RI.removeItem(event.getPlayer());
+    return;
     }
 }

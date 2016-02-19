@@ -6,22 +6,22 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class AE_DamageEvent extends AE_Event {
 
-	private final LivingEntity victim;
-	private final EntityDamageByEntityEvent event;
+    private final LivingEntity victim;
+    private final EntityDamageByEntityEvent event;
 
-	public AE_DamageEvent(Player attacker, LivingEntity victim, EntityDamageByEntityEvent event) {
-		super(attacker);
+    public AE_DamageEvent(Player attacker, LivingEntity victim, EntityDamageByEntityEvent event) {
+        super(attacker);
 
-		this.victim = victim;
-		this.event = event;
-	}
+        this.victim = victim;
+        this.event = event;
+    }
 
-	public LivingEntity getVictim() {
-		return victim;
-	}
+    public LivingEntity getVictim() {
+        return victim;
+    }
 
-	public EntityDamageByEntityEvent getRawEvent() {
-		return event;
-	}
+    public EntityDamageByEntityEvent getRawEvent() {
+        return event;
+    }
 
 }

@@ -7,27 +7,27 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class AE_ProjectileHitEvent extends AE_Event {
 
-	private final Projectile projectile;
-	private final ProjectileHitEvent event;
-	private final Location location;
+    private final Projectile projectile;
+    private final ProjectileHitEvent event;
+    private final Location location;
 
-	public AE_ProjectileHitEvent(Player player, Projectile projectile, ProjectileHitEvent event, Location location) {
-		super(player);
+    public AE_ProjectileHitEvent(Player player, Projectile projectile, ProjectileHitEvent event, Location location) {
+        super(player);
 
-		this.projectile = projectile;
-		this.event = event;
-		this.location = location;
-	}
+        this.projectile = projectile;
+        this.event = event;
+        this.location = location;
+    }
 
-	public Projectile getProjectile() {
-		return projectile;
-	}
+    public Projectile getProjectile() {
+        return projectile;
+    }
 
-	public ProjectileHitEvent getRawEvent() {
-		return event;
-	}
+    public ProjectileHitEvent getRawEvent() {
+        return event;
+    }
 
-	public Location getLocation() {
-		return location;
-	}
+    public Location getLocation() {
+        return location;
+    }
 }
