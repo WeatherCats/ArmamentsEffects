@@ -18,8 +18,8 @@ public class AE_EffectStun extends AE_EffectParent {
     public void run(AE_DamageEvent event) {
         LivingEntity target = event.getVictim();
         String[] args = event.getArgs();
-        int length = 5;
 
+        int length = 5;
         if (args.length >= 1) {
             try {
                 length = Integer.parseInt(args[0]);

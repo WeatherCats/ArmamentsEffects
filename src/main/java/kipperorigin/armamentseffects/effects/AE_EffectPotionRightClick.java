@@ -21,19 +21,16 @@ public class AE_EffectPotionRightClick extends AE_EffectParent {
             return;
         if ((event.getAction() == Action.RIGHT_CLICK_AIR) || (event.getAction() == Action.RIGHT_CLICK_BLOCK)) {
             potion = args[0];
-            if (args.length > 1) {
-                try {
+
+            try {
+                if (args.length > 1) {
                     amp = Integer.parseInt(args[1]);
-                } catch (NumberFormatException e) {
-                    return;
                 }
-            }
-            if (args.length > 2) {
-                try {
+                if (args.length > 2) {
                     time = Integer.parseInt(args[2]);
-                } catch (NumberFormatException e) {
-                    return;
                 }
+            } catch (NumberFormatException e) {
+                    return;
             }
 
             PotionEffectType type = PotionEffectType.getByName(potion);
@@ -53,23 +50,20 @@ public class AE_EffectPotionRightClick extends AE_EffectParent {
         int amp = 1;
         int time = 5;
         Player player = (Player) event.getEntity();
+
         if (args.length == 0)
             return;
 
         potion = args[0];
-        if (args.length > 1) {
-            try {
+        try {
+            if (args.length > 1) {
                 amp = Integer.parseInt(args[1]);
-            } catch (NumberFormatException e) {
-                return;
             }
-        }
-        if (args.length > 2) {
-            try {
+            if (args.length > 2) {
                 time = Integer.parseInt(args[2]);
-            } catch (NumberFormatException e) {
-                return;
             }
+        } catch (NumberFormatException e) {
+            return;
         }
 
         PotionEffectType type = PotionEffectType.getByName(potion);

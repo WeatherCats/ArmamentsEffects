@@ -68,12 +68,8 @@ public class AE_EffectShoot extends AE_EffectParent {
                     
                     Entity entity = world.spawnEntity(location, type);
                     entity.setVelocity(projectile.getVelocity());
-                    
-                    return;
                 } 
-            } else
-                return;
-        } else
-            return;
+            }
+        }
     }
 }

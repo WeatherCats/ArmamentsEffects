@@ -46,6 +46,5 @@ public class AE_EffectDrain extends AE_EffectParent {
             else
                 player.setHealth(player.getHealth() + amp);
         }
-        return;
     }
 }

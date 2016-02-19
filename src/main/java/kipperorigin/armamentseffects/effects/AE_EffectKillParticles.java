@@ -9,7 +9,6 @@ public class AE_EffectKillParticles extends AE_EffectParent {
     private AE_Main plugin;
 
     public AE_EffectKillParticles(AE_Main plugin) {
-
         this.plugin = plugin;
     }
     

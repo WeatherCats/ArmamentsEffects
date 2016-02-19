@@ -22,23 +22,21 @@ public class AE_EffectPotions extends AE_EffectParent {
         String potion;
         int amp = 1;
         int time = 5;
+
         if (args.length == 0)
             return;
 
         potion = args[0];
-        if (args.length > 1) {
-            try {
+
+        try {
+            if (args.length > 1) {
                 amp = Integer.parseInt(args[1]);
-            } catch (NumberFormatException e) {
-                return;
             }
-        }
-        if (args.length > 2) {
-            try {
+            if (args.length > 2) {
                 time = Integer.parseInt(args[2]);
-            } catch (NumberFormatException e) {
-                return;
             }
+        } catch (NumberFormatException e) {
+            return;
         }
 
         PotionEffectType type = PotionEffectType.getByName(potion);
@@ -59,24 +57,22 @@ public class AE_EffectPotions extends AE_EffectParent {
         int amp = 1;
         int time = 5;
         String splash = "false";
+
         if (args.length == 0)
             return;
 
         potion = args[0];
-        if (args.length > 1) {
-            try {
+        try {
+            if (args.length > 1) {
                 amp = Integer.parseInt(args[1]);
-            } catch (NumberFormatException e) {
-                return;
             }
-        }
-        if (args.length > 2) {
-            try {
+            if (args.length > 2) {
                 time = Integer.parseInt(args[2]);
-            } catch (NumberFormatException e) {
-                return;
             }
+        } catch (NumberFormatException e) {
+            return;
         }
+
         if (args.length > 3) {
             if (args[3].equalsIgnoreCase("splash"))
                 splash = "true";

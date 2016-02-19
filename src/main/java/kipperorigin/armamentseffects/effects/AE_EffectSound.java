@@ -21,6 +21,7 @@ public class AE_EffectSound extends AE_EffectParent {
         String soundstring;
         String playsound = "player";
         int x = 1;
+
         final Location loc = player.getLocation();
         if (args.length == 0 || args[0].isEmpty()) {
             soundstring = null;
