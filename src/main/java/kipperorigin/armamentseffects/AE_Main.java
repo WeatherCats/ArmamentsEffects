@@ -3,7 +3,7 @@ package kipperorigin.armamentseffects;
 import kipperorigin.armamentseffects.effects.AE_EffectCommand;
 import kipperorigin.armamentseffects.effects.AE_EffectDisarm;
 import kipperorigin.armamentseffects.effects.AE_EffectDrain;
-import kipperorigin.armamentseffects.effects.AE_EffectDurability;
+//import kipperorigin.armamentseffects.effects.AE_EffectDurability;
 import kipperorigin.armamentseffects.effects.AE_EffectExplode;
 import kipperorigin.armamentseffects.effects.AE_EffectFireworkParticle;
 import kipperorigin.armamentseffects.effects.AE_EffectInstakill;
@@ -56,8 +56,8 @@ public class AE_Main extends JavaPlugin {
 		listener.registerEffect("unarm", disarm);
 		
 		// durability
-		AE_EffectDurability durability = new AE_EffectDurability();
-		listener.registerEffect("durability", durability);
+		// AE_EffectDurability durability = new AE_EffectDurability();
+		// listener.registerEffect("durability", durability);
 
 		// explode
 		AE_EffectExplode explode = new AE_EffectExplode();
