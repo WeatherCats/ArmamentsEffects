@@ -38,7 +38,7 @@ public class AE_EffectTnT extends AE_EffectParent {
         Vector x = new Vector(0, .35, 0);
         Vector sg[] = new Vector[]{new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random())};
 
-        if(args.length > 0 && (args[1].equalsIgnoreCase(types[0]) || args[1].equalsIgnoreCase(types[5]))) {
+        if(args.length > 1 && (args[1].equalsIgnoreCase(types[0]) || args[1].equalsIgnoreCase(types[5]))) {
             
             int multiply = 1;
             int timer = 0;
@@ -71,9 +71,9 @@ public class AE_EffectTnT extends AE_EffectParent {
                 for(int i = 0; i < a.length; i++) {
                     a[i].add(sg[i]);
                     if (timer <= 0)
-                        tnt.fireTnTNoTimer(a[0], loc);
+                        tnt.fireTnTNoTimer(a[i], loc);
                     else
-                        tnt.fireTnT(a[0], loc, timer);
+                        tnt.fireTnT(a[i], loc, timer);
                 }
             }
             
