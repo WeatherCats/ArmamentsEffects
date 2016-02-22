@@ -21,7 +21,7 @@ public class AE_EffectTnT extends AE_EffectParent {
 
     @Override
     public void run(final AE_InteractEvent event) {
-        
+
         /* -t Trishot
          * -sg Shotgun
          * -mr Mortar
@@ -38,7 +38,7 @@ public class AE_EffectTnT extends AE_EffectParent {
         Vector x = new Vector(0, .35, 0);
         Vector sg[] = new Vector[]{new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random()), new Vector(Math.random(), Math.random(), Math.random())};
 
-        if(args.length > 1 && (args[1].equalsIgnoreCase(types[0]) || args[1].equalsIgnoreCase(types[5]))) {
+        if(args.length >= 1 && (args[0].equalsIgnoreCase(types[0]) || args[0].equalsIgnoreCase(types[5]))) {
             
             int multiply = 1;
             int timer = 0;
@@ -65,7 +65,7 @@ public class AE_EffectTnT extends AE_EffectParent {
             else
                 tnt.fireTnT(v, loc, timer);
 
-            if (args[1].equalsIgnoreCase(types[0])) { 
+            if (args[0].equalsIgnoreCase(types[0])) { 
                 Vector a[] = new Vector[]{v, v, v, v, v, v, v, v};
                 
                 for(int i = 0; i < a.length; i++) {
