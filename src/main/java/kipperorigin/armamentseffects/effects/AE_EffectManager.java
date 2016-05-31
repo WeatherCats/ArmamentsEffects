@@ -29,6 +29,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.EquipmentSlot;
 
 @SuppressWarnings("deprecation")
 public class AE_EffectManager implements Listener {
@@ -127,6 +128,8 @@ public class AE_EffectManager implements Listener {
         Player player = event.getPlayer();
         Location loc = player.getLocation();
 
+        if(event.getHand() != EquipmentSlot.HAND) return;
+        
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             runEvent(new AE_InteractEvent(player, event.getClickedBlock().getLocation(), event));
         } else if (event.getAction() == Action.RIGHT_CLICK_AIR) {
