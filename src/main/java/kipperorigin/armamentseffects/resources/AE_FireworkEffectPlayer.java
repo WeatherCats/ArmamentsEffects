@@ -1,12 +1,6 @@
 package kipperorigin.armamentseffects.resources;
 
-import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
-
-import org.bukkit.Color;
-import org.bukkit.EntityEffect;
 import org.bukkit.FireworkEffect;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -42,11 +36,6 @@ public class AE_FireworkEffectPlayer {
      * }
      */
     
-    // internal references, performance improvements
-    private Method world_getHandle = null;
-    private Method nms_world_broadcastEntityEffect = null;
-    private Method firework_getHandle = null;
-    
     /**
      * Play a pretty firework at the location with the FireworkEffect when called
      * @param world
@@ -60,23 +49,6 @@ public class AE_FireworkEffectPlayer {
         fwm.addEffect(fe);
         fwm.setPower(0);
         fw.setFireworkMeta(fwm);
-    }
-    
-
-    
-    /**
-     * Internal method, used as shorthand to grab our method in a nice friendly manner
-     * @param cl
-     * @param method
-     * @return Method (or null)
-     */
-    private static Method getMethod(Class<?> cl, String method) {
-        for(Method m : cl.getMethods()) {
-            if(m.getName().equals(method)) {
-                return m;
-            }
-        }
-        return null;
     }
 
 }

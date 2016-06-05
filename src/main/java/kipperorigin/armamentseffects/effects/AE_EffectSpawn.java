@@ -3,7 +3,6 @@ package kipperorigin.armamentseffects.effects;
 import kipperorigin.armamentseffects.event.AE_InteractEvent;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;

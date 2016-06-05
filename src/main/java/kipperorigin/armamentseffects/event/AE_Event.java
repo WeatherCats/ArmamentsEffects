@@ -14,7 +14,7 @@ public class AE_Event {
 
     public AE_Event(Player player) {
         this.player = player;
-        item = player.getItemInHand();
+        item = player.getInventory().getItemInMainHand();
     }
 
     public final Player getPlayer() {

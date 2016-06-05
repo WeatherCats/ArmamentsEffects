@@ -13,6 +13,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+@SuppressWarnings("deprecation")
 public class AE_EffectPotions extends AE_EffectParent {
 
     @Override

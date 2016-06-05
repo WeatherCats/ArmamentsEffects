@@ -21,7 +21,6 @@ import kipperorigin.armamentseffects.effects.AE_EffectSpawn;
 import kipperorigin.armamentseffects.effects.AE_EffectStun;
 import kipperorigin.armamentseffects.effects.AE_EffectTeleport;
 import kipperorigin.armamentseffects.effects.AE_EffectTnT;
-import kipperorigin.armamentseffects.effects.AE_EffectUnbreakable;
 import kipperorigin.armamentseffects.effects.AE_EffectVelocity;
 import kipperorigin.armamentseffects.effects.AE_EffectWeb;
 
@@ -124,11 +123,6 @@ public class AE_Main extends JavaPlugin {
         AE_EffectTnT tnt = new AE_EffectTnT(this);
         listener.registerEffect("tnt", tnt);
         listener.registerEffect("primedtnt", tnt);
-        
-        // unbreakable
-        AE_EffectUnbreakable unbreakable = new AE_EffectUnbreakable();
-        listener.registerEffect("unbreakable", unbreakable);
-        listener.registerEffect("unbreaking", unbreakable);
 
         // velocity
         AE_EffectVelocity velocity = new AE_EffectVelocity();

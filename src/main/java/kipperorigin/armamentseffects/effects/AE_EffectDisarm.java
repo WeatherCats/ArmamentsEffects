@@ -19,7 +19,7 @@ public class AE_EffectDisarm extends AE_EffectParent {
 
         Player victim = (Player)event.getVictim();
 
-        ItemStack item = victim.getItemInHand();
+        ItemStack item = victim.getInventory().getItemInMainHand();
         if (item == null || item.getType() == Material.AIR)
             return;
 

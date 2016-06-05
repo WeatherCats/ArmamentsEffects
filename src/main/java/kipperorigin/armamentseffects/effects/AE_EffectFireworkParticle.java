@@ -91,22 +91,17 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
 
     @Override
     public void run(AE_ProjectileHitEvent event) {
-        final Projectile projectile = event.getProjectile();
         String[] args = event.getArgs();
     
         if (args.length != 2 || args[0].isEmpty())
             return;
 
-        final Type type;
         try {
-            type = Type.valueOf(args[0].toUpperCase());
         } catch  (IllegalArgumentException e) {
             return;
         }
 
-        final Color color;
         try {
-            color = colorCheck.getFireworkColorByString(args[1]);
         } catch (NullPointerException e) {
             return;
         }

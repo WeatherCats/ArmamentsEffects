@@ -3,7 +3,6 @@ package kipperorigin.armamentseffects.effects;
 import kipperorigin.armamentseffects.event.AE_DamageEvent;
 import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
 import kipperorigin.armamentseffects.resources.AE_Explode;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
@@ -44,12 +43,12 @@ public class AE_EffectExplode extends AE_EffectParent {
 
         float power = 0;
 
-        if (args.length != 2 || !args[0].equalsIgnoreCase("impact")) {
+        if (args.length != 2 || !args[1].equalsIgnoreCase("impact")) {
             return;
         }
 
         try {
-            power = Integer.parseInt(args[1]);
+            power = Integer.parseInt(args[0]);
         }
         catch (NumberFormatException e) {
             return;

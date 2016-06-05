@@ -30,16 +30,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.EquipmentSlot;
 
-@SuppressWarnings("deprecation")
 public class AE_EffectManager implements Listener {
 
-    private AE_Main plugin;
-    
     public AE_EffectManager(AE_Main plugin) {
-
-    this.plugin = plugin;
     }
     
     public String stripColors(String line) {
@@ -84,15 +78,13 @@ public class AE_EffectManager implements Listener {
         		}
         		damager = (Player)source;
         		sourceIsPlayer = false;
-            }
-            
-            else if(assailant instanceof Player) {
+            } else if(assailant instanceof Player) {
             	damager = (Player)assailant;
             } else {
             	return;
             }
         }
-        
+
         ItemStack item = damager.getInventory().getItemInMainHand(); // TODO: Test: this might have changed since a projectile started it's journey? Opportunity to cheat for the player?
 
         if (!item.hasItemMeta())
@@ -114,7 +106,6 @@ public class AE_EffectManager implements Listener {
 
         if (item.getType().equals(Material.BOW) && sourceIsPlayer)
             return;
-
         if (event.isCancelled() && !damager.hasPermission("ae.admin") && exempt)
             return;
 
@@ -125,7 +116,7 @@ public class AE_EffectManager implements Listener {
 
         if (item == null || item.getType() == Material.AIR)
             return;
-
+        
         runEvent(new AE_DamageEvent(damager, injured, event));
     }
 
