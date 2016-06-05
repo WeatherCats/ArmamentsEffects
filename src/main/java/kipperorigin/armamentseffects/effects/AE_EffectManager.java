@@ -27,6 +27,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -69,24 +70,29 @@ public class AE_EffectManager implements Listener {
         {
             Entity assailant = event.getDamager();
             if ((assailant instanceof Projectile)) {
-            ProjectileSource source = ((Projectile)assailant).getShooter();
-            if(!(source instanceof Player)) {
-                return;
-            }
-            damager = (Player)source;
-            sourceIsPlayer = false;
+            	Projectile projectile = (Projectile) assailant;
+                int i = 0;
+        		while(projectile.hasMetadata("Data " + String.valueOf(i))) {
+        			Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data " + String.valueOf(i)).get(0).asInt());
+        			i++;
+        		}  	
+        		projectile.eject();
+        		ProjectileSource source = ((Projectile)assailant).getShooter();
+        		if(!(source instanceof Player)) {
+        			return;
+        		}
+        		damager = (Player)source;
+        		sourceIsPlayer = false;
             }
             
             else if(assailant instanceof Player) {
-            damager = (Player)assailant;
-            }
-            
-            else {
-            return;
+            	damager = (Player)assailant;
+            } else {
+            	return;
             }
         }
         
-        ItemStack item = damager.getItemInHand(); // TODO: Test: this might have changed since a projectile started it's journey? Opportunity to cheat for the player?
+        ItemStack item = damager.getInventory().getItemInMainHand(); // TODO: Test: this might have changed since a projectile started it's journey? Opportunity to cheat for the player?
 
         if (!item.hasItemMeta())
             return;
@@ -127,6 +133,8 @@ public class AE_EffectManager implements Listener {
         Player player = event.getPlayer();
         Location loc = player.getLocation();
 
+        if(event.getHand() != EquipmentSlot.HAND) return;
+        
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             runEvent(new AE_InteractEvent(player, event.getClickedBlock().getLocation(), event));
         } else if (event.getAction() == Action.RIGHT_CLICK_AIR) {
@@ -167,9 +175,11 @@ public class AE_EffectManager implements Listener {
 
         Location location = event.getEntity().getLocation();
 
-        if (projectile.hasMetadata("Data")) {
-            Bukkit.getScheduler().cancelTasks(plugin);
-        }
+        int i = 0;
+		while(projectile.hasMetadata("Data " + String.valueOf(i))) {
+			Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data " + String.valueOf(i)).get(0).asInt());
+			i++;
+		}
 
         projectile.eject();
 

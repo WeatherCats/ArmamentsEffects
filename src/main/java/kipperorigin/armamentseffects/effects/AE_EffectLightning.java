@@ -50,15 +50,19 @@ public class AE_EffectLightning extends AE_EffectParent implements Listener {
         }, 0L, timer).getTaskId();
         MetadataValue x = new FixedMetadataValue(plugin, taskId);
         projectile.setMetadata("Data", x);
-        
+		int i = 0;
+		
+		while(projectile.hasMetadata("Data " + String.valueOf(i))) 
+			i++;
+		
+		projectile.setMetadata("Data " + String.valueOf(i), x);
         if (event.getRawEvent().isCancelled() && projectile.hasMetadata("Data"))
-                Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
+            Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
     }
 
     @Override
     public void run(AE_ProjectileHitEvent event) {
         String[] args = event.getArgs();
-        Bukkit.getScheduler().cancelTasks(plugin);
         if (args.length == 0)
             event.getLocation().getWorld().strikeLightning(event.getLocation());
         else if (args.length <= 2 && args[0].equalsIgnoreCase("effect"))
