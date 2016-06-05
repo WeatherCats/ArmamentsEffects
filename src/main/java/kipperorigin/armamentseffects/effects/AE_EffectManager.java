@@ -138,8 +138,6 @@ public class AE_EffectManager implements Listener {
         
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             runEvent(new AE_InteractEvent(player, event.getClickedBlock().getLocation(), event));
-        } else if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            runEvent(new AE_InteractEvent(player, loc, event));
         } else {
             runEvent(new AE_InteractEvent(player, loc, event));
         }

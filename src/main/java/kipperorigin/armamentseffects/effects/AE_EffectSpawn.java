@@ -23,9 +23,10 @@ public class AE_EffectSpawn extends AE_EffectParent {
 
         if (args.length == 0)
             return;
+
         
         if ((event.getAction() == Action.RIGHT_CLICK_AIR) || (event.getAction() == Action.LEFT_CLICK_AIR)) {
-            event.getRawEvent().setCancelled(true);;
+            event.getRawEvent().setCancelled(true);
         	return;
         }
 
