@@ -72,6 +72,15 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
                         public void run() {
                             final Location loc = event.getProjectile().getLocation();
                             projectile.getWorld().playEffect(loc, effect, data, 100);
+                            if (projectile.getLocation().getY() <= 0) {
+                            	int i = 0;
+                            	while(projectile.hasMetadata("Data " + String.valueOf(i))) {
+                            		Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data " + String.valueOf(i)).get(0).asInt());
+                            		i++;
+                            	}
+                            	projectile.eject();
+                            	projectile.remove();
+                    		}
                         }
                     }, 0L, timer).getTaskId();
                 MetadataValue x = new FixedMetadataValue(plugin, taskId);

@@ -58,6 +58,15 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
             final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
                     @Override
                     public void run() {
+                        if (projectile.getLocation().getY() <= 0) {
+                        	int i = 0;
+                        	while(projectile.hasMetadata("Data " + String.valueOf(i))) {
+                        		Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data " + String.valueOf(i)).get(0).asInt());
+                        		i++;
+                        	}
+                        	projectile.eject();
+                        	projectile.remove();
+                		}
                         try {
                             fplayer.playFirework(event.getPlayer().getWorld(), projectile.getLocation(), getEffect(type, color));
                         } catch (Exception e) {
@@ -84,8 +93,6 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
     public void run(AE_ProjectileHitEvent event) {
         final Projectile projectile = event.getProjectile();
         String[] args = event.getArgs();
-
-        Bukkit.getScheduler().cancelTasks(plugin);
     
         if (args.length != 2 || args[0].isEmpty())
             return;

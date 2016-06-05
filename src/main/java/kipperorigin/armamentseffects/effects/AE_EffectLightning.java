@@ -46,6 +46,15 @@ public class AE_EffectLightning extends AE_EffectParent implements Listener {
             @Override
             public void run() {
                 event.getProjectile().getLocation().getWorld().strikeLightningEffect(event.getProjectile().getLocation());
+                if (projectile.getLocation().getY() <= 0) {
+                	int i = 0;
+                	while(projectile.hasMetadata("Data " + String.valueOf(i))) {
+                		Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data " + String.valueOf(i)).get(0).asInt());
+                		i++;
+                	}
+                	projectile.eject();
+                	projectile.remove();
+        		}
             }
         }, 0L, timer).getTaskId();
         MetadataValue x = new FixedMetadataValue(plugin, taskId);
