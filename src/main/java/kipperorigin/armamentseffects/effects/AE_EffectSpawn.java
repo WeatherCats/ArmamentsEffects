@@ -22,9 +22,10 @@ public class AE_EffectSpawn extends AE_EffectParent {
 
         if (args.length == 0)
             return;
-        
-        if (!event.getRawEvent().getClickedBlock().equals(Material.AIR))
-            event.getRawEvent().setCancelled(true);;
+
+        if(event.getRawEvent().getClickedBlock() != null)
+            if(!event.getRawEvent().getClickedBlock().equals(Material.AIR))
+                event.getRawEvent().setCancelled(true);
 
         String mob = args[0].toUpperCase();
         if (args[0].equalsIgnoreCase("charged_creeper")) {
