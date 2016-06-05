@@ -66,7 +66,14 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
                     }
                 }, 0L, timer).getTaskId();
             MetadataValue x = new FixedMetadataValue(plugin, taskId);
-            projectile.setMetadata("Data", x);
+			int i = 0;
+			
+			while(projectile.hasMetadata("Data " + String.valueOf(i))) 
+				i++;
+			
+			projectile.setMetadata("Data " + String.valueOf(i), x);
+            if (event.getRawEvent().isCancelled() && projectile.hasMetadata("Data"))
+                Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
         }
         catch(RuntimeException e) {
             return;

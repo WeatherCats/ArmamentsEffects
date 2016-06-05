@@ -42,7 +42,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
                 return;
             }
 
-            if (args.length == 3) {
+            if (args.length >= 3) {
                 timer = Integer.parseInt(args[2]);  
             }
         
@@ -77,9 +77,14 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
                 MetadataValue x = new FixedMetadataValue(plugin, taskId);
 
                 if (args.length == 4 && args[3].equalsIgnoreCase("permanent")) {
-                
+    	    		event.getPlayer().sendMessage("taskId = " + String.valueOf(taskId));
                 } else {
-                    projectile.setMetadata("Data", x);
+        			int i = 0;
+        			
+        			while(projectile.hasMetadata("Data " + String.valueOf(i))) 
+        				i++;
+        			
+        			projectile.setMetadata("Data " + String.valueOf(i), x);
                     if (event.getRawEvent().isCancelled() && projectile.hasMetadata("Data"))
                         Bukkit.getScheduler().cancelTask(projectile.getMetadata("Data").get(0).asInt());
                 }
@@ -95,15 +100,17 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
         final Projectile projectile = event.getProjectile();
         String[] args = event.getArgs();
         final Location loc = event.getProjectile().getLocation();
-
+        int data = 0;
+        
         if (args.length == 0 || args[0].isEmpty())
             return;
-        else if (args.length > 4) {
+        else if (args.length > 4 || args.length < 2) {
             return;
         }
-        
-        if (projectile.hasMetadata("Data")) {
-            Bukkit.getScheduler().cancelTasks(plugin);
+        try {
+        	data = Integer.parseInt(args[1]);
+        } catch (NumberFormatException e) {
+        	return;
         }
 
         final String particle = args[0].toUpperCase();
@@ -120,14 +127,6 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
             return;
             
         } else {
-
-            int data;
-            try {
-                data = Integer.parseInt(args[1]);
-            } catch (NumberFormatException e) {
-                return;
-            }
-
             if (data == 0)
                 return;
 
@@ -157,17 +156,14 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
             
             final Effect effect = Effect.valueOf(particle);
             
-            if (effect == Effect.ITEM_BREAK || effect == Effect.TILE_BREAK || effect == Effect.TILE_DUST) {
-                return; 
-            } else {
-                int data = Integer.parseInt(args[1]);
+            if (effect == Effect.ITEM_BREAK || effect == Effect.TILE_BREAK || effect == Effect.TILE_DUST)
+            	return; 
+            int data = Integer.parseInt(args[1]);
                 
-                if (data == 0)
-                    return;
+            if (data == 0)
+            	return;
                 
-                victim.getWorld().playEffect(loc, effect, data, 100);
-            }
-
+            victim.getWorld().playEffect(loc, effect, data, 100);
         } catch (NullPointerException | IllegalArgumentException e) {
         }
     }
