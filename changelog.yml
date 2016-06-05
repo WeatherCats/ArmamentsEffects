@@ -36,8 +36,20 @@ Ver 0.5
 - Effects Added:
   - Sound
   - Particle
-
+  - Stun
+  
 Ver 0.6
 - Maven build structure
 - Code cleanup
 
+Ver 0.7
+- Updated to 1.9
+- Returned TnT to a previous functioning state
+- Added individual tasks for particle arrows, they will no longer end each other
+- Added permanent argument for particles arrows. Will not stay through reboots.
+- Added Swap teleporting when damaging a player.
+- Added teleporting upon damaging a player.
+- Effects Added:
+  - Kill particles
+  - Lightning
+  - Fireworks
