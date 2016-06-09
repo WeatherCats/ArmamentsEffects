@@ -38,7 +38,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
         
             if (args.length == 0 || args[0].isEmpty())
                 return;
-            else if (args.length > 4) {
+            else if (args.length > 4 || args.length < 2) {
                 return;
             }
 

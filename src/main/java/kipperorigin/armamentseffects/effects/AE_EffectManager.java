@@ -111,7 +111,8 @@ public class AE_EffectManager implements Listener {
 
         if (!sourceIsPlayer) {
             int x = damager.getInventory().first(Material.ARROW);
-            item = damager.getInventory().getItem(x);
+            if (x != -1)
+            	item = damager.getInventory().getItem(x);
         }
 
         if (item == null || item.getType() == Material.AIR)

@@ -53,3 +53,8 @@ Ver 0.7
   - Kill particles
   - Lightning
   - Fireworks
+  
+Ver 0.8
+- Fixed Error when player had no arrows
+- Fixed AIOOB on particle effects
+- Added Packet Particle effects

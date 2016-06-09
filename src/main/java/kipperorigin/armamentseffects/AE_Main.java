@@ -10,6 +10,7 @@ import kipperorigin.armamentseffects.effects.AE_EffectInstakill;
 import kipperorigin.armamentseffects.effects.AE_EffectKillParticles;
 import kipperorigin.armamentseffects.effects.AE_EffectLightning;
 import kipperorigin.armamentseffects.effects.AE_EffectManager;
+import kipperorigin.armamentseffects.effects.AE_EffectPacketParticles;
 import kipperorigin.armamentseffects.effects.AE_EffectParticle;
 import kipperorigin.armamentseffects.effects.AE_EffectPotionRightClick;
 import kipperorigin.armamentseffects.effects.AE_EffectPotions;
@@ -28,13 +29,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolManager;
+
 public class AE_Main extends JavaPlugin {
 
     private final PluginManager pm = Bukkit.getPluginManager();
+    private ProtocolManager protocolManager;
 
     @Override
     public void onEnable() {
-        
+    	
         final AE_EffectManager listener = new AE_EffectManager(this);
         
         pm.registerEvents(listener, this);
@@ -138,6 +142,11 @@ public class AE_Main extends JavaPlugin {
         AE_EffectParticle particle = new AE_EffectParticle(this);
         listener.registerEffect("particle", particle);
         listener.registerEffect("display", particle);
+        
+        // packet particles
+        AE_EffectPacketParticles packetParticles = new AE_EffectPacketParticles(this);
+        listener.registerEffect("packetparticle", packetParticles);
+        listener.registerEffect("packetparticles", packetParticles);
 
         // remove ailment
         AE_EffectRemoveAilment heal = new AE_EffectRemoveAilment();
@@ -149,5 +158,13 @@ public class AE_Main extends JavaPlugin {
         listener.registerEffect("teleport", teleport);
         listener.registerEffect("move", teleport);
     }
+    
+	public ProtocolManager getProtocolManager() {
+		return protocolManager;
+	}
+
+	public void setProtocolManager(ProtocolManager protocolManager) {
+		this.protocolManager = protocolManager;
+	}
 
 }

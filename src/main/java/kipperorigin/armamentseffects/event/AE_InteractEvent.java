@@ -28,5 +28,4 @@ public class AE_InteractEvent extends AE_Event {
     public Action getAction() {
         return event.getAction();
     }
-
 }

@@ -3,6 +3,8 @@ main: kipperorigin.armamentseffects.AE_Main
 author: KipperOrigin, GoalieGuy6, FrediW
 version: 0.7
 
+softdepend: [ProtocolLib]
+
 permissions:
   ae.main:
     description: All Armaments Effects Permissions.
