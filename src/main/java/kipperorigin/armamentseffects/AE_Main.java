@@ -98,7 +98,7 @@ public class AE_Main extends JavaPlugin {
         listener.registerEffect("apply", potions);
         
         // rideable
-        AE_EffectRideable rideable = new AE_EffectRideable();
+        AE_EffectRideable rideable = new AE_EffectRideable(this);
         listener.registerEffect("rideable", rideable);
         listener.registerEffect("ride", rideable);
 

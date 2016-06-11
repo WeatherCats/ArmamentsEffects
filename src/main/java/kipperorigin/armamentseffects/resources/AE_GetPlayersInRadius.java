@@ -19,7 +19,10 @@ public class AE_GetPlayersInRadius {
 				if (e.getLocation().distance(litr.next().getLocation()) > i)
 					litr.remove();
 			}
-			return playersInWorld;
+			if (playersInWorld.isEmpty() || playersInWorld == null)
+				return null;
+			else
+				return playersInWorld;
 		}
 	}
 }
