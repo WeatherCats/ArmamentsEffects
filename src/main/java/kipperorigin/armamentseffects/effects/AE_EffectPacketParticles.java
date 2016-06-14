@@ -18,7 +18,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers.Particle;
 
 import kipperorigin.armamentseffects.AE_Main;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
-import kipperorigin.armamentseffects.resources.AE_GetPlayersInRadius;
+import kipperorigin.armamentseffects.resources.AE_EntityGetter;
 
 public class AE_EffectPacketParticles extends AE_EffectParent implements Listener {
 
@@ -32,7 +32,7 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
     }
     
     private ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-    private AE_GetPlayersInRadius pir = new AE_GetPlayersInRadius();
+    private AE_EntityGetter eg = new AE_EntityGetter();
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -114,7 +114,7 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
             public void run() {
             	
             	int i = 0;
-            	List<Player> players = pir.getPlayersInRadius(projectile.getWorld(), 50, projectile);
+            	List<Player> players = eg.getPlayersInRadius(50, projectile);
             	
         		if (args.length >= 3 && !args[2].equalsIgnoreCase("x"))
         			try {
