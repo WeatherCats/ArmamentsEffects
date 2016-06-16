@@ -42,10 +42,14 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
 		final Projectile projectile = event.getProjectile();
 		String[] args = event.getArgs();
 		int timer = 1;
+		long delay = 0;
 		PacketContainer particlePacket = protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
 		int[] il = {0,0};
+    	float xF = 0;
+    	float yF = 0;
+    	float zF = 0;
 		
-		if (args.length == 0 || args.length > 11)
+		if (args.length == 0 || args.length > 12)
 			return;
 		
 		if (args.length >= 1)
@@ -53,52 +57,92 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
 				particlePacket.getParticles().write(0, Particle.valueOf(args[0].toUpperCase()));
 			} catch (IllegalArgumentException e) {
 				player.sendMessage("ARGUMENT 1 INVALID PARTICLE");
+				return;
 			}
 		if (args.length >= 2)
 			try {
 				particlePacket.getIntegers().write(0, Particle.valueOf(args[1].toUpperCase()).getId());
 			} catch (IllegalArgumentException e) {
 				player.sendMessage("ARGUMENT 2 IS AN INVALID PARTICLE SPREAD");
+				return;
+			}
+		if (args.length >= 3 && !args[2].equalsIgnoreCase("x"))
+			try {
+				xF = Float.valueOf(args[2]);
+			} catch (NumberFormatException e) {
+				player.sendMessage("ARGUMENT 3 MUST BE X OR A NUMBER");
+			}
+		if (args.length >= 4 && !args[3].equalsIgnoreCase("x"))
+			try {
+				yF = Float.valueOf(args[3]);
+			} catch (NumberFormatException e) {
+				player.sendMessage("ARGUMENT 4 MUST BE X OR A NUMBER");
+			}
+		if (args.length >= 5 && !args[4].equalsIgnoreCase("x"))
+			try {
+				zF = Float.valueOf(args[4]);
+			} catch (NumberFormatException e) {
+				player.sendMessage("ARGUMENT 5 MUST BE X OR A NUMBER");
 			}
 		if (args.length >= 6 && !args[5].equalsIgnoreCase("x"))
 			try {
 				particlePacket.getFloat().write(3, Float.valueOf(args[5]));
 			} catch (NumberFormatException e) {
 				player.sendMessage("ARGUMENT 6 MUST BE X OR A NUMBER");
+				return;
 			}
 		if (args.length >= 7 && !args[6].equalsIgnoreCase("x"))
 			try {
 				particlePacket.getFloat().write(4, Float.valueOf(args[6]));
 			} catch (NumberFormatException e) {
 				player.sendMessage("ARGUMENT 7 MUST BE X OR A NUMBER");
+				return;
 			}
 		if (args.length >= 8 && !args[7].equalsIgnoreCase("x"))
 			try {
 				particlePacket.getFloat().write(5, Float.valueOf(args[7]));
 			} catch (NumberFormatException e) {
 				player.sendMessage("ARGUMENT 8 MUST BE X OR A NUMBER");
+				return;
 			}
 		if (args.length >= 9 && !args[8].equalsIgnoreCase("x")) {
 			try {
 				il[0] = Material.valueOf(args[8].toUpperCase()).getId();
 			} catch (IllegalArgumentException e) {
 				player.sendMessage("ARGUMENT 9 MUST BE A MATERIAL");
+				return;
 			}
 			try {
 				particlePacket.getIntegerArrays().write(0, il);
 			} catch (IllegalArgumentException e) {
 				player.sendMessage("UNKOWN ERROR PLEASE REPORT");
+				return;
 			}
 		}
 		if (args.length >= 10)
-			if (args[8].equalsIgnoreCase("x"))
+			if (args[9].equalsIgnoreCase("x"))
 				timer = 1;
 			else
 				try {
-					timer = Integer.valueOf(args[8]);
+					timer = Integer.valueOf(args[9]);
 				} catch (NumberFormatException e) {
-					player.sendMessage("MUST BE AN INTEGER");
+					player.sendMessage("ARGUMENT 10 MUST BE AN INTEGER");
+					return;
 				}
+		if (args.length >= 11)
+			if (args[10].equalsIgnoreCase("x"))
+				delay = 0;
+			else
+				try {
+					delay = Long.valueOf(args[10]);
+				} catch (NumberFormatException e) {
+					player.sendMessage("ARGUMENT 11 MUST BE AN INTEGER");
+					return;
+				}
+		
+		final float fXF = xF;
+		final float fYF = yF;
+		final float fZF = zF;
 				
 		try {
     		protocolManager.sendServerPacket(player, particlePacket);
@@ -107,37 +151,16 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
     	}
 		
         final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
-        	float xF = 0;
-        	float yF = 0;
-        	float zF = 0;
             @Override
             public void run() {
             	
             	int i = 0;
             	List<Player> players = eg.getPlayersInRadius(50, projectile);
             	
-        		if (args.length >= 3 && !args[2].equalsIgnoreCase("x"))
-        			try {
-        				xF = Float.valueOf(args[2]);
-        			} catch (NumberFormatException e) {
-        				player.sendMessage("ARGUMENT 3 MUST BE X OR A NUMBER");
-        			}
-        		if (args.length >= 4 && !args[3].equalsIgnoreCase("x"))
-        			try {
-        				yF = Float.valueOf(args[3]);
-        			} catch (NumberFormatException e) {
-        				player.sendMessage("ARGUMENT 4 MUST BE X OR A NUMBER");
-        			}
-        		if (args.length >= 5 && !args[4].equalsIgnoreCase("x"))
-        			try {
-        				zF = Float.valueOf(args[4]);
-        			} catch (NumberFormatException e) {
-        				player.sendMessage("ARGUMENT 5 MUST BE X OR A NUMBER");
-        			}
         		particlePacket.getFloat()
-        			.write(0, (float) projectile.getLocation().getX() + xF)
-        			.write(1, (float) projectile.getLocation().getY() + yF)
-        			.write(2, (float) projectile.getLocation().getZ() + zF)
+        			.write(0, (float) projectile.getLocation().getX() + fXF)
+        			.write(1, (float) projectile.getLocation().getY() + fYF)
+        			.write(2, (float) projectile.getLocation().getZ() + fZF)
         			.write(6, 1F);
             	
             	if (players != null) {
@@ -160,10 +183,10 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
                 	projectile.remove();
         		}
             }
-        }, 0L, timer).getTaskId();
+        }, delay, timer).getTaskId();
         MetadataValue x = new FixedMetadataValue(plugin, taskId);
 
-        if (args.length == 11 && args[10].equalsIgnoreCase("permanent")) {
+        if (args.length == 12 && args[11].equalsIgnoreCase("permanent")) {
     		event.getPlayer().sendMessage("taskId = " + String.valueOf(taskId));
         } else {
 			int i = 0;

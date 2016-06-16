@@ -41,19 +41,27 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
             final Projectile projectile = event.getProjectile();
             String[] args = event.getArgs();
             int timer = 1;
+            long delay = 0;
         
-            if (args.length > 3 || args[0].isEmpty())
+            if (args.length > 4 || args[0].isEmpty())
                 return;
         
             final Type type = Type.valueOf(args[0].toUpperCase());
             final Color color = colorCheck.getFireworkColorByString(args[1]);
         
-            if (args.length == 3) {
+            if (args.length >= 3) {
                 try {
                     timer = Integer.parseInt(args[2]);
                 } catch (NumberFormatException e) {
                     return;
                 }
+            }
+            if (args.length == 4) {
+            	try {
+            		delay = Long.parseLong(args[3]);
+            	} catch (NumberFormatException e) {
+            		return;
+            	}
             }
             final int taskId = Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
                     @Override
@@ -73,7 +81,7 @@ public class AE_EffectFireworkParticle extends AE_EffectParent implements Listen
                             return;
                         }
                     }
-                }, 0L, timer).getTaskId();
+                }, delay, timer).getTaskId();
             MetadataValue x = new FixedMetadataValue(plugin, taskId);
 			int i = 0;
 			

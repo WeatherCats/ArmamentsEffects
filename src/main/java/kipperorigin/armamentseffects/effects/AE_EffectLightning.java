@@ -38,7 +38,7 @@ public class AE_EffectLightning extends AE_EffectParent implements Listener {
             try {
                 Integer.parseInt(args[1]);
             } catch (NumberFormatException e) {
-                
+                return;
             }
         }
         

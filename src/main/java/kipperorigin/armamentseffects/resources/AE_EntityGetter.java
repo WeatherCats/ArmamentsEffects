@@ -26,7 +26,7 @@ public class AE_EntityGetter {
 		}
 	}
 	
-	/* public List<Player> getPlayersInSight(Player player) {
+	public List<Player> getPlayersInSight(Player player) {
 		List<Player> playersInSight = getPlayersInRadius(50, player);
 		
 		ListIterator<Player> litr = null;
@@ -35,21 +35,20 @@ public class AE_EntityGetter {
 		else {
 			litr=playersInSight.listIterator();
 			while(litr.hasNext())
-				if (!player.hasLineOfSight(player))
+				if (!player.hasLineOfSight(litr.next()))
 					litr.remove();
 		}
 		return null;
 	}
 	
 	public Player getClosestPlayer(Player player, List<Player> players) {
-		Player cPlayer = players.get(0);
 		if (players.isEmpty())
 			return null;
-		else
-			for (int i = 1; i < players.size(); i++) {
-				if (player.getLocation().distance(cPlayer.getLocation()) > player.getLocation().distance(players.get(i).getLocation()))
-					cPlayer = players.get(i);
-			}
+		Player cPlayer = players.get(0);
+		for (int i = 1; i < players.size(); i++) {
+			if (player.getLocation().distance(cPlayer.getLocation()) > player.getLocation().distance(players.get(i).getLocation()))
+				cPlayer = players.get(i);
+		}
 		return cPlayer;
 	}
 	
@@ -59,5 +58,5 @@ public class AE_EntityGetter {
 			return null;
 		else
 			return cPlayer;
-	} */
+	}
 }

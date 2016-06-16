@@ -35,6 +35,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
             final Projectile projectile = event.getProjectile();
             String[] args = event.getArgs();
             int timer = 1;
+            long delay = 0;
         
             if (args.length == 0 || args[0].isEmpty())
                 return;
@@ -42,10 +43,22 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
                 return;
             }
 
-            if (args.length >= 3) {
-                timer = Integer.parseInt(args[2]);  
+            if (args.length >= 2) {
+            	try {
+            		timer = Integer.parseInt(args[1]);  
+            	} catch (NumberFormatException e) {
+            		player.sendMessage("ARGUMENT 3 MUST BE AN INTEGER");
+            		return;
+            	}
             }
-        
+            if (args.length >= 3) {
+            	try {
+            		delay = Long.parseLong(args[2]);
+            	} catch (NumberFormatException e) {
+            		player.sendMessage("ARGUMENT 4 MUST BE AN INTEGER");
+            	}
+            }
+            
             final String particle = args[0].toUpperCase();
 
             try {
@@ -82,7 +95,7 @@ public class AE_EffectParticle extends AE_EffectParent implements Listener {
                             	projectile.remove();
                     		}
                         }
-                    }, 0L, timer).getTaskId();
+                    }, delay, timer).getTaskId();
                 MetadataValue x = new FixedMetadataValue(plugin, taskId);
 
                 if (args.length == 4 && args[3].equalsIgnoreCase("permanent")) {

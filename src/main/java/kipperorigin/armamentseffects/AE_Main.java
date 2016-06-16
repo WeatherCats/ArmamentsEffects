@@ -6,7 +6,7 @@ import kipperorigin.armamentseffects.effects.AE_EffectDrain;
 //import kipperorigin.armamentseffects.effects.AE_EffectDurability;
 import kipperorigin.armamentseffects.effects.AE_EffectExplode;
 import kipperorigin.armamentseffects.effects.AE_EffectFireworkParticle;
-import kipperorigin.armamentseffects.effects.AE_EffectHomingArrow;
+//import kipperorigin.armamentseffects.effects.AE_EffectHomingArrow;
 import kipperorigin.armamentseffects.effects.AE_EffectInstakill;
 import kipperorigin.armamentseffects.effects.AE_EffectKillParticles;
 import kipperorigin.armamentseffects.effects.AE_EffectLightning;
@@ -73,7 +73,7 @@ public class AE_Main extends JavaPlugin {
         listener.registerEffect("firework", firework);
         listener.registerEffect("fireworkparticle", firework);
         
-        // firework particle
+        // homing arrow
         // AE_EffectHomingArrow ha = new AE_EffectHomingArrow(this);
         // listener.registerEffect("Homing", ha);
         // listener.registerEffect("Seeking", ha);
