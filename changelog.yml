@@ -58,3 +58,8 @@ Ver 0.8
 - Fixed Error when player had no arrows
 - Fixed AIOOB on particle effects
 - Added Packet Particle effects
+
+Ver 0.8.1
+- Fixed Issue where material did not need to be provided when it should have
+- Increased Efficiency for packet particles
+- Fixed the wrong arguments being called in packet particles

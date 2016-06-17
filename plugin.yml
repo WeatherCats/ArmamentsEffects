@@ -1,7 +1,7 @@
 name: ArmamentsEffects
 main: kipperorigin.armamentseffects.AE_Main
 author: KipperOrigin, GoalieGuy6, FrediW
-version: 0.8
+version: 0.8.1
 
 softdepend: [ProtocolLib]
 

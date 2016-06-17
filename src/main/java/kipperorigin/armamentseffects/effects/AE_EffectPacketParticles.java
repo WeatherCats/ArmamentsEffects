@@ -52,13 +52,33 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
 		if (args.length == 0 || args.length > 12)
 			return;
 		
-		if (args.length >= 1)
+		if (args.length >= 1) {
 			try {
 				particlePacket.getParticles().write(0, Particle.valueOf(args[0].toUpperCase()));
 			} catch (IllegalArgumentException e) {
 				player.sendMessage("ARGUMENT 1 INVALID PARTICLE");
 				return;
 			}
+			if (args[0].equalsIgnoreCase("Block_Crack") || args[0].equalsIgnoreCase("Block_Dust") || args[0].equalsIgnoreCase("Item_Crack")) {
+				if (args.length >= 9) {
+					try {
+						il[0] = Material.valueOf(args[8].toUpperCase()).getId();
+					} catch (IllegalArgumentException e) {
+						player.sendMessage("ARGUMENT 9 MUST BE A MATERIAL");
+						return;
+					}
+					try {
+						particlePacket.getIntegerArrays().write(0, il);
+					} catch (IllegalArgumentException e) {
+						player.sendMessage("UNKOWN ERROR PLEASE REPORT");
+						return;
+					}
+				} else {
+					player.sendMessage("You must provide a material in argument 9 for this particle!");
+					return;
+				}
+			}
+		}
 		if (args.length >= 2)
 			try {
 				particlePacket.getIntegers().write(0, Particle.valueOf(args[1].toUpperCase()).getId());
@@ -105,20 +125,6 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
 				player.sendMessage("ARGUMENT 8 MUST BE X OR A NUMBER");
 				return;
 			}
-		if (args.length >= 9 && !args[8].equalsIgnoreCase("x")) {
-			try {
-				il[0] = Material.valueOf(args[8].toUpperCase()).getId();
-			} catch (IllegalArgumentException e) {
-				player.sendMessage("ARGUMENT 9 MUST BE A MATERIAL");
-				return;
-			}
-			try {
-				particlePacket.getIntegerArrays().write(0, il);
-			} catch (IllegalArgumentException e) {
-				player.sendMessage("UNKOWN ERROR PLEASE REPORT");
-				return;
-			}
-		}
 		if (args.length >= 10)
 			if (args[9].equalsIgnoreCase("x"))
 				timer = 1;
