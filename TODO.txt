@@ -1,6 +1,7 @@
 --IMPORTANT--
 1. Update all effects to attach to projectiles rather than reading from the bow.
 2. Add % of Piercing on piercing stats print-out.
+3. Add parser for effects, as well as commands when they're added.
 
 --EFFECTS BY TXT FILE--
 Update plugin to read from text files. This will be used to read from files based on item names.
