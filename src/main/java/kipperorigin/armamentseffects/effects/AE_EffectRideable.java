@@ -1,9 +1,9 @@
 package kipperorigin.armamentseffects.effects;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Projectile;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
+//import org.bukkit.Bukkit;
+//import org.bukkit.entity.Projectile;
+//import org.bukkit.metadata.FixedMetadataValue;
+//import org.bukkit.metadata.MetadataValue;
 
 import kipperorigin.armamentseffects.AE_Main;
 import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
@@ -11,7 +11,7 @@ import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
 
 public class AE_EffectRideable extends AE_EffectParent {
 
-    private AE_Main plugin;
+   private AE_Main plugin;
 
     public AE_EffectRideable(AE_Main plugin) {
 

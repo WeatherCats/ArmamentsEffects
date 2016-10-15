@@ -163,3 +163,5 @@ pip-log.txt
 .DS_Store
 
 target/
+target/classes/kipperorigin/armamentseffects/effects/AE_EffectParticle$1.class
+*.class

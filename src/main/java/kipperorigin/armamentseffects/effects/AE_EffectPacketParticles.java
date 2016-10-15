@@ -43,7 +43,7 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
 		String[] args = event.getArgs();
 		int timer = 1;
 		long delay = 0;
-		PacketContainer particlePacket = protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
+		final PacketContainer particlePacket = protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
 		int[] il = {0,0};
     	float xF = 0;
     	float yF = 0;
@@ -61,12 +61,24 @@ public class AE_EffectPacketParticles extends AE_EffectParent implements Listene
 			}
 			if (args[0].equalsIgnoreCase("Block_Crack") || args[0].equalsIgnoreCase("Block_Dust") || args[0].equalsIgnoreCase("Item_Crack")) {
 				if (args.length >= 9) {
-					try {
-						il[0] = Material.valueOf(args[8].toUpperCase()).getId();
-					} catch (IllegalArgumentException e) {
-						player.sendMessage("ARGUMENT 9 MUST BE A MATERIAL");
+					String[] parts = args[8].split(";");
+					if (parts.length > 2)
 						return;
+					else {
+						try {
+							il[0] = Material.valueOf(parts[0].toUpperCase()).getId();
+						} catch (IllegalArgumentException e) {
+							player.sendMessage("ARGUMENT 9 MUST BE A MATERIAL");
+							return;
+						}
+						if (parts.length == 2)
+							try {
+								player.sendMessage(parts[1]);
+							} catch (NumberFormatException e) {
+								player.sendMessage("ARGUMENT 9 DATA VALUE MUST BE AN INTEGER");
+							}
 					}
+					
 					try {
 						particlePacket.getIntegerArrays().write(0, il);
 					} catch (IllegalArgumentException e) {
