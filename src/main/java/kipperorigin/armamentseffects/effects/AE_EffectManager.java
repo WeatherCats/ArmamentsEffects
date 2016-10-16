@@ -1,5 +1,6 @@
 package kipperorigin.armamentseffects.effects;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -32,8 +35,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class AE_EffectManager implements Listener {
-
+	
+	private AE_Main plugin;
+	
     public AE_EffectManager(AE_Main plugin) {
+    	this.plugin = plugin;
     }
     
     public String stripColors(String line) {
@@ -178,44 +184,93 @@ public class AE_EffectManager implements Listener {
     }
 
     private void runEvent(AE_Event data) {
-        ItemStack item = data.getItem();
-        
-        if (!item.hasItemMeta())
-            return;
-        ItemMeta meta = item.getItemMeta();
-        if (!meta.hasLore())
-            return;
-        List<String> lore = meta.getLore();
-        
-        for (String line : lore) {
-            line = stripColors(line);
-            
-            String[] parts = line.split(" +", 2);
-            String name = parts[0];
-            
-            AE_EffectParent effect = getEffect(name);
-            if (effect == null)
-                continue;
+    	if(data instanceof AE_DamageEvent) {
+    		if (((AE_DamageEvent)data).getRawEvent().getEntity() instanceof Projectile) {
+    			Projectile projectile = (Projectile) ((AE_DamageEvent) data).getRawEvent().getEntity();
+    			this.projectileEvent(data, projectile);
+    			return;
+    		}
+    	}
 
-            String[] args;
-            if (parts.length == 2)
-                args = parts[1].split(" +");
-            else
-                args = new String[0];
-            
-            data.setArgs(args);
-            if(data instanceof AE_DamageEvent) {
-                effect.run((AE_DamageEvent)data);
-            }
-            else if(data instanceof AE_ProjectileEvent) {
-                effect.run((AE_ProjectileEvent)data);
-            }
-            else if(data instanceof AE_ProjectileHitEvent) {
-                effect.run((AE_ProjectileHitEvent)data);
-            }
-            else if(data instanceof AE_InteractEvent) {
-                effect.run((AE_InteractEvent)data);
-            }
-        }
-    }    
+    	if(data instanceof AE_ProjectileHitEvent){
+    		this.projectileEvent(data, ((AE_ProjectileHitEvent)data).getProjectile());
+    		return;
+    	}
+    	ItemStack item = data.getItem();
+    		
+    	if (!item.hasItemMeta())
+    		return;
+    	ItemMeta meta = item.getItemMeta();
+    	if (!meta.hasLore())
+    		return;
+    	List<String> lore = meta.getLore();
+    	
+    	for (String line : lore) {
+    		line = stripColors(line);
+    		
+    		String[] parts = line.split(" +", 2);
+    		String name = parts[0];
+    		
+    		AE_EffectParent effect = getEffect(name);
+    		if (effect == null)
+    			continue;
+    		
+    		String[] args;
+    		if (parts.length == 2)
+    			args = parts[1].split(" +");
+    		else
+    			args = new String[0];
+    		
+    		data.setArgs(args);
+    		if(data instanceof AE_DamageEvent) {
+    			effect.run((AE_DamageEvent)data);
+    		}
+    		else if(data instanceof AE_ProjectileEvent) {
+    			effect.run((AE_ProjectileEvent)data);
+    			int i = 0;
+    			MetadataValue x = new FixedMetadataValue(plugin, line);
+    			
+    			while(((AE_ProjectileEvent)data).getProjectile().hasMetadata("Effect " + String.valueOf(i))) 
+    				i++;
+    			
+    			((AE_ProjectileEvent)data).getProjectile().setMetadata("Effect " + String.valueOf(i), x);
+    		}
+    		else if(data instanceof AE_InteractEvent) {
+    			effect.run((AE_InteractEvent)data);
+    		}
+    	}
+    }
+    
+    private void projectileEvent(AE_Event data, Projectile projectile) {
+    	int i = 0;
+		List<String> lore = new ArrayList<String>();
+		while(projectile.hasMetadata("Effect " + String.valueOf(i))) {
+			lore.add(projectile.getMetadata("Effect " + String.valueOf(i)).get(0).asString());
+			i++;
+		}
+		if (lore.isEmpty()) return;
+		
+		for (String line : lore) {
+			line = stripColors(line);
+			
+			String[]parts = line.split(" +", 3);
+			String name = parts[0];
+			
+			AE_EffectParent effect = getEffect(name);
+			
+			if (effect == null)
+				continue;
+			
+			String[] args;
+			if (parts.length == 3)
+				args = parts[1].split(" +");
+			else
+				args = new String[0];
+			
+			data.setArgs(args);
+			
+			effect.run((AE_ProjectileHitEvent)data);
+		}
+    }
+    
 }
