@@ -1,0 +1,43 @@
+--IMPORTANT--
+1. Update all effects to attach to projectiles rather than reading from the bow.
+2. Add % of Piercing on piercing stats print-out.
+3. Add parser for effects, as well as commands when they're added.
+
+--EFFECTS BY TXT FILE--
+Update plugin to read from text files. This will be used to read from files based on item names.
+I.E. The item name could be 'Holy Sword' and that would read from the 'Holy_Sword.txt' file.
+This would also be used to read effects from players. This would be used majorly for patreon effects. This would allow players to
+use a command such as /effect <effect> that would then apply the effects on any bow they use rather than reading from the bow itself.
+It would read from a file such as "Player_'username'.txt" then read from the '<effect>' section.
+I.E.
+Player_KipperOrigin.txt
+Firewheel
+Desc: Fire particles spawn in a circle around the arrow.
+Effects:
+  - effect command line here.
+  - another effect command line.
+  - etc.
+  
+* This will eventually be used for effects outside of bow particle effects, but the initial version will most likely only include bows.
+* Future versions will be planned to have effect types, and subtypes. I.E. Type: Bow, Subtype: Firework/Particle
+  
+Commands would be as such
+/effect list (gives the player a list of effects they can use)
+/effect off (disables current effect)
+/effect <effect> (enables effect to play. Overrides effect of same type)
+/effect info <effect> (gives player detailed information on the effect; if a player does not have the effect, the unlock information will also print out)
+/effect list <type> (gives player a list of effects based on the type)
+/effect types (gives players the types of effects)
+
+Flags for commands
+-all (only used for lists, this would show players all effects including effects they don't have)
+
+Admin Commands
+/effect remove <effect> <line #>
+/effect add <effect>
+/effect overwrite <effect> <line #>
+/effect create <effect> <type> <description>
+/effect delete <effect>
+/effect type <effect> <type>
+/effect desc <effect> <description>
+/effect view <effect>
