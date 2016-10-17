@@ -63,3 +63,11 @@ Ver 0.8.1
 - Fixed Issue where material did not need to be provided when it should have
 - Increased Efficiency for packet particles
 - Fixed the wrong arguments being called in packet particles
+
+Ver 0.9
+- Added Stats Effect
+- Added Piercing Effect
+- Added Falling Blocks to Shoot Effect
+- Added Dropped Items to Shoot Effect
+- Changed effects from bows to play from metadata on the arrow rather than the bow. This will prevent incorrect effects.
+- Changed some syntax for the shoot effect when shooting entities.

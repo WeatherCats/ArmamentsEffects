@@ -14,6 +14,7 @@ public class AE_EffectPiercing extends AE_EffectParent {
     public void run(AE_DamageEvent event) {
     	Player player = event.getPlayer();
         String[] args = event.getArgs();
+        player.sendMessage("test");
         double d;
         if (args.length < 4 && args.length > 1) {
             try {

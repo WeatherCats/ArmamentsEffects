@@ -13,6 +13,7 @@ import kipperorigin.armamentseffects.effects.AE_EffectLightning;
 import kipperorigin.armamentseffects.effects.AE_EffectManager;
 import kipperorigin.armamentseffects.effects.AE_EffectPacketParticles;
 import kipperorigin.armamentseffects.effects.AE_EffectParticle;
+import kipperorigin.armamentseffects.effects.AE_EffectPiercing;
 import kipperorigin.armamentseffects.effects.AE_EffectPotionRightClick;
 import kipperorigin.armamentseffects.effects.AE_EffectPotions;
 import kipperorigin.armamentseffects.effects.AE_EffectRemoveAilment;
@@ -20,6 +21,7 @@ import kipperorigin.armamentseffects.effects.AE_EffectRideable;
 import kipperorigin.armamentseffects.effects.AE_EffectShoot;
 import kipperorigin.armamentseffects.effects.AE_EffectSound;
 import kipperorigin.armamentseffects.effects.AE_EffectSpawn;
+import kipperorigin.armamentseffects.effects.AE_EffectStats;
 import kipperorigin.armamentseffects.effects.AE_EffectStun;
 import kipperorigin.armamentseffects.effects.AE_EffectTeleport;
 import kipperorigin.armamentseffects.effects.AE_EffectTnT;
@@ -41,6 +43,7 @@ public class AE_Main extends JavaPlugin {
     public void onEnable() {
     	
         final AE_EffectManager listener = new AE_EffectManager(this);
+        final AE_CommandExecutor ce = new AE_CommandExecutor(this);
         
         pm.registerEvents(listener, this);
 
@@ -97,7 +100,12 @@ public class AE_Main extends JavaPlugin {
         AE_EffectLightning lightning = new AE_EffectLightning(this);
         listener.registerEffect("lightning", lightning);
         listener.registerEffect("thunder", lightning);
-
+        
+        // piercing
+        AE_EffectPiercing piercing = new AE_EffectPiercing();
+        listener.registerEffect("piercing", piercing);
+        listener.registerEffect("penetration", piercing);
+        
         // potions
         AE_EffectPotions potions = new AE_EffectPotions();
         listener.registerEffect("inflict", potions);
@@ -123,6 +131,11 @@ public class AE_Main extends JavaPlugin {
         AE_EffectSpawn spawn = new AE_EffectSpawn();
         listener.registerEffect("spawn", spawn);
         listener.registerEffect("summon", spawn);
+        
+        // stats
+        AE_EffectStats stats = new AE_EffectStats();
+        listener.registerEffect("stats", stats);
+        listener.registerEffect("numbers", stats);
 
         // stun
         AE_EffectStun stun = new AE_EffectStun();
