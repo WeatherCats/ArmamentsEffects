@@ -1,5 +1,6 @@
 package kipperorigin.armamentseffects;
 
+import kipperorigin.armamentseffects.effects.AE_EffectArrow;
 import kipperorigin.armamentseffects.effects.AE_EffectCommand;
 import kipperorigin.armamentseffects.effects.AE_EffectDisarm;
 import kipperorigin.armamentseffects.effects.AE_EffectDrain;
@@ -46,6 +47,11 @@ public class AE_Main extends JavaPlugin {
         final AE_CommandExecutor ce = new AE_CommandExecutor(this);
         
         pm.registerEvents(listener, this);
+        
+        // arrow
+        AE_EffectArrow arrow = new AE_EffectArrow(this);
+        listener.registerEffect("arrow", arrow);
+        listener.registerEffect("fire", arrow);
 
         // command
         AE_EffectCommand command = new AE_EffectCommand();
