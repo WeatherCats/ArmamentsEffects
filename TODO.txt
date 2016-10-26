@@ -41,3 +41,10 @@ Admin Commands
 /effect type <effect> <type>
 /effect desc <effect> <description>
 /effect view <effect>
+
+--EFFECTS--
+1. Cursed Item - (item that applies potion effect or something when picked up)
+2. Arrow Barrage - (arrows shoot out from the player when hit)
+3. Arrow Swarm - (arrows shoot at the player when hit)
+4. Make an arrow effect similar to tnt (take the code from tnt for vectors and such)
+
