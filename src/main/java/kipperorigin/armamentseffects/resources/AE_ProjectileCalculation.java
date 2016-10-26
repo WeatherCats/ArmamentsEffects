@@ -1,4 +1,4 @@
-package kipperorigin.armamentseffects.event;
+package kipperorigin.armamentseffects.resources;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -14,6 +14,14 @@ public class AE_ProjectileCalculation {
 			// Subtract 0.5 to get from -.5 to .5, multiply by .75 to confine
 			(Math.random() - 0.5) * 0.75,
 			Math.random() * 0.5,
+			1
+		);
+	}
+	
+	public Vector randomOffsetCustom(int i) {
+		return new Vector(
+			(Math.random() - i) * .75,
+			Math.random() * i,
 			1
 		);
 	}

@@ -14,14 +14,25 @@ import org.bukkit.entity.Fish;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LargeFireball;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Snowball;
 import org.bukkit.entity.ThrownExpBottle;
 import org.bukkit.entity.WitherSkull;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.util.Vector;
 
+import kipperorigin.armamentseffects.AE_Main;
+
 public class AE_Shoot {
+	
+    private AE_Main plugin;
+
+    public AE_Shoot(AE_Main plugin) {
+        this.plugin = plugin;
+    }
 	
 	public void shootItem (Vector vec, World world, Location loc, Boolean delay, ItemStack i) {
 		Material mat1 = i.getType();
@@ -51,27 +62,44 @@ public class AE_Shoot {
 		entity.setVelocity(vec);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void shootProjectile(Vector vec, Player player, String name) {
+		Projectile projectile = null;
         if (name.equalsIgnoreCase("snowball")) {
-        	player.launchProjectile(Snowball.class).setVelocity(vec);
+        	projectile = player.launchProjectile(Snowball.class);
+        	projectile.setVelocity(vec);
         } else if (name.equalsIgnoreCase("fireball")) {
-        	player.launchProjectile(Fireball.class).setVelocity(vec);
+        	projectile = player.launchProjectile(Fireball.class);
+        	projectile.setVelocity(vec);
         } else if (name.equalsIgnoreCase("fireshot")) {
-        	player.launchProjectile(SmallFireball.class).setVelocity(vec);
+        	projectile = player.launchProjectile(SmallFireball.class);
+        	projectile.setVelocity(vec);
         } else if (name.equalsIgnoreCase("fireblast")) {
-        	player.launchProjectile(LargeFireball.class).setVelocity(vec);
+        	projectile = player.launchProjectile(LargeFireball.class);
+        	projectile.setVelocity(vec);
         } else if (name.equalsIgnoreCase("arrow")) {
-        	player.launchProjectile(Arrow.class).setVelocity(vec);
+        	projectile = player.launchProjectile(Arrow.class);
+        	projectile.setVelocity(vec);
         } else if (name.equalsIgnoreCase("withershot")) {
-        	player.launchProjectile(WitherSkull.class).setVelocity(vec);
+        	projectile = player.launchProjectile(WitherSkull.class);
+        	projectile.setVelocity(vec);
         } else if (name.equalsIgnoreCase("egg")) {
-        	player.launchProjectile(Egg.class).setVelocity(vec);
+        	projectile = player.launchProjectile(Egg.class);
+        	projectile.setVelocity(vec);
         } else if (name.equalsIgnoreCase("fish")) {
-        	player.launchProjectile(Fish.class).setVelocity(vec);
+        	projectile = player.launchProjectile(Fish.class);
+        	projectile.setVelocity(vec);
         } else if (name.equalsIgnoreCase("xpbottle")) {
-        	player.launchProjectile(ThrownExpBottle.class).setVelocity(vec);
+        	projectile = player.launchProjectile(ThrownExpBottle.class);
+        	projectile.setVelocity(vec);
         } else {
         	player.sendMessage("Please use a valid projectile!");
+        	return;
+        }
+        
+        if (projectile != null) {
+        	MetadataValue x = new FixedMetadataValue(plugin, "projectile");	
+			projectile.setMetadata("Generated", x);
         }
 	}
 }
