@@ -5,13 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kipperorigin.armamentseffects.AE_Main;
-import kipperorigin.armamentseffects.event.AE_DamageEvent;
-import kipperorigin.armamentseffects.event.AE_Event;
-import kipperorigin.armamentseffects.event.AE_InteractEvent;
-import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
-import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,18 +19,26 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
-import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.projectiles.ProjectileSource;
+
+import kipperorigin.armamentseffects.AE_Main;
+import kipperorigin.armamentseffects.event.AE_DamageEvent;
+import kipperorigin.armamentseffects.event.AE_Event;
+import kipperorigin.armamentseffects.event.AE_InteractEvent;
+import kipperorigin.armamentseffects.event.AE_ProjectileEvent;
+import kipperorigin.armamentseffects.event.AE_ProjectileHitEvent;
+import kipperorigin.armamentseffects.managers.Effect;
 
 public class AE_EffectManager implements Listener {
 	
-	private AE_Main plugin;
-	
+    private AE_Main plugin;
+    
     public AE_EffectManager(AE_Main plugin) {
     	this.plugin = plugin;
     }
@@ -60,7 +61,8 @@ public class AE_EffectManager implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void process(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof LivingEntity))
+	
+	if (!(event.getEntity() instanceof LivingEntity))
             return;
 
         boolean sourceIsPlayer = true; // Source was a player?
@@ -125,6 +127,7 @@ public class AE_EffectManager implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void process(PlayerInteractEvent event) {
+
         Player player = event.getPlayer();
         Location loc = player.getLocation();
 
@@ -278,5 +281,5 @@ public class AE_EffectManager implements Listener {
 			}
 		}
     }
-    
+
 }

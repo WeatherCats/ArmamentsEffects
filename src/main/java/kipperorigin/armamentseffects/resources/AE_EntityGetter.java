@@ -11,7 +11,7 @@ public class AE_EntityGetter {
 	public List<Player> getPlayersInRadius(int i, Entity e) {
 		List<Player> playersInWorld = e.getWorld().getPlayers();
 		ListIterator<Player> litr = null;
-		
+
 		if (playersInWorld.isEmpty())
 			return null;
 		else {

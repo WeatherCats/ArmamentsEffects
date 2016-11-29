@@ -33,20 +33,43 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.comphenix.protocol.ProtocolManager;
+
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import kipperorigin.armamentseffects.managers.EffectManager;
+import org.cubeville.commons.commands.CommandParser;
+import org.bukkit.configuration.file.FileConfiguration;
+import kipperorigin.armamentseffects.managers.EventListener;
+import kipperorigin.armamentseffects.registry.Registry;
+import kipperorigin.armamentseffects.commands.*;
 
 public class AE_Main extends JavaPlugin {
 
+    private static AE_Main instance; // TODO: Unload -> delete!
+    private CommandParser commandParser;
     private final PluginManager pm = Bukkit.getPluginManager();
-    private ProtocolManager protocolManager;
-
+    private EventListener eventListener;
+    
+    public static AE_Main getInstance() {
+	return instance;
+    }
+    
     @Override
     public void onEnable() {
-    	
+	instance = this;
+
+	SerializationRegistration.init();
+        EffectManager e = new EffectManager();
+        e.addExampleEffects();
+        initializeCommands();
+        
         final AE_EffectManager listener = new AE_EffectManager(this);
-        final AE_CommandExecutor ce = new AE_CommandExecutor(this);
         
         pm.registerEvents(listener, this);
+
+        eventListener = new EventListener();
+        pm.registerEvents(eventListener, this);
         
         // arrow
         AE_EffectArrow arrow = new AE_EffectArrow(this);
@@ -184,12 +207,59 @@ public class AE_Main extends JavaPlugin {
         listener.registerEffect("move", teleport);
     }
     
-	public ProtocolManager getProtocolManager() {
-		return protocolManager;
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
+	if(!(sender instanceof Player)) return false;
+	Player player = (Player)sender;
+	
+	if(command.getName().equals("fx")) {
+            if(args.length == 1 && args[0].equals("save")) {
+                FileConfiguration config = getConfig();
+                config.set("EffectManager", EffectManager.getInstance());
+                config.set("Registry", eventListener.getRegistry());
+                saveConfig();
+                return true;
+            }
+            else if(args.length == 1 && args[0].equals("load")) {
+                EffectManager e = (EffectManager) getConfig().get("EffectManager");
+                player.sendMessage("Effects loaded");
+                Registry r = (Registry) getConfig().get("Registry");
+                eventListener.setRegistry(r);
+                player.sendMessage("Registry loaded");
+                return true;
+            }
+            else if(args.length == 1 && args[0].equals("test")) {
+                player.sendMessage("UUID: " + player.getUniqueId());
+                return true;
+            }
+            else {
+                commandParser.execute(player, args);
+                return true;
+            }
 	}
-
-	public void setProtocolManager(ProtocolManager protocolManager) {
-		this.protocolManager = protocolManager;
+	else {
+	    return false;
 	}
+    }
 
+    private void initializeCommands() {
+	commandParser = new CommandParser();
+	commandParser.addCommand(new CreateParticleCommand());
+	commandParser.addCommand(new EffectListCommand());
+	commandParser.addCommand(new HookListCommand());
+	commandParser.addCommand(new InfoCommand());
+        commandParser.addCommand(new EffectCreateParticleCommand());
+        commandParser.addCommand(new EffectCreateSoundCommand());
+        commandParser.addCommand(new HookCreateDamageOtherEntityCancelEventCommand());
+        commandParser.addCommand(new HookCreateInteractCancelEventCommand());
+        commandParser.addCommand(new HookCreateInteractPlayerLocationCommand());
+        commandParser.addCommand(new HookCreateInteractTargetLocationCommand());
+        commandParser.addCommand(new HookRemoveDamageOtherEntity());
+        commandParser.addCommand(new HookRemoveInteract());
+        commandParser.addCommand(new EffectRemove());
+        commandParser.addCommand(new PermissionAddCommand());
+        commandParser.addCommand(new PermissionListCommand());
+        commandParser.addCommand(new PermissionRemoveCommand());
+    }
 }

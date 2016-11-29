@@ -3,8 +3,14 @@ main: kipperorigin.armamentseffects.AE_Main
 author: KipperOrigin, GoalieGuy6, FrediW
 version: 0.9
 
+depend: [SimpleNBT]
 softdepend: [ProtocolLib]
 
+commands:
+  fx:
+    description: effects management command
+    usage: /fx
+    
 permissions:
   ae.main:
     description: All Armaments Effects Permissions.
