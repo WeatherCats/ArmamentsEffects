@@ -254,12 +254,17 @@ public class AE_Main extends JavaPlugin {
         commandParser.addCommand(new HookCreateDamageOtherEntityCancelEventCommand());
         commandParser.addCommand(new HookCreateInteractCancelEventCommand());
         commandParser.addCommand(new HookCreateInteractPlayerLocationCommand());
-        commandParser.addCommand(new HookCreateInteractTargetLocationCommand());
+        commandParser.addCommand(new HookCreateInteractTargetLocationCommand()); 
+        commandParser.addCommand(new HookCreateProjectileLaunchPlayerLocationCommand());
         commandParser.addCommand(new HookRemoveDamageOtherEntity());
         commandParser.addCommand(new HookRemoveInteract());
         commandParser.addCommand(new EffectRemove());
         commandParser.addCommand(new PermissionAddCommand());
         commandParser.addCommand(new PermissionListCommand());
         commandParser.addCommand(new PermissionRemoveCommand());
+        commandParser.addCommand(new HookCreateProjectileLaunchPlayerLocationCommand());
+        commandParser.addCommand(new HookCreateProjectileLaunchParticlePlayerCommand());
+        commandParser.addCommand(new HookCreateInteractParticlePlayerCommand());
+        commandParser.addCommand(new EffectModifyParticleCommand());
     }
 }

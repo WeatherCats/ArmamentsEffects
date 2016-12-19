@@ -3,7 +3,7 @@ main: kipperorigin.armamentseffects.AE_Main
 author: KipperOrigin, GoalieGuy6, FrediW
 version: 0.9
 
-depend: [SimpleNBT]
+depend: [CVTools]
 softdepend: [ProtocolLib]
 
 commands:

@@ -7,6 +7,7 @@ import java.util.Set;
 import org.bukkit.entity.Player;
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
+import org.cubeville.commons.commands.CommandResponse;
 
 import kipperorigin.armamentseffects.registry.Registry;
 import kipperorigin.armamentseffects.util.ItemUtil;
@@ -18,7 +19,7 @@ public class HookListCommand extends Command
         addFlag("all");
     }
 
-    public void execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
+    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         if(flags.contains("all")) {
             player.sendMessage("--------------- Hook List ---------------");
             List<String> hooks = Registry.getInstance().getHookList();
@@ -30,5 +31,6 @@ public class HookListCommand extends Command
             List<String> hooks = Registry.getInstance().getHookList(itemName);
             for(String h: hooks) player.sendMessage(h);
         }
+        return null;
     }
 }

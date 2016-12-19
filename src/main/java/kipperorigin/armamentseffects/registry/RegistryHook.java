@@ -36,9 +36,10 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
     }
 
     public RegistryHook(Map<String, Object> config) {
-        cooldownTime = (Long) config.get("cooldownTime");
+        cooldownTime = (int) config.get("cooldownTime");
         needsPermission = (boolean) config.get("needsPermission");
         if(needsPermission) permission = (String) config.get("permission");
+        hooks = (List<T>) config.get("hooks");
     }
     
     public Map<String, Object> serialize() {
@@ -46,6 +47,7 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
         ret.put("cooldownTime", cooldownTime);
         ret.put("needsPermission", needsPermission);
         if(needsPermission) ret.put("permission", permission);
+        ret.put("hooks", hooks);
         return ret;
     }
     

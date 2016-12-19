@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
+import org.cubeville.commons.commands.CommandResponse;
 
 import kipperorigin.armamentseffects.managers.Effect;
 import kipperorigin.armamentseffects.managers.EffectManager;
@@ -20,9 +21,10 @@ public class EffectRemove extends Command
         addBaseParameter(new CommandParameterEffect(Effect.class));
     }
 
-    public void execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
+    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         Effect effect = (Effect) baseParameters.get(0);
         if(Registry.getInstance().isEffectInUse(effect)) throw new CommandExecutionException("Effect is in use, removal not possible.");
         EffectManager.getInstance().removeEffect(effect);
+        return null;
     }
 }

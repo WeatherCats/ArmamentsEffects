@@ -40,8 +40,6 @@ public class InteractHookTargetLocation implements InteractHook
             effects.add(EffectManager.getInstance().getEffectByName(effect));
         }
         noTargetEffects = new ArrayList<>();
-        System.out.println("notargeteffects:" + config.get("noTargetEffects")); 
-        System.out.println("notargeteffects clas:" + config.get("noTargetEffects").getClass().getName());
         for(String effect: (List<String>) config.get("noTargetEffects")) {
             noTargetEffects.add(EffectManager.getInstance().getEffectByName(effect));
         }

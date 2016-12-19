@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
 import org.cubeville.commons.commands.CommandParameterString;
+import org.cubeville.commons.commands.CommandResponse;
 
 import kipperorigin.armamentseffects.managers.EffectManager;
 
@@ -19,7 +20,7 @@ public class InfoCommand extends Command
 	addBaseParameter(new CommandParameterString());
     }
 
-    public void execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
+    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
 	String name =(String) baseParameters.get(0);
 	List<String> info = EffectManager.getInstance().getEffectInfo(name);
 	if(info == null) throw new CommandExecutionException("Effect " + name + " not found!");
@@ -27,5 +28,6 @@ public class InfoCommand extends Command
 	for(String i: info) {
 	    player.sendMessage(i);
 	}
+        return null;
     }
 }

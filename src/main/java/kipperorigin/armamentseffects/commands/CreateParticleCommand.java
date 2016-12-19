@@ -19,6 +19,7 @@ import org.cubeville.commons.commands.CommandParameterEnum;
 import org.cubeville.commons.commands.CommandParameterEnumeratedStringList;
 import org.cubeville.commons.commands.CommandParameterInteger;
 import org.cubeville.commons.commands.CommandParameterPotionEffectType;
+import org.cubeville.commons.commands.CommandResponse;
 
 public class CreateParticleCommand extends Command
 {
@@ -35,9 +36,10 @@ public class CreateParticleCommand extends Command
         addBaseParameter(new CommandParameterEnumeratedStringList(poss));
     }
 
-    public void execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) {
+    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) {
 	//player.sendMessage("Create particle effect with particle = " + (Particle) parameters.get("particle"));
 	//PotionEffectType x = (PotionEffectType) textParameters.get(0);
 	player.sendMessage("Enchantment is ");
+        return null;
     }
 }

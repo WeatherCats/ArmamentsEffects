@@ -40,10 +40,8 @@ public class SmoothSnowEffect extends EffectWithLocation
                 }
             }
         }
-        System.out.println("Closest down: " + closestDown + ", closest up: " + closestUp);
         if(closestUp != -1 && closestDown != -1 && closestUp != 0) {
             double ratio = closestDown / closestUp;
-            System.out.println("Ratio: " + ratio);
             ratio *= 4;
             if(ratio > 7) ratio = 7;
             int snowHeight = (int) ratio;

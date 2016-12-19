@@ -9,17 +9,16 @@ public class ParticleEffectTimedRunnable extends BukkitRunnable
 {
     private final JavaPlugin plugin;
     private final Location location;
-    private final int effectId;
+    private final ParticleEffect effect;
     private int step;
     private int ticks;
     private double stepsPerTick;
     private double speed;
 
-    public ParticleEffectTimedRunnable(JavaPlugin plugin, int effectId, double stepsPerTick, double speed, Location location)
+    public ParticleEffectTimedRunnable(JavaPlugin plugin, ParticleEffect effect, double stepsPerTick, double speed, Location location)
     {
-	System.out.println("Start timed runnable");
 	this.plugin = plugin;
-	this.effectId = effectId;
+	this.effect = effect;
 	this.location = location;
 	this.stepsPerTick = stepsPerTick;
 	this.speed = speed;
@@ -35,12 +34,12 @@ public class ParticleEffectTimedRunnable extends BukkitRunnable
 	    Location nloc = location.clone();
 	    dist.multiply(step * speed);
 	    nloc.add(dist);
-            if(step % 20 == 0) {
-                System.out.println("Playing step " + step + " at " + nloc);
-            }
-	    if(!((ParticleEffect)(EffectManager.getInstance().getEffectById(effectId))).play(step++, nloc)) {
+            //if(step % 20 == 0) {
+            //    System.out.println("Playing step " + step + " at " + nloc);
+            //}
+	    if(!effect.play(step++, nloc)) {
 		this.cancel();
-		System.out.println("Cancel coz steps at " + step);
+		//System.out.println("Cancel coz steps at " + step);
 		return;
 	    }
 	}

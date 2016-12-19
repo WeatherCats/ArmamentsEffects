@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandParameterString;
 import org.cubeville.commons.commands.CommandParameterUUID;
+import org.cubeville.commons.commands.CommandResponse;
 
 import kipperorigin.armamentseffects.registry.Registry;
 
@@ -24,7 +25,7 @@ public class PermissionListCommand extends Command
         addOptionalBaseParameter(new CommandParameterString());
     }
 
-    public void execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) {
+    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) {
         if(baseParameters.size() == 0) { // List available permissions
             List<String> permissions = new ArrayList<String>(Registry.getInstance().getPermissionList().getPermissions());
             Collections.sort(permissions);
@@ -40,5 +41,6 @@ public class PermissionListCommand extends Command
                 player.sendMessage(p.toString() + ": " + op.getName());
             }
         }
+        return null;
     }
 }

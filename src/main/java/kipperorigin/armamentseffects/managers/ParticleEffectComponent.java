@@ -1,6 +1,5 @@
 package kipperorigin.armamentseffects.managers;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +15,8 @@ import com.comphenix.protocol.wrappers.EnumWrappers.Particle;
 import kipperorigin.armamentseffects.managers.modifier.CoordinateModifier;
 import kipperorigin.armamentseffects.managers.sources.coordinate.ConstantCoordinateSource;
 import kipperorigin.armamentseffects.managers.sources.coordinate.CoordinateSource;
+import kipperorigin.armamentseffects.managers.sources.value.ValueSource;
+import kipperorigin.armamentseffects.managers.sources.value.ConstantValueSource;
 import kipperorigin.armamentseffects.util.Conversions;
 
 @SerializableAs("ParticleEffectComponent")
@@ -23,8 +24,10 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 {
     private CoordinateSource coordinates;
     private Particle particle;
-    private int count;
-    private Vector spread;
+    private ValueSource count;
+    private ValueSource spreadX;
+    private ValueSource spreadY;
+    private ValueSource spreadZ;
     private Material material;
     private boolean directionalCoordinates;
     private List<CoordinateModifier> modifiers;
@@ -33,8 +36,10 @@ public class ParticleEffectComponent implements ConfigurationSerializable
     public ParticleEffectComponent() {
 	coordinates = new ConstantCoordinateSource();
 	particle = Particle.VILLAGER_HAPPY;
-	count = 0;
-	spread = new Vector(0, 0, 0);
+	count = new ConstantValueSource(0);
+	spreadX = new ConstantValueSource(0);
+        spreadY = new ConstantValueSource(0);
+        spreadZ = new ConstantValueSource(0);
 	material = Material.AIR;
 	directionalCoordinates = true;
 	modifiers = new ArrayList<>();
@@ -44,8 +49,10 @@ public class ParticleEffectComponent implements ConfigurationSerializable
     public ParticleEffectComponent(Map<String, Object> config) {
 	coordinates = (CoordinateSource) config.get("coordinates");
 	particle = Particle.valueOf((String) config.get("particle"));
-	count = (int) config.get("count");
-	spread = Conversions.getVectorFromString((String) config.get("spread"));
+	count = (ValueSource) config.get("count");
+        spreadX = (ValueSource) config.get("spreadX");
+        spreadY = (ValueSource) config.get("spreadY");
+        spreadZ = (ValueSource) config.get("spreadZ");
 	material = Material.valueOf((String) config.get("material"));
 	directionalCoordinates = (boolean) config.get("directionalCoordinates");
 	modifiers = (List<CoordinateModifier>) config.get("modifiers");
@@ -57,7 +64,9 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	ret.put("coordinates", coordinates);
 	ret.put("particle", particle.toString());
 	ret.put("count", count);
-	ret.put("spread", Conversions.getVectorAsString(spread));
+        ret.put("spreadX", spreadX);
+        ret.put("spreadY", spreadY);
+        ret.put("spreadZ", spreadZ);
 	ret.put("material", material.toString());
 	ret.put("directionalCoordinates", directionalCoordinates);
 	ret.put("modifiers", modifiers);
@@ -79,8 +88,10 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	List<String> ret = new ArrayList<>();
 	ret.add("  Source: " + coordinates.getInfo());
 	ret.add("  Particle: " + particle);
-	ret.add("  Count: " + count);
-	ret.add("  Spread: " + spread);
+	ret.add("  Count: " + count.getInfo());
+	ret.add("  SpreadX: " + spreadX.getInfo());
+	ret.add("  SpreadY: " + spreadY.getInfo());
+	ret.add("  SpreadZ: " + spreadZ.getInfo());
 	ret.add("  Material: " + material);
 	if(modifiers.size() > 0) {
 	    ret.add("  Modifiers:");
@@ -129,20 +140,36 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	this.particle = argParticle;
     }
 
-    public final int getCount() {
+    public final ValueSource getCount() {
 	return this.count;
     }
 
-    public final void setCount(final int argCount) {
+    public final void setCount(final ValueSource argCount) {
 	this.count = argCount;
     }
 
-    public final Vector getSpread() {
-	return this.spread;
+    public final ValueSource getSpreadX() {
+	return this.spreadX;
     }
 
-    public final void setSpread(Vector spread) {
-	this.spread = spread;
+    public final void setSpreadX(ValueSource spreadX) {
+	this.spreadX = spreadX;
+    }
+    
+    public final ValueSource getSpreadY() {
+	return this.spreadY;
+    }
+
+    public final void setSpreadY(ValueSource spreadY) {
+	this.spreadY = spreadY;
+    }
+    
+    public final ValueSource getSpreadZ() {
+	return this.spreadZ;
+    }
+
+    public final void setSpreadZ(ValueSource spreadZ) {
+	this.spreadZ = spreadZ;
     }
     
     public final Material getMaterial() {

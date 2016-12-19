@@ -21,6 +21,10 @@ public class ConstantCoordinateSource implements CoordinateSource
 	vertices.add(new Vector(0, 0, 0));
     }
 
+    public ConstantCoordinateSource(List<Vector> vertices) {
+        this.vertices = vertices;
+    }
+    
     public ConstantCoordinateSource(Map<String, Object> config) {
 	List<String> vl = (List<String>) config.get("vertices");
 	vertices = new ArrayList<>();
@@ -39,10 +43,6 @@ public class ConstantCoordinateSource implements CoordinateSource
 	return ret;
     }
     
-    public ConstantCoordinateSource(List<Vector> vertices) {
-	this.vertices = vertices;
-    }
-
     public List<Vector> getVertices(int step, int nr) {
 	return vertices;
     }

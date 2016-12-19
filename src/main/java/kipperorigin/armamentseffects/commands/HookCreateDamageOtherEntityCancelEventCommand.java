@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
+import org.cubeville.commons.commands.CommandResponse;
 
 import kipperorigin.armamentseffects.registry.Registry;
 import kipperorigin.armamentseffects.util.ItemUtil;
@@ -19,9 +20,10 @@ public class HookCreateDamageOtherEntityCancelEventCommand extends Command
         super("hook create damageotherentity cancelevent");
     }
 
-    public void execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
+    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
-        Registry.getInstance().registerDamageOtherEntityEvent(itemName, new DamageOtherEntityHookCancelEvent());
+        Registry.getInstance().registerEvent(itemName, new DamageOtherEntityHookCancelEvent());
+        return null;
     }
 
 }

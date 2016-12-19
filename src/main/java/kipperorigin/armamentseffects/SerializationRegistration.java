@@ -5,6 +5,10 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 public class SerializationRegistration
 {
     public static void init() {
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookTargetLocation.class);
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookPlayerLocation.class);
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookCancelEvent.class);
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.DamageOtherEntityHookCancelEvent.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.ParticleEffect.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.ParticleEffectComponent.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.ParticleEffectTimelineEntry.class);
@@ -19,10 +23,7 @@ public class SerializationRegistration
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.sources.value.ConstantValueSource.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.sources.value.LinearValueSource.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.sources.value.SinewaveValueSource.class);
-	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookTargetLocation.class);
-	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookPlayerLocation.class);
-	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookCancelEvent.class);
-	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.DamageOtherEntityHookCancelEvent.class);
-        
+        ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.registry.RegistryHook.class);
+        ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.ProjectileLaunchHookParticlePlayer.class);
     }
 }

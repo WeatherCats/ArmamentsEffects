@@ -11,6 +11,7 @@ import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
 import org.cubeville.commons.commands.CommandParameterListString;
 import org.cubeville.commons.commands.CommandParameterString;
+import org.cubeville.commons.commands.CommandResponse;
 
 import kipperorigin.armamentseffects.hooks.InteractHookTargetLocation;
 import kipperorigin.armamentseffects.managers.Effect;
@@ -26,7 +27,7 @@ public class HookCreateInteractTargetLocationCommand extends Command
         addOptionalBaseParameter(new CommandParameterListEffect(EffectWithLocation.class));
     }
 
-    public void execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
+    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         List<Effect> noTargetParameters;
         if(baseParameters.size() < 2) {
             noTargetParameters = new ArrayList<>();
@@ -36,6 +37,7 @@ public class HookCreateInteractTargetLocationCommand extends Command
         }
 
         String itemName = ItemUtil.safeGetItemInMainHandName(player);        
-        Registry.getInstance().registerInteractEvent(itemName, new InteractHookTargetLocation((List<Effect>) baseParameters.get(0), noTargetParameters));
+        Registry.getInstance().registerEvent(itemName, new InteractHookTargetLocation((List<Effect>) baseParameters.get(0), noTargetParameters));
+        return null;
     }
 }

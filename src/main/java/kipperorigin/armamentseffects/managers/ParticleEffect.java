@@ -20,7 +20,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import kipperorigin.armamentseffects.managers.modifier.*;
 
 @SerializableAs("ParticleEffect")
-public class ParticleEffect extends EffectWithLocationAndTimeline
+public class ParticleEffect extends EffectWithLocation
 {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
@@ -72,7 +72,6 @@ public class ParticleEffect extends EffectWithLocationAndTimeline
         for(ParticleEffectComponent component: components) {
             if(component.isActive(localStep)) {
                 for(Vector vec: component.getModifiedCoordinates(localStep)) {
-                    System.out.println("Create packet");
                     Location nloc = location.clone();
                     Vector nvec = vec.clone();
                     if(component.getDirectionalCoordinates()) {
@@ -81,20 +80,17 @@ public class ParticleEffect extends EffectWithLocationAndTimeline
                     nloc.add(nvec);
                     PacketContainer particlePacket = protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
                     particlePacket.getParticles().write(0, component.getParticle());
-                    particlePacket.getIntegers().write(0, component.getCount());
+                    particlePacket.getIntegers().write(0, new Double(component.getCount().getValue(step)).intValue());
                     particlePacket.getFloat().write(0, (float) nloc.getX());
                     particlePacket.getFloat().write(1, (float) nloc.getY());
                     particlePacket.getFloat().write(2, (float) nloc.getZ());
-                    particlePacket.getFloat().write(3, (float)component.getSpread().getX());
-                    particlePacket.getFloat().write(4, (float)component.getSpread().getY());
-                    particlePacket.getFloat().write(5, (float)component.getSpread().getZ());
+                    particlePacket.getFloat().write(3, (float) component.getSpreadX().getValue(step));
+                    particlePacket.getFloat().write(4, (float) component.getSpreadY().getValue(step));
+                    particlePacket.getFloat().write(5, (float) component.getSpreadZ().getValue(step));
                     particlePacket.getFloat().write(6, 1F);
                     //particlePacket.getBooleans().write(0, true);
                     sendParticlePackets(nloc, particlePacket);
                 }
-            }
-            else {
-                System.out.println("Component is not active.");
             }
         }
         

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
 import org.cubeville.commons.commands.CommandParameterInteger;
+import org.cubeville.commons.commands.CommandResponse;
 
 import kipperorigin.armamentseffects.registry.Registry;
 import kipperorigin.armamentseffects.util.ItemUtil;
@@ -20,9 +21,10 @@ public class HookRemoveDamageOtherEntity extends Command
         addBaseParameter(new CommandParameterInteger());
     }
 
-    public void execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
+    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
         Registry.getInstance().deregisterDamageOtherEntityEvent(itemName, (int) baseParameters.get(0));
+        return null;
     }
     
 }

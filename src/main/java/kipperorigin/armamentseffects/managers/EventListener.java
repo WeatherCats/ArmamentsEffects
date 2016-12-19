@@ -8,12 +8,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 import kipperorigin.armamentseffects.hooks.DamageOtherEntityHookCancelEvent;
 import kipperorigin.armamentseffects.hooks.DamageOtherEntityHookTargetEntity;
 import kipperorigin.armamentseffects.hooks.InteractHookBlockLocation;
 import kipperorigin.armamentseffects.hooks.InteractHookCancelEvent;
-import kipperorigin.armamentseffects.hooks.InteractHookParticleDirected;
+import kipperorigin.armamentseffects.hooks.InteractHookParticlePlayer;
 import kipperorigin.armamentseffects.hooks.InteractHookPlayer;
 import kipperorigin.armamentseffects.hooks.InteractHookPlayerLocation;
 import kipperorigin.armamentseffects.hooks.InteractHookTargetLocation;
@@ -77,6 +79,7 @@ public class EventListener implements Listener
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void process(EntityDamageByEntityEvent event) {
+        System.out.println("Damage entity by entity" + event.getEntity());
         registry.processEntityDamageByEntityEvent(event);
     }
 
@@ -85,5 +88,13 @@ public class EventListener implements Listener
 	registry.processInteractEvent(event);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void process(ProjectileLaunchEvent event) {
+        registry.processProjectileLaunchEvent(event);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void process(ProjectileHitEvent event) {
+    }
     
 }

@@ -44,7 +44,7 @@ public class EffectManager implements ConfigurationSerializable
     public EffectManager() {
         effects = new ArrayList<>();
         instance = this;
-        //addExampleEffects();
+        addExampleEffects();
     }
 
     public void addExampleEffects() {
