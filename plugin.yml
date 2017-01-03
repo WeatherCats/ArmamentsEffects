@@ -10,7 +10,8 @@ commands:
   fx:
     description: effects management command
     usage: /fx
-    
+    permission: fx.admin
+
 permissions:
   ae.main:
     description: All Armaments Effects Permissions.
@@ -42,4 +43,7 @@ permissions:
     default: op
   ae.admin:
     description: Able to override event cancels.
+    default: op
+  fx.admin:
+    description: Able to use the fx command
     default: op

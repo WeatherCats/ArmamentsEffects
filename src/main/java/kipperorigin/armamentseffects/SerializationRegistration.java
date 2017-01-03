@@ -5,13 +5,14 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 public class SerializationRegistration
 {
     public static void init() {
-	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookTargetLocation.class);
-	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookPlayerLocation.class);
-	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookCancelEvent.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.DamageOtherEntityHookCancelEvent.class);
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookCancelEvent.class);
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookPlayerLocation.class);
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookTargetLocation.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.ParticleEffect.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.ParticleEffectComponent.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.ParticleEffectTimelineEntry.class);
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.PiercingEffect.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.SoundEffect.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.modifier.CoordinateModifierMove.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.modifier.CoordinateModifierRotate.class);
@@ -23,7 +24,9 @@ public class SerializationRegistration
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.sources.value.ConstantValueSource.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.sources.value.LinearValueSource.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.sources.value.SinewaveValueSource.class);
-        ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.registry.RegistryHook.class);
+        ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.DamageOtherEntityHookEventAndDamager.class);
         ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.ProjectileLaunchHookParticlePlayer.class);
+        ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.ProjectileLaunchHookPlayerLocation.class);
+        ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.registry.RegistryHook.class);
     }
 }

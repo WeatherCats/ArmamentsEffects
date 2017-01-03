@@ -3,10 +3,12 @@ package kipperorigin.armamentseffects.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -79,22 +81,22 @@ public class EventListener implements Listener
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void process(EntityDamageByEntityEvent event) {
-        System.out.println("Damage entity by entity" + event.getEntity());
         registry.processEntityDamageByEntityEvent(event);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void process(PlayerInteractEvent event) {
-	registry.processInteractEvent(event);
+        registry.processInteractEvent(event);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void process(ProjectileLaunchEvent event) {
-        registry.processProjectileLaunchEvent(event);
+            registry.processProjectileLaunchEvent(event);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void process(ProjectileHitEvent event) {
+    public void process(ProjectileHitEvent event) { 
+        registry.processProjectileHitEvent(event);
     }
-    
+
 }

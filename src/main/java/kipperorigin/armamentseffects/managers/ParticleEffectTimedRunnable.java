@@ -34,12 +34,8 @@ public class ParticleEffectTimedRunnable extends BukkitRunnable
 	    Location nloc = location.clone();
 	    dist.multiply(step * speed);
 	    nloc.add(dist);
-            //if(step % 20 == 0) {
-            //    System.out.println("Playing step " + step + " at " + nloc);
-            //}
 	    if(!effect.play(step++, nloc)) {
 		this.cancel();
-		//System.out.println("Cancel coz steps at " + step);
 		return;
 	    }
 	}

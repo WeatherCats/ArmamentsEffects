@@ -259,7 +259,7 @@ public class EffectManager implements ConfigurationSerializable
     public Effect getEffectByName(String name) {
         int id = getEffectIdByName(name);
         if(id == -1) return null;
-        return effects.get(getEffectIdByName(name));
+        return effects.get(id);
     }
 
     public List<String> getEffectInfo(String name) {

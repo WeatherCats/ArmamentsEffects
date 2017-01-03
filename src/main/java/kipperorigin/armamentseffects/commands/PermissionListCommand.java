@@ -27,7 +27,7 @@ public class PermissionListCommand extends Command
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) {
         if(baseParameters.size() == 0) { // List available permissions
-            List<String> permissions = new ArrayList<String>(Registry.getInstance().getPermissionList().getPermissions());
+            List<String> permissions = new ArrayList<String>(Registry.getInstance().getPermissionList().getPermissionList());
             Collections.sort(permissions);
             for(String p: permissions) {
                 player.sendMessage(p);

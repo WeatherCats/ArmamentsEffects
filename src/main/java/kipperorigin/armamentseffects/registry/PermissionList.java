@@ -14,55 +14,67 @@ import org.bukkit.configuration.serialization.SerializableAs;
 @SerializableAs("PermissionList")
 public class PermissionList implements ConfigurationSerializable
 {
-    private Map<String, Set<UUID>> permissions;
+    private Map<String, Set<UUID>> permissionList;
 
     public PermissionList() {
-        permissions = new HashMap<>();
+        permissionList = new HashMap<>();
     }
 
     public PermissionList(Map<String, Object> config) {
-        permissions = (Map<String, Set<UUID>>) config.get("permissions");
+        permissionList = new HashMap<>();
+        Map<String, List<String>> configPermissionList = (Map<String, List<String>>) config.get("permissionList");
+        for(String permission: configPermissionList.keySet()) {
+            permissionList.put(permission, new HashSet<UUID>());
+            for(String member: configPermissionList.get(permission)) {
+                permissionList.get(permission).add(UUID.fromString(member));
+            }
+        }
     }
 
     public Map<String, Object> serialize() {
-        Map<String, List<String>> wp = new HashMap<>();;
-        for(String s: permissions.keySet()) {
-            List<String> sl = new ArrayList<>();
-            for(UUID uuid: permissions.get(s)) {
-                sl.add(uuid.toString());
-            }
-            wp.put(s, sl);
-        }
         Map<String, Object> ret = new HashMap<>();
-        ret.put("permissions", wp);
+        Map<String, List<String>> perms = new HashMap<>();
+        for(String permission: permissionList.keySet()) {
+            List<String> members = new ArrayList<>();
+            for(UUID uuid: permissionList.get(permission)) {
+                members.add(uuid.toString());
+            }
+            perms.put(permission, members);
+        }
+        ret.put("permissionList", perms);
         return ret;
     }
     
     public boolean hasPermission(String permission, UUID player) {
-        if(!permissions.containsKey(permission)) return false;
-        return permissions.get(permission).contains(player);
+        if(!permissionList.containsKey(permission)) return false;
+        Set<UUID> pl = permissionList.get(permission);
+        return pl.contains(player);
     }
 
     public void addPermission(String permission, UUID player) {
-        if(!permissions.containsKey(permission)) {
-            permissions.put(permission, new HashSet<>());
+        if(!permissionList.containsKey(permission)) {
+            permissionList.put(permission, new HashSet<>());
         }
-        permissions.get(permission).add(player);
+        permissionList.get(permission).add(player);
     }
 
     public void removePermission(String permission, UUID player) {
-        if(!permissions.containsKey(permission)) throw new IllegalArgumentException("Permission " + permission + " does not exist.");
-        if(!permissions.get(permission).contains(player)) throw new IllegalArgumentException("Player does not have permission.");
-        permissions.get(permission).remove(player);
-        if(permissions.get(permission).size() == 0) permissions.remove(permission);
+        if(!permissionList.containsKey(permission)) throw new IllegalArgumentException("Permission " + permission + " does not exist.");
+        if(!permissionList.get(permission).contains(player)) throw new IllegalArgumentException("Player does not have permission.");
+        permissionList.get(permission).remove(player);
+        if(permissionList.get(permission).size() == 0) permissionList.remove(permission);
     }
 
-    public Set<String> getPermissions() {
-        return permissions.keySet();
+    public Set<String> getPermissionList() {
+        return permissionList.keySet();
     }
 
     public Set<UUID> getPlayersByPermission(String permission) {
-        if(!permissions.containsKey(permission)) return new HashSet<>();
-        return permissions.get(permission);
+        if(!permissionList.containsKey(permission)) return new HashSet<>();
+        return permissionList.get(permission);
+    }
+
+    public boolean permissionExists(String permission) {
+        return permissionList.containsKey(permission);
     }
 }

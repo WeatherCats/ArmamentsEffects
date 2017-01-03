@@ -93,7 +93,7 @@ public class InteractHookTargetLocation implements InteractHook
 
     public boolean usesEffect(Effect effect) {
         for(int i = 0; i < effects.size(); i++) if(effects.get(i) == effect) return true;
-        for(int i = 0; i < effects.size(); i++) if(noTargetEffects.get(i) == effect) return true;
+        for(int i = 0; i < noTargetEffects.size(); i++) if(noTargetEffects.get(i) == effect) return true;
         return false;
     }
 

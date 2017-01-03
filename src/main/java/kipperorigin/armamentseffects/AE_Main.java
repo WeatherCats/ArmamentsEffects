@@ -4,10 +4,8 @@ import kipperorigin.armamentseffects.effects.AE_EffectArrow;
 import kipperorigin.armamentseffects.effects.AE_EffectCommand;
 import kipperorigin.armamentseffects.effects.AE_EffectDisarm;
 import kipperorigin.armamentseffects.effects.AE_EffectDrain;
-//import kipperorigin.armamentseffects.effects.AE_EffectDurability;
 import kipperorigin.armamentseffects.effects.AE_EffectExplode;
 import kipperorigin.armamentseffects.effects.AE_EffectFireworkParticle;
-//import kipperorigin.armamentseffects.effects.AE_EffectHomingArrow;
 import kipperorigin.armamentseffects.effects.AE_EffectInstakill;
 import kipperorigin.armamentseffects.effects.AE_EffectKillParticles;
 import kipperorigin.armamentseffects.effects.AE_EffectLightning;
@@ -70,7 +68,9 @@ public class AE_Main extends JavaPlugin {
 
         eventListener = new EventListener();
         pm.registerEvents(eventListener, this);
-        
+
+        loadEffects(null);
+
         // arrow
         AE_EffectArrow arrow = new AE_EffectArrow(this);
         listener.registerEffect("arrow", arrow);
@@ -205,6 +205,7 @@ public class AE_Main extends JavaPlugin {
         AE_EffectTeleport teleport = new AE_EffectTeleport();
         listener.registerEffect("teleport", teleport);
         listener.registerEffect("move", teleport);
+
     }
     
     @Override
@@ -215,34 +216,39 @@ public class AE_Main extends JavaPlugin {
 	
 	if(command.getName().equals("fx")) {
             if(args.length == 1 && args[0].equals("save")) {
-                FileConfiguration config = getConfig();
-                config.set("EffectManager", EffectManager.getInstance());
-                config.set("Registry", eventListener.getRegistry());
-                saveConfig();
+                saveEffects();
                 return true;
             }
             else if(args.length == 1 && args[0].equals("load")) {
-                EffectManager e = (EffectManager) getConfig().get("EffectManager");
-                player.sendMessage("Effects loaded");
-                Registry r = (Registry) getConfig().get("Registry");
-                eventListener.setRegistry(r);
-                player.sendMessage("Registry loaded");
-                return true;
-            }
-            else if(args.length == 1 && args[0].equals("test")) {
-                player.sendMessage("UUID: " + player.getUniqueId());
+                loadEffects(null);
                 return true;
             }
             else {
                 commandParser.execute(player, args);
                 return true;
             }
-	}
+        }
 	else {
 	    return false;
 	}
     }
 
+    private void loadEffects(Player player) {
+        EffectManager e = (EffectManager) getConfig().get("EffectManager");
+        if(player != null) player.sendMessage("Effects loaded");
+        Registry r = (Registry) getConfig().get("Registry");
+        if(r == null) r = new Registry();
+        eventListener.setRegistry(r);
+        if(player != null) player.sendMessage("Registry loaded");
+    }
+
+    private void saveEffects() {
+        FileConfiguration config = getConfig();
+        config.set("EffectManager", EffectManager.getInstance());
+        config.set("Registry", eventListener.getRegistry());
+        saveConfig();
+    }
+    
     private void initializeCommands() {
 	commandParser = new CommandParser();
 	commandParser.addCommand(new CreateParticleCommand());
@@ -250,21 +256,24 @@ public class AE_Main extends JavaPlugin {
 	commandParser.addCommand(new HookListCommand());
 	commandParser.addCommand(new InfoCommand());
         commandParser.addCommand(new EffectCreateParticleCommand());
+        commandParser.addCommand(new EffectCreatePiercingCommand());
         commandParser.addCommand(new EffectCreateSoundCommand());
+        commandParser.addCommand(new EffectModifyParticleCommand());
+        commandParser.addCommand(new EffectRemove());
+        commandParser.addCommand(new HookCooldownCommand());
         commandParser.addCommand(new HookCreateDamageOtherEntityCancelEventCommand());
+        commandParser.addCommand(new HookCreateDamageOtherEntityEventAndDamagerCommand());
         commandParser.addCommand(new HookCreateInteractCancelEventCommand());
+        commandParser.addCommand(new HookCreateInteractParticlePlayerCommand());
         commandParser.addCommand(new HookCreateInteractPlayerLocationCommand());
         commandParser.addCommand(new HookCreateInteractTargetLocationCommand()); 
+        commandParser.addCommand(new HookCreateProjectileLaunchParticlePlayerCommand());
         commandParser.addCommand(new HookCreateProjectileLaunchPlayerLocationCommand());
+        commandParser.addCommand(new HookPermissionSetCommand());
         commandParser.addCommand(new HookRemoveDamageOtherEntity());
         commandParser.addCommand(new HookRemoveInteract());
-        commandParser.addCommand(new EffectRemove());
         commandParser.addCommand(new PermissionAddCommand());
         commandParser.addCommand(new PermissionListCommand());
         commandParser.addCommand(new PermissionRemoveCommand());
-        commandParser.addCommand(new HookCreateProjectileLaunchPlayerLocationCommand());
-        commandParser.addCommand(new HookCreateProjectileLaunchParticlePlayerCommand());
-        commandParser.addCommand(new HookCreateInteractParticlePlayerCommand());
-        commandParser.addCommand(new EffectModifyParticleCommand());
     }
 }

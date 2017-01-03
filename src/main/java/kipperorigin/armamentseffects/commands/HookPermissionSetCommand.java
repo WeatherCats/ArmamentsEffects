@@ -16,20 +16,19 @@ import kipperorigin.armamentseffects.managers.EffectWithLocation;
 import kipperorigin.armamentseffects.registry.Registry;
 import kipperorigin.armamentseffects.util.ItemUtil;
 
-public class HookCreateInteractPlayerLocationCommand extends Command
+public class HookPermissionSetCommand extends Command
 {
-    public  HookCreateInteractPlayerLocationCommand() {
-        super("hook create interact playerlocation");
-        addBaseParameter(new CommandParameterEffect(EffectWithLocation.class));
+    public HookPermissionSetCommand() {
+        super("hook permission set");
+        addBaseParameter(new CommandParameterEventClass());
+        addBaseParameter(new CommandParameterPermission());
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
-
-        Effect effect = (Effect) baseParameters.get(0);
-        Registry.getInstance().registerEvent(itemName, new InteractHookPlayerLocation(effect));
-        return new CommandResponse("Hook created.");
+        String eventClass = (String) baseParameters.get(0);
+        String permission = (String) baseParameters.get(1);
+        Registry.getInstance().setPermission(itemName, eventClass, permission);
+        return null;
     }
 }
-
-    
