@@ -30,6 +30,7 @@ public class EffectCreateParticleCommand extends Command
         effect.addComponent(component);
         ParticleCommandHelper.setComponentValues(component, parameters);
         EffectManager.getInstance().addEffect(effect);
+        CommandUtil.saveConfig();
         return null;
     }
 }

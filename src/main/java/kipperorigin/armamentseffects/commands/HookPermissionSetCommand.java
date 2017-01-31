@@ -29,6 +29,8 @@ public class HookPermissionSetCommand extends Command
         String eventClass = (String) baseParameters.get(0);
         String permission = (String) baseParameters.get(1);
         Registry.getInstance().setPermission(itemName, eventClass, permission);
+        CommandUtil.saveConfig();
+        CommandUtil.clearPermissionCache();
         return null;
     }
 }

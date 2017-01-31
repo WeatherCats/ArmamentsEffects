@@ -17,12 +17,13 @@ import kipperorigin.armamentseffects.hooks.DamageOtherEntityHookCancelEvent;
 public class HookCreateDamageOtherEntityCancelEventCommand extends Command
 {
     public HookCreateDamageOtherEntityCancelEventCommand() {
-        super("hook create damage cancelevent");
+        super("hook create damage cancel");
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
         Registry.getInstance().registerEvent(itemName, new DamageOtherEntityHookCancelEvent());
+        CommandUtil.saveConfig();
         return null;
     }
 

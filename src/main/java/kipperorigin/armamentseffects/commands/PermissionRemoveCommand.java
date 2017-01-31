@@ -24,6 +24,8 @@ public class PermissionRemoveCommand extends Command
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) {
         Registry.getInstance().getPermissionList().removePermission((String) baseParameters.get(0), (UUID) baseParameters.get(1));
+        CommandUtil.saveConfig();
+        CommandUtil.clearPermissionCache();
         return null;
     }
 }

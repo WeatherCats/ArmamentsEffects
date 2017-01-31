@@ -28,6 +28,7 @@ public class HookCreateInteractParticlePlayerCommand extends Command
         if(itemName == null) throw new CommandExecutionException("No named item in hand!");
         Effect effect = (Effect) baseParameters.get(0);
         Registry.getInstance().registerEvent(itemName, new InteractHookParticlePlayer(effect.getName(), 0, 1, 1, false, 0));
+        CommandUtil.saveConfig();
         return new CommandResponse("Hook created.");
     }
 }

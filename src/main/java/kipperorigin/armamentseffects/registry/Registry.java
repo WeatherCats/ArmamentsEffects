@@ -122,9 +122,17 @@ public class Registry implements ConfigurationSerializable
         List<String> ret = new ArrayList<>();
         for(String key: eventMaps.keySet()) {
             if(eventMaps.get(key).containsKey(itemName)) {
-                ret.add(key + ":");
+                RegistryHook<Hook> rh = eventMaps.get(key).get(itemName);
+                String i = "";
+                if(rh.getPermission() != null) i += rh.getPermission();
+                if(rh.getCooldown() != 0) {
+                    if(i.length() > 0) i += ",";
+                    i += (Double.valueOf(rh.getCooldown()) / 1000);
+                }
+                if(i.length() > 0) i = " (" + i + ")";
+                ret.add(key + i + ":");
                 int cnt = 1;
-                for(Hook h: eventMaps.get(key).get(itemName).getHooks()) {
+                for(Hook h: rh.getHooks()) {
                     ret.add("  " + (cnt++) + ") " + ((Hook) h).getInfo());
                 }
             }
@@ -156,7 +164,6 @@ public class Registry implements ConfigurationSerializable
 	if(event.getHand() != EquipmentSlot.HAND) return;
 
         String itemName = ItemUtil.getItemName(event.getItem());
-        System.out.println("Itemname: " + itemName);
         if(itemName == null) return;
         if(!interactEvents.containsKey(itemName)) return;
 
@@ -253,6 +260,7 @@ public class Registry implements ConfigurationSerializable
         for(String s: damageOtherEntityEvents.keySet()) {
             if(hookListUsesEffect(effect, damageOtherEntityEvents.get(s).getHooks())) return true;
         }
+        // TODO: Other effect types!!!
         return false;
     }
 
@@ -318,5 +326,12 @@ public class Registry implements ConfigurationSerializable
     public Set<String> getEventClasses() {
         return eventMaps.keySet();
     }
-    
+
+    public void clearPermissionCache() {
+        for(Map<String, RegistryHook<Hook>> eventMap: eventMaps.values()) {
+            for(RegistryHook<Hook> hook: eventMap.values()) {
+                hook.clearPermissionCache();
+            }
+        }
+    }
 }

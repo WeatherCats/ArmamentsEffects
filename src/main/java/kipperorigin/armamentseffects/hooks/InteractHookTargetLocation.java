@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Location;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -22,8 +23,9 @@ public class InteractHookTargetLocation implements InteractHook
 {
     List<Effect> effects;
     List<Effect> noTargetEffects;
+    boolean fixedPitch = false;
 
-    public InteractHookTargetLocation(List<Effect> effects, List<Effect> noTargetEffects) {
+    public InteractHookTargetLocation(List<Effect> effects, List<Effect> noTargetEffects, boolean fixedPitch) {
 	this.effects = new ArrayList<>();
 	for(Effect effect: effects) {
 	    if(effect instanceof EffectWithLocation) this.effects.add((EffectWithLocation) effect);
@@ -32,6 +34,7 @@ public class InteractHookTargetLocation implements InteractHook
 	for(Effect effect: noTargetEffects) {
 	    if(effect instanceof EffectWithLocation) this.noTargetEffects.add((EffectWithLocation) effect);
 	}
+        this.fixedPitch = fixedPitch;
     }
 
     public InteractHookTargetLocation(Map<String, Object> config) {
@@ -43,19 +46,24 @@ public class InteractHookTargetLocation implements InteractHook
         for(String effect: (List<String>) config.get("noTargetEffects")) {
             noTargetEffects.add(EffectManager.getInstance().getEffectByName(effect));
         }
+        if(config.containsKey("fixedPitch")) {
+            fixedPitch = (boolean)config.get("fixedPitch");
+        }
     }
     
     public Map<String, Object> serialize() {
         Map<String, Object> ret = new HashMap<>();
         ret.put("effects", Conversions.getListOfEffectNames(effects));
         ret.put("noTargetEffects", Conversions.getListOfEffectNames(noTargetEffects));
+        ret.put("fixedPitch", fixedPitch);
         return ret;
     }
 
     public String getInfo() {
         return "TargetLocation: ["
             + Conversions.joinStringList(Conversions.getListOfEffectNames(effects), ",") + "] / ["
-            + Conversions.joinStringList(Conversions.getListOfEffectNames(noTargetEffects), ",") + "]";
+            + Conversions.joinStringList(Conversions.getListOfEffectNames(noTargetEffects), ",") + "]"
+            + (fixedPitch ? " (fixed pitch)" : "");
     }
     
     public void process(PlayerInteractEvent event) {
@@ -67,7 +75,7 @@ public class InteractHookTargetLocation implements InteractHook
 	    if(!e.isDead()) {
 		double dist = e.getLocation().distance(player.getLocation());
 		if(dist < 10) {
-		    if(e.getType() == EntityType.PLAYER || e.getType() == EntityType.VILLAGER || e.getType() == EntityType.PIG || e.getType() == EntityType.COW || e.getType() == EntityType.SHEEP || e.getType() == EntityType.CHICKEN || e.getType() == EntityType.HORSE) {
+		    if(e.getType() == EntityType.PLAYER || e.getType() == EntityType.VILLAGER || e.getType() == EntityType.PIG || e.getType() == EntityType.COW || e.getType() == EntityType.SHEEP || e.getType() == EntityType.CHICKEN || e.getType() == EntityType.HORSE || e.getType() == EntityType.MUSHROOM_COW || e.getType() == EntityType.WOLF || e.getType() == EntityType.OCELOT) {
 			Vector targetDirection = e.getLocation().subtract(player.getLocation()).toVector();
 			Vector playerDirection = player.getLocation().getDirection();
 			double angle = playerDirection.angle(targetDirection);
@@ -79,14 +87,19 @@ public class InteractHookTargetLocation implements InteractHook
 		}
 	    }
 	}
-	if(target != null) {
+
+        if(target != null) {
+            Location loc = target.getLocation();
+            if(fixedPitch) loc.setPitch(0);
 	    for(Effect effect: effects) {
-		((EffectWithLocation) effect).play(target.getLocation());
+		((EffectWithLocation) effect).play(loc);
 	    }
 	}
 	else {
+            Location loc = player.getLocation();
+            if(fixedPitch) loc.setPitch(0);
 	    for(Effect effect: noTargetEffects) {
-		((EffectWithLocation) effect).play(player.getLocation());
+		((EffectWithLocation) effect).play(loc);
 	    }
 	}
     }

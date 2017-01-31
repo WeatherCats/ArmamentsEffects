@@ -24,6 +24,7 @@ public class HookRemoveDamageOtherEntity extends Command
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
         Registry.getInstance().deregisterDamageOtherEntityEvent(itemName, (int) baseParameters.get(0));
+        CommandUtil.saveConfig();
         return null;
     }
     

@@ -21,13 +21,15 @@ public class HookCreateInteractPlayerLocationCommand extends Command
     public  HookCreateInteractPlayerLocationCommand() {
         super("hook create interact playerlocation");
         addBaseParameter(new CommandParameterEffect(EffectWithLocation.class));
+        addFlag("fixedpitch");
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
-
         Effect effect = (Effect) baseParameters.get(0);
-        Registry.getInstance().registerEvent(itemName, new InteractHookPlayerLocation(effect));
+        boolean fixedPitch = flags.contains("fixedpitch");
+        Registry.getInstance().registerEvent(itemName, new InteractHookPlayerLocation(effect, fixedPitch));
+        CommandUtil.saveConfig();
         return new CommandResponse("Hook created.");
     }
 }

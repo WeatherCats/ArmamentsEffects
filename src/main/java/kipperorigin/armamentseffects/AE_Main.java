@@ -215,11 +215,11 @@ public class AE_Main extends JavaPlugin {
 	Player player = (Player)sender;
 	
 	if(command.getName().equals("fx")) {
-            if(args.length == 1 && args[0].equals("save")) {
+            if(args.length == 1 && args[0].equals("save")) { // TODO: deprecated
                 saveEffects();
                 return true;
             }
-            else if(args.length == 1 && args[0].equals("load")) {
+            else if(args.length == 1 && args[0].equals("load")) { // TODO: deprecated
                 loadEffects(null);
                 return true;
             }
@@ -233,7 +233,7 @@ public class AE_Main extends JavaPlugin {
 	}
     }
 
-    private void loadEffects(Player player) {
+    public void loadEffects(Player player) {
         EffectManager e = (EffectManager) getConfig().get("EffectManager");
         if(player != null) player.sendMessage("Effects loaded");
         Registry r = (Registry) getConfig().get("Registry");
@@ -242,7 +242,7 @@ public class AE_Main extends JavaPlugin {
         if(player != null) player.sendMessage("Registry loaded");
     }
 
-    private void saveEffects() {
+    public void saveEffects() {
         FileConfiguration config = getConfig();
         config.set("EffectManager", EffectManager.getInstance());
         config.set("Registry", eventListener.getRegistry());
@@ -251,7 +251,6 @@ public class AE_Main extends JavaPlugin {
     
     private void initializeCommands() {
 	commandParser = new CommandParser();
-	commandParser.addCommand(new CreateParticleCommand());
 	commandParser.addCommand(new EffectListCommand());
 	commandParser.addCommand(new HookListCommand());
 	commandParser.addCommand(new InfoCommand());

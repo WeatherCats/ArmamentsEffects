@@ -7,11 +7,13 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.entity.EntityType;
 
 import kipperorigin.armamentseffects.hooks.DamageOtherEntityHookCancelEvent;
 import kipperorigin.armamentseffects.hooks.DamageOtherEntityHookTargetEntity;
@@ -79,24 +81,30 @@ public class EventListener implements Listener
         return registry;
     }
     
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOW)
     public void process(EntityDamageByEntityEvent event) {
         registry.processEntityDamageByEntityEvent(event);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOW)
     public void process(PlayerInteractEvent event) {
         registry.processInteractEvent(event);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOW)
     public void process(ProjectileLaunchEvent event) {
             registry.processProjectileLaunchEvent(event);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOW)
     public void process(ProjectileHitEvent event) { 
         registry.processProjectileHitEvent(event);
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void process(CreatureSpawnEvent event) {
+        if(event.getEntity().getType() == EntityType.HORSE) {
+            System.out.println(event.getEntity().getLocation() + ": " + event.getEntity().getType());
+        }
+    }
 }

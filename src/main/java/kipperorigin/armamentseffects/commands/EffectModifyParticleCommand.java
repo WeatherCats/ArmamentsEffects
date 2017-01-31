@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
+import org.cubeville.commons.commands.CommandParameterInteger;
 import org.cubeville.commons.commands.CommandResponse;
 
 import kipperorigin.armamentseffects.managers.ParticleEffect;
@@ -19,6 +20,7 @@ public class EffectModifyParticleCommand extends Command {
         super("effect modify");
         addBaseParameter(new CommandParameterEffect(ParticleEffect.class));
         ParticleCommandHelper.addCommandParameters(this);
+        addParameter("component", true, new CommandParameterInteger(1, 100));
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters)
@@ -26,8 +28,18 @@ public class EffectModifyParticleCommand extends Command {
         if(parameters.size() == 0) throw new CommandExecutionException("No modification parameters.");
         ParticleEffect effect = (ParticleEffect) baseParameters.get(0);
         ParticleCommandHelper.setEffectValues(effect, parameters);
-        ParticleEffectComponent component = effect.getComponents().get(0);
+        int componentIdx = 0;
+        if(parameters.get("component") != null) {
+            componentIdx = (int) parameters.get("component") - 1;
+            int currentSize = effect.getComponents().size();
+            if(componentIdx > currentSize) throw new CommandExecutionException("Effect currently only has " + currentSize + " components!");
+            if(componentIdx == currentSize) {
+                effect.addComponent(new ParticleEffectComponent());
+            }
+        }
+        ParticleEffectComponent component = effect.getComponents().get(componentIdx);
         ParticleCommandHelper.setComponentValues(component, parameters);
+        CommandUtil.saveConfig();
         return new CommandResponse("Effect component successfully modified.");
     }
 }

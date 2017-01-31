@@ -17,12 +17,13 @@ import kipperorigin.armamentseffects.hooks.InteractHookCancelEvent;
 public class HookCreateInteractCancelEventCommand extends Command
 {
     public HookCreateInteractCancelEventCommand() {
-        super("hook create interact cancelevent");
+        super("hook create interact cancel");
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
         Registry.getInstance().registerEvent(itemName, new InteractHookCancelEvent());
+        CommandUtil.saveConfig();
         return null;
     }
 

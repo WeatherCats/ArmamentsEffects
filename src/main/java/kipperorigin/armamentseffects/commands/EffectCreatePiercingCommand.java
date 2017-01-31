@@ -34,6 +34,7 @@ public class EffectCreatePiercingCommand extends Command
         }
         PiercingEffect effect = new PiercingEffect(name, (PiercingEffect.PiercingType) baseParameters.get(1), (double) baseParameters.get(2), flags.contains("stats"));
         EffectManager.getInstance().addEffect(effect);
+        CommandUtil.saveConfig();
         return null;
     }
 }

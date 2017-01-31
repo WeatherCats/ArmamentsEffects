@@ -32,6 +32,7 @@ public class EffectCreateSoundCommand extends Command
         };
         SoundEffect effect = new SoundEffect(name, (Sound) baseParameters.get(1));
         EffectManager.getInstance().addEffect(effect);
-        return null;
+        CommandUtil.saveConfig();
+       return null;
     }
 }

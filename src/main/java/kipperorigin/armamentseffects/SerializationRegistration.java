@@ -7,6 +7,7 @@ public class SerializationRegistration
     public static void init() {
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.DamageOtherEntityHookCancelEvent.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookCancelEvent.class);
+	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookParticlePlayer.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookPlayerLocation.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.hooks.InteractHookTargetLocation.class);
 	ConfigurationSerialization.registerClass(kipperorigin.armamentseffects.managers.ParticleEffect.class);

@@ -26,9 +26,9 @@ public class HookCreateProjectileLaunchParticlePlayerCommand extends Command
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.getItemInMainHandName(player);
         if(itemName == null) throw new CommandExecutionException("No named item in hand!");
-
         Effect effect = (Effect) baseParameters.get(0);
         Registry.getInstance().registerEvent(itemName, new ProjectileLaunchHookParticlePlayer(effect.getName()));
+        CommandUtil.saveConfig();
         return new CommandResponse("Hook created");
     }
 }

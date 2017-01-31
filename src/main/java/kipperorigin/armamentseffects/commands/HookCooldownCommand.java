@@ -28,6 +28,7 @@ public class HookCooldownCommand extends Command
         double cooldown = (double) baseParameters.get(1);
         if(cooldown < 0) throw new CommandExecutionException("Cooldown time must be 0 or positive.");
         Registry.getInstance().setCooldown(itemName, eventClass, cooldown);
+        CommandUtil.saveConfig();
         return null;
     }
 

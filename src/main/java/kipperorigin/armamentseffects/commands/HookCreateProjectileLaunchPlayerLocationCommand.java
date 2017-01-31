@@ -32,6 +32,7 @@ public class HookCreateProjectileLaunchPlayerLocationCommand extends Command
 
         Effect effect = (Effect) baseParameters.get(0);
         Registry.getInstance().registerEvent(itemName, new ProjectileLaunchHookPlayerLocation((Effect) baseParameters.get(0)));
+        CommandUtil.saveConfig();
         return new CommandResponse("Hook created.");
     }
 }

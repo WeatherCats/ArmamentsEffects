@@ -25,6 +25,7 @@ public class HookCreateInteractTargetLocationCommand extends Command
         super("hook create interact targetlocation");
         addBaseParameter(new CommandParameterListEffect(EffectWithLocation.class));
         addOptionalBaseParameter(new CommandParameterListEffect(EffectWithLocation.class));
+        addFlag("fixedpitch");
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
@@ -36,8 +37,11 @@ public class HookCreateInteractTargetLocationCommand extends Command
             noTargetParameters = (List<Effect>) baseParameters.get(1);
         }
 
+        boolean fixedPitch = flags.contains("fixedpitch");
+        
         String itemName = ItemUtil.safeGetItemInMainHandName(player);        
-        Registry.getInstance().registerEvent(itemName, new InteractHookTargetLocation((List<Effect>) baseParameters.get(0), noTargetParameters));
+        Registry.getInstance().registerEvent(itemName, new InteractHookTargetLocation((List<Effect>) baseParameters.get(0), noTargetParameters, fixedPitch));
+        CommandUtil.saveConfig();
         return null;
     }
 }

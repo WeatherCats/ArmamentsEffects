@@ -53,29 +53,21 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
     }
 
     public boolean isPermitted(UUID uuid) {
-        System.out.println("Check permission for " + uuid);
         if(permission == null && cooldownTime == 0) return true;
 
-        System.out.println("Look at player data");
         PlayerData pd = playerData.get(uuid);
         if(pd == null) {
-            System.out.println("No player data yet.");
             if(permission == null) {
                 pd = new PlayerData(true);
-                System.out.println("Create joker permission for player");
             }
             else {
-                System.out.println("Check if player has permission");
                 boolean hasPermission = Registry.getInstance().getPermissionList().hasPermission(permission, uuid);
-                System.out.println("Check if player has permission: " + hasPermission);
                 pd = new PlayerData(hasPermission);
             }
-            System.out.println("Newly created playerdata has permissio: " + pd.hasPermission);
             playerData.put(uuid, pd);
         }
 
         boolean hasPermission = pd.hasPermission;
-        System.out.println("Whatever. The player has permission? : " + hasPermission);
         
         boolean needCooldown;
         if(cooldownTime == 0) {
@@ -98,8 +90,19 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
         this.permission = permission;
     }
 
+    public String getPermission() {
+        return permission;
+    }
+    
     public void setCooldown(int cooldown) {
         this.cooldownTime = cooldown;
     }
+
+    public long getCooldown() {
+        return cooldownTime;
+    }
     
+    public void clearPermissionCache() {
+        playerData = new HashMap<>();        
+    }
 }

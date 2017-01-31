@@ -27,6 +27,7 @@ public class HookCreateDamageOtherEntityEventAndDamagerCommand extends Command
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
         Effect effect = (Effect) baseParameters.get(0);
         Registry.getInstance().registerEvent(itemName, new DamageOtherEntityHookEventAndDamager(effect));
+        CommandUtil.saveConfig();
         return null;
     }
 }

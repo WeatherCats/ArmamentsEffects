@@ -25,6 +25,7 @@ public class EffectRemove extends Command
         Effect effect = (Effect) baseParameters.get(0);
         if(Registry.getInstance().isEffectInUse(effect)) throw new CommandExecutionException("Effect is in use, removal not possible.");
         EffectManager.getInstance().removeEffect(effect);
+        CommandUtil.saveConfig();
         return null;
     }
 }

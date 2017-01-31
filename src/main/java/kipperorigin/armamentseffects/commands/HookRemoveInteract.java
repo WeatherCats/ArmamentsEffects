@@ -24,6 +24,7 @@ public class HookRemoveInteract extends Command
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
         String itemName = ItemUtil.safeGetItemInMainHandName(player);
         Registry.getInstance().deregisterInteractEvent(itemName, (int) baseParameters.get(0));
+        CommandUtil.saveConfig();
         return null;
     }
     
