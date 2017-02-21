@@ -218,6 +218,7 @@ public class EffectManager implements ConfigurationSerializable
     }
 
     public void addEffect(Effect effect) {
+        if(getEffectIdByName(effect.getName()) != -1) throw new IllegalArgumentException("Effect with that name already exists!");
         effects.add(effect);
     }
 

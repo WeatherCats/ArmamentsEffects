@@ -28,6 +28,7 @@ public class ParticleCommandHelper
         command.addParameter("particle", true, new CommandParameterEnum(Particle.class));
         command.addParameter("constantsource", true, new CommandParameterListVector());
         command.addParameter("circlesource", true, new CommandParameterListDouble(2));
+        command.addParameter("circlesourcexz", true, new CommandParameterListDouble(2));
         {
             List<CommandParameterType> pl = new ArrayList<>();
             pl.add(new CommandParameterVector());
@@ -55,6 +56,7 @@ public class ParticleCommandHelper
         if(parameters.containsKey("constantsource")) numberOfSources++;
         if(parameters.containsKey("circlesource")) numberOfSources++;
         if(parameters.containsKey("randomsource")) numberOfSources++;
+        if(parameters.containsKey("circlesourcexz")) numberOfSources++;
         if(numberOfSources > 1) throw new IllegalArgumentException("Only one coordinate source is possible.");
 
         if(parameters.containsKey("constantsource")) {
@@ -62,11 +64,12 @@ public class ParticleCommandHelper
             component.setCoordinates(new ConstantCoordinateSource(coords));
         }
 
-        if(parameters.containsKey("circlesource")) {
+        if(parameters.containsKey("circlesource") || parameters.containsKey("circlesourcexz")) {
             List<Double> pars = (List<Double>) parameters.get("circlesource");
+            if(pars == null) pars = (List<Double>) parameters.get("circlesourcexz");
             int startAngle = 0;
             int endAngle = 360 - pars.get(1).intValue();
-            component.setCoordinates(new CircleCoordinateSource(pars.get(0), pars.get(1).intValue(), 0, endAngle, false));
+            component.setCoordinates(new CircleCoordinateSource(pars.get(0), pars.get(1).intValue(), 0, endAngle, parameters.containsKey("circlesourcexz")));
         }
 
         if(parameters.containsKey("randomsource")) {

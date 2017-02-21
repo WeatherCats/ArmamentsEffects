@@ -174,7 +174,7 @@ public class Registry implements ConfigurationSerializable
     public void deregisterInteractEvent(String name, int index) {
         deregisterEvent(interactEvents, name, index);
     }
-    
+
     public void processEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if(event.getDamager() instanceof Player) {
             Player damager = (Player) event.getDamager();

@@ -1,7 +1,7 @@
 name: ArmamentsEffects
-main: kipperorigin.armamentseffects.AE_Main
+main: org.cubeville.effects.Effects
 author: KipperOrigin, GoalieGuy6, FrediW
-version: 0.9
+version: 1.2
 
 depend: [CVTools]
 softdepend: [ProtocolLib]
