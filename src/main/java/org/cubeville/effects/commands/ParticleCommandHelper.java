@@ -6,10 +6,12 @@ import java.util.Map;
 
 import org.bukkit.util.Vector;
 import org.cubeville.commons.commands.Command;
+import org.cubeville.commons.commands.CommandParameterDouble;
 import org.cubeville.commons.commands.CommandParameterEnum;
 import org.cubeville.commons.commands.CommandParameterInteger;
 import org.cubeville.commons.commands.CommandParameterList;
 import org.cubeville.commons.commands.CommandParameterListDouble;
+import org.cubeville.commons.commands.CommandParameterListInteger;
 import org.cubeville.commons.commands.CommandParameterListVector;
 import org.cubeville.commons.commands.CommandParameterType;
 import org.cubeville.commons.commands.CommandParameterVector;
@@ -17,6 +19,7 @@ import org.cubeville.effects.managers.ParticleEffect;
 import org.cubeville.effects.managers.ParticleEffectComponent;
 import org.cubeville.effects.managers.sources.coordinate.CircleCoordinateSource;
 import org.cubeville.effects.managers.sources.coordinate.ConstantCoordinateSource;
+import org.cubeville.effects.managers.sources.coordinate.CoordinateSource;
 import org.cubeville.effects.managers.sources.coordinate.RandomCoordinateSource;
 import org.cubeville.effects.managers.sources.value.ValueSource;
 
@@ -27,8 +30,12 @@ public class ParticleCommandHelper
     public static void addCommandParameters(Command command) {
         command.addParameter("particle", true, new CommandParameterEnum(Particle.class));
         command.addParameter("constantsource", true, new CommandParameterListVector());
+        command.addParameter("constantsource+", true, new CommandParameterListVector());
+        command.addParameter("constantsource-", true, new CommandParameterListInteger(1));
+        command.addParameter("constantsourcescale", true, new CommandParameterDouble());
+        command.addParameter("constantsourcescalexy", true, new CommandParameterDouble());
         command.addParameter("circlesource", true, new CommandParameterListDouble(2));
-        command.addParameter("circlesourcexz", true, new CommandParameterListDouble(2));
+        command.addParameter("circlesourcexy", true, new CommandParameterListDouble(2));
         {
             List<CommandParameterType> pl = new ArrayList<>();
             pl.add(new CommandParameterVector());
@@ -54,14 +61,42 @@ public class ParticleCommandHelper
     public static void setComponentValues(ParticleEffectComponent component, Map<String, Object> parameters) {
         int numberOfSources = 0;
         if(parameters.containsKey("constantsource")) numberOfSources++;
+        if(parameters.containsKey("constantsource+")) numberOfSources++;
+        if(parameters.containsKey("constantsource-")) numberOfSources++;
         if(parameters.containsKey("circlesource")) numberOfSources++;
         if(parameters.containsKey("randomsource")) numberOfSources++;
         if(parameters.containsKey("circlesourcexz")) numberOfSources++;
-        if(numberOfSources > 1) throw new IllegalArgumentException("Only one coordinate source is possible.");
+        if(parameters.containsKey("constantsourcescale")) numberOfSources++;
+        if(parameters.containsKey("constantsourcescalexy")) numberOfSources++;
+        if(numberOfSources > 1) throw new IllegalArgumentException("Only one coordinate source creation or modification parameter is possible.");
 
         if(parameters.containsKey("constantsource")) {
             List<Vector> coords = (List<Vector>) parameters.get("constantsource");
             component.setCoordinates(new ConstantCoordinateSource(coords));
+        }
+
+        if(parameters.containsKey("constantsource+")) {
+            List<Vector> coords = (List<Vector>) parameters.get("constantsource+");
+            CoordinateSource source = component.getCoordinates();
+            if(source instanceof ConstantCoordinateSource) {
+                ConstantCoordinateSource csource = (ConstantCoordinateSource) source;
+                csource.addVertices(coords);
+            }
+            else {
+                component.setCoordinates(new ConstantCoordinateSource(coords));
+            }
+        }
+
+        if(parameters.containsKey("constantsource-")) {
+            List<Integer> indices = (List<Integer>) parameters.get("constantsource-");
+            CoordinateSource source = component.getCoordinates();
+            if(source instanceof ConstantCoordinateSource) {
+                ConstantCoordinateSource csource = (ConstantCoordinateSource) source;
+                csource.removeVertices(indices);
+            }
+            else {
+                throw new IllegalArgumentException("Can't remove coordinates, source is not constant!");
+            }
         }
 
         if(parameters.containsKey("circlesource") || parameters.containsKey("circlesourcexz")) {
@@ -78,6 +113,23 @@ public class ParticleCommandHelper
             Vector vec2 = (Vector) pars.get(1);
             int count = (Integer) pars.get(2);
             component.setCoordinates(new RandomCoordinateSource(count, vec1, vec2));
+        }
+
+        if(parameters.containsKey("constantsourcescale") || parameters.containsKey("constantsourcescalexy")) {
+            boolean includeZ = parameters.containsKey("constantsourcescale");
+            double factor;
+            if(includeZ)
+                factor = (double) parameters.get("constantsourcescale");
+            else
+                factor = (double) parameters.get("constantsourcescalexy");
+            CoordinateSource source = component.getCoordinates();
+            if(source instanceof ConstantCoordinateSource) {
+                ConstantCoordinateSource csource = (ConstantCoordinateSource) source;
+                csource.scaleVertices(factor, includeZ);
+            }
+            else {
+                throw new IllegalArgumentException("Can't scale coordinates, source is not constant!");
+            }
         }
         
         if(parameters.containsKey("particle")) component.setParticle((Particle) parameters.get("particle"));

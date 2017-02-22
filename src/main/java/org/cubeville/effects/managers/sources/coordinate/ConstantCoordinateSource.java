@@ -1,6 +1,7 @@
 package org.cubeville.effects.managers.sources.coordinate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,28 @@ public class ConstantCoordinateSource implements CoordinateSource
 	ret.put("vertices", vl);
 	return ret;
     }
-    
+
+    public void addVertices(List<Vector> vertices) {
+        this.vertices.addAll(vertices);
+    }
+
+    public void removeVertices(List<Integer> indices) {
+        Collections.sort(indices);
+        if(indices.get(0) < 1) throw new IllegalArgumentException("Coordinate index too low!");
+        if(indices.get(indices.size() - 1) - 1 >= vertices.size()) throw new IllegalArgumentException("Coordinate index too high!");
+        for(int i = indices.size() - 1; i >= 0; i--) {
+            vertices.remove((int) (indices.get(i) - 1));
+        }
+    }
+
+    public void scaleVertices(double factor, boolean includeZ) {
+        for(int i = 0; i < vertices.size(); i++) {
+            Vector v = vertices.get(i);
+            Vector nv = new Vector(v.getX() * factor, v.getY() * factor, v.getZ() * (includeZ ? factor : 1.0));
+            vertices.set(i, nv);
+        }
+    }
+        
     public List<Vector> getVertices(int step, int nr) {
 	return vertices;
     }
@@ -49,7 +71,7 @@ public class ConstantCoordinateSource implements CoordinateSource
 	String ret = "Constant (";
 	for(int i = 0; i < vertices.size(); i++) {
 	    if(i > 0) ret += ", ";
-	    ret += vertices.get(i).getX() + "/" + vertices.get(i).getY() + "/" + vertices.get(i).getZ();
+	    ret += String.format("%.2f", vertices.get(i).getX()) + "/" + String.format("%.2f", vertices.get(i).getY()) + "/" + String.format("%.2f", vertices.get(i).getZ());
 	}
         ret += ")";
 	return ret;

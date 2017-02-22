@@ -32,7 +32,8 @@ public class ProjectileLaunchHookParticlePlayer implements ProjectileLaunchHook
     }
 
     public String getInfo() {
-        return "Projectile Launch Particle Player";
+        if(effect == null) return "Effect not found!";
+        return "ProjectileLaunch ParticlePlayer: " + effect.getName();
     }
 
     public void process(ProjectileLaunchEvent event) {
