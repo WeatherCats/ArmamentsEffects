@@ -72,6 +72,14 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	return ret;
     }
 
+    public void addModifier(CoordinateModifier coordinateModifier) {
+        modifiers.add(coordinateModifier);
+    }
+
+    public void deleteModifiers() {
+        modifiers = new ArrayList<>();
+    }
+    
     public boolean isActive(int step) {
         if(timeline.size() == 0) return true;
 	for(ParticleEffectTimelineEntry tle: timeline) {
@@ -110,9 +118,9 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	return modifiers;
     }
     
-    public final void addModifier(CoordinateModifier modifier) {
-	getModifiers().add(modifier);
-    }
+    //public final void addModifier(CoordinateModifier modifier) {
+    //getModifiers().add(modifier);
+    //}
     
     public final CoordinateSource getCoordinates() {
 	return coordinates;

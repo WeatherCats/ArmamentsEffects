@@ -37,7 +37,7 @@ public class Registry implements ConfigurationSerializable
     private Map<String, RegistryHook<DamageOtherEntityHook>> damageOtherEntityEvents;
     private Map<String, RegistryHook<ProjectileLaunchHook>> projectileLaunchEvents;
     private Map<String, RegistryHook<ProjectileHitHook>> projectileHitEvents;
-    
+
     private Map<String, Map<String, RegistryHook<Hook>>> eventMaps;
 
     static Registry instance;
@@ -175,6 +175,10 @@ public class Registry implements ConfigurationSerializable
         deregisterEvent(interactEvents, name, index);
     }
 
+    public void deregisterProjectileLaunchEvent(String name, int index) {
+        deregisterEvent(projectileLaunchEvents, name, index);
+    }
+    
     public void processEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
         if(event.getDamager() instanceof Player) {
             Player damager = (Player) event.getDamager();
@@ -249,13 +253,11 @@ public class Registry implements ConfigurationSerializable
     }
 
     public boolean isEffectInUse(Effect effect) {
-        for(String s: interactEvents.keySet()) {
-            if(hookListUsesEffect(effect, interactEvents.get(s).getHooks())) return true;
+        for(Map<String, RegistryHook<Hook>> eventMap: eventMaps.values()) {
+            for(String s: eventMap.keySet()) {
+                if(hookListUsesEffect(effect, eventMap.get(s).getHooks())) return true;
+            }
         }
-        for(String s: damageOtherEntityEvents.keySet()) {
-            if(hookListUsesEffect(effect, damageOtherEntityEvents.get(s).getHooks())) return true;
-        }
-        // TODO: Other effect types!!!
         return false;
     }
 

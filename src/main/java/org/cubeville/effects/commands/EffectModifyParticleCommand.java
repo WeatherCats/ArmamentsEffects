@@ -18,7 +18,7 @@ public class EffectModifyParticleCommand extends Command {
         super("effect modify");
         addBaseParameter(new CommandParameterEffect(ParticleEffect.class));
         ParticleCommandHelper.addCommandParameters(this);
-        addParameter("component", true, new CommandParameterInteger(1, 100));
+        addParameter("component", true, new CommandParameterInteger(1, 25));
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters)
@@ -27,17 +27,19 @@ public class EffectModifyParticleCommand extends Command {
         ParticleEffect effect = (ParticleEffect) baseParameters.get(0);
         ParticleCommandHelper.setEffectValues(effect, parameters);
         int componentIdx = 0;
+        boolean create = false;
         if(parameters.get("component") != null) {
             componentIdx = (int) parameters.get("component") - 1;
             int currentSize = effect.getComponents().size();
             if(componentIdx > currentSize) throw new CommandExecutionException("Effect currently only has " + currentSize + " components!");
             if(componentIdx == currentSize) {
                 effect.addComponent(new ParticleEffectComponent());
+                create = true;
             }
         }
         ParticleEffectComponent component = effect.getComponents().get(componentIdx);
         ParticleCommandHelper.setComponentValues(component, parameters);
         CommandUtil.saveConfig();
-        return new CommandResponse("Effect component successfully modified.");
+        return new CommandResponse("Effect component successfully " + (create ? "created." : "modified."));
     }
 }

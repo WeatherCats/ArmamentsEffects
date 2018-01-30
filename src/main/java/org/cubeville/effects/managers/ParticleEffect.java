@@ -84,6 +84,9 @@ public class ParticleEffect extends EffectWithLocation
                     particlePacket.getFloat().write(4, (float) component.getSpreadY().getValue(step));
                     particlePacket.getFloat().write(5, (float) component.getSpreadZ().getValue(step));
                     particlePacket.getFloat().write(6, 1F);
+                    int[] il = {0, 0};
+                    il[0] = component.getMaterial().getId();
+                    particlePacket.getIntegerArrays().write(0, il);
                     //particlePacket.getBooleans().write(0, true);
                     sendParticlePackets(nloc, particlePacket);
                 }

@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.util.Vector;
+
 import org.cubeville.commons.commands.Command;
+import org.cubeville.commons.commands.CommandParameterBoolean;
 import org.cubeville.commons.commands.CommandParameterDouble;
 import org.cubeville.commons.commands.CommandParameterEnum;
 import org.cubeville.commons.commands.CommandParameterInteger;
@@ -17,6 +20,11 @@ import org.cubeville.commons.commands.CommandParameterType;
 import org.cubeville.commons.commands.CommandParameterVector;
 import org.cubeville.effects.managers.ParticleEffect;
 import org.cubeville.effects.managers.ParticleEffectComponent;
+import org.cubeville.effects.managers.ParticleEffectTimelineEntry;
+import org.cubeville.effects.managers.modifier.CoordinateModifierMove;
+import org.cubeville.effects.managers.modifier.CoordinateModifierRotate;
+import org.cubeville.effects.managers.modifier.CoordinateModifierScale;
+import org.cubeville.effects.managers.modifier.CoordinateModifierScale2d;
 import org.cubeville.effects.managers.sources.coordinate.CircleCoordinateSource;
 import org.cubeville.effects.managers.sources.coordinate.ConstantCoordinateSource;
 import org.cubeville.effects.managers.sources.coordinate.CoordinateSource;
@@ -34,8 +42,8 @@ public class ParticleCommandHelper
         command.addParameter("constantsource-", true, new CommandParameterListInteger(1));
         command.addParameter("constantsourcescale", true, new CommandParameterDouble());
         command.addParameter("constantsourcescalexy", true, new CommandParameterDouble());
-        command.addParameter("circlesource", true, new CommandParameterListDouble(2));
-        command.addParameter("circlesourcexy", true, new CommandParameterListDouble(2));
+        command.addParameter("circlesource", true, new CommandParameterListDouble(3));
+        command.addParameter("circlesourcexz", true, new CommandParameterListDouble(3));
         {
             List<CommandParameterType> pl = new ArrayList<>();
             pl.add(new CommandParameterVector());
@@ -50,6 +58,26 @@ public class ParticleCommandHelper
         command.addParameter("spready", true, new CommandParameterValueSource());
         command.addParameter("spreadz", true, new CommandParameterValueSource());
         command.addParameter("count", true, new CommandParameterValueSource());
+        command.addParameter("rotate+", true, new CommandParameterValueSource());
+        {
+            List<CommandParameterType> pl = new ArrayList<>();
+            pl.add(new CommandParameterValueSource());
+            pl.add(new CommandParameterBoolean());
+            pl.add(new CommandParameterBoolean());
+            pl.add(new CommandParameterBoolean());
+            command.addParameter("move+", true, new CommandParameterList(pl));
+        }
+        command.addParameter("scale+", true, new CommandParameterValueSource());
+        {
+            List<CommandParameterType> pl = new ArrayList<>();
+            pl.add(new CommandParameterValueSource());
+            pl.add(new CommandParameterValueSource());
+            command.addParameter("scale2d+", true, new CommandParameterList(pl));
+        }
+        command.addParameter("modifier-", true, new CommandParameterInteger());
+        command.addParameter("material", true, new CommandParameterEnum(Material.class));
+        command.addParameter("timeline+", true, new CommandParameterListInteger(3));
+        command.addParameter("timeline-", true, new CommandParameterInteger());
     }
     
     public static void setEffectValues(ParticleEffect effect, Map<String, Object> parameters) {
@@ -57,7 +85,7 @@ public class ParticleCommandHelper
         if(parameters.containsKey("repeat")) effect.setRepeatCount((int) parameters.get("repeat"));
         if(parameters.containsKey("repeatoffset")) effect.setRepeatOffset((int) parameters.get("repeatoffset"));
     }
-    
+
     public static void setComponentValues(ParticleEffectComponent component, Map<String, Object> parameters) {
         int numberOfSources = 0;
         if(parameters.containsKey("constantsource")) numberOfSources++;
@@ -104,7 +132,7 @@ public class ParticleCommandHelper
             if(pars == null) pars = (List<Double>) parameters.get("circlesourcexz");
             int startAngle = 0;
             int endAngle = 360 - pars.get(1).intValue();
-            component.setCoordinates(new CircleCoordinateSource(pars.get(0), pars.get(1).intValue(), 0, endAngle, parameters.containsKey("circlesourcexz")));
+            component.setCoordinates(new CircleCoordinateSource(pars.get(0), pars.get(2), pars.get(1).intValue(), 0, endAngle, parameters.containsKey("circlesourcexz")));
         }
 
         if(parameters.containsKey("randomsource")) {
@@ -138,5 +166,59 @@ public class ParticleCommandHelper
         if(parameters.containsKey("spready")) component.setSpreadY((ValueSource) parameters.get("spready"));
         if(parameters.containsKey("spreadz")) component.setSpreadZ((ValueSource) parameters.get("spreadz"));
         if(parameters.containsKey("count")) component.setCount((ValueSource) parameters.get("count"));
+        if(parameters.containsKey("material")) component.setMaterial((Material) parameters.get("material"));
+
+        if(parameters.containsKey("rotate+")) {
+            CoordinateModifierRotate modifier =
+                new CoordinateModifierRotate((ValueSource) parameters.get("rotate+"));
+            component.addModifier(modifier);
+        }
+
+        if(parameters.containsKey("move+")) {
+            List<Object> pars = (List<Object>) parameters.get("move+");
+            CoordinateModifierMove modifier =
+                new CoordinateModifierMove((ValueSource) pars.get(0),
+                                           (Boolean) pars.get(1),
+                                           (Boolean) pars.get(2),
+                                           (Boolean) pars.get(3));
+            component.addModifier(modifier);
+        }
+
+        if(parameters.containsKey("scale+")) {
+            CoordinateModifierScale modifier =
+                new CoordinateModifierScale((ValueSource) parameters.get("scale+"));
+            component.addModifier(modifier);
+        }
+
+        if(parameters.containsKey("scale2d+")) {
+            List<Object> pars = (List<Object>) parameters.get("scale2d+");
+            CoordinateModifierScale2d modifier =
+                new CoordinateModifierScale2d((ValueSource) pars.get(0),
+                                              (ValueSource) pars.get(1));
+            component.addModifier(modifier);
+        }
+        
+        if(parameters.containsKey("modifier-")) {
+            int index = (int) parameters.get("modifier-");
+            if(index > 0 && index <= component.getModifiers().size()) {
+                component.getModifiers().remove(index - 1);
+            }
+        }
+        
+        if(parameters.containsKey("timeline+")) {
+            List<Integer> p = (List<Integer>) parameters.get("timeline+");
+            int tstart = p.get(0);
+            int tcount = p.get(1);
+            int trepeat = p.get(2);
+            component.getTimeline().add(new ParticleEffectTimelineEntry(tstart, trepeat, tcount));
+        }
+
+        if(parameters.containsKey("timeline-")) {
+            int index = (int) parameters.get("timeline-");
+            if(index > 0 && index <= component.getTimeline().size()) {
+                component.getTimeline().remove(index - 1);
+            }
+        }
+
     }
 }

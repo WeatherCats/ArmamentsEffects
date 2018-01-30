@@ -22,8 +22,8 @@ public class CoordinateModifierScale2d implements CoordinateModifier
     }
 
     public CoordinateModifierScale2d(Map<String, Object> config) {
-	sourceX = (ValueSource) config.get(sourceX);
-	sourceY = (ValueSource) config.get(sourceY);
+	sourceX = (ValueSource) config.get("sourceX");
+	sourceY = (ValueSource) config.get("sourceY");
     }
 
     public Map<String, Object> serialize() {
