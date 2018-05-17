@@ -5,15 +5,18 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.cubeville.effects.Effects;
 import org.cubeville.effects.managers.Effect;
 import org.cubeville.effects.managers.EffectManager;
 import org.cubeville.effects.managers.ParticleEffect;
 import org.cubeville.effects.managers.ParticleEffectTimedRunnable;
+import org.cubeville.effects.util.PlayerUtil;
 
-@SerializableAs("InteractHookParticlePlayer")
-public class InteractHookParticlePlayer implements InteractHook
+@SerializableAs("InteractHookTargetLocationParticlePlayer")
+public class InteractHookTargetLocationParticlePlayer implements InteractHook
 {
     private ParticleEffect effect;
     private double yOffset;
@@ -21,8 +24,8 @@ public class InteractHookParticlePlayer implements InteractHook
     private double speed;
     private boolean fixedPitch;
     private double pitch;
-    
-    public InteractHookParticlePlayer(String effectName, double yOffset, double stepsPerTick, double speed, boolean fixedPitch, double pitch) {
+
+    public InteractHookTargetLocationParticlePlayer(String effectName, double yOffset, double stepsPerTick, double speed, boolean fixedPitch, double pitch) {
 	this.effect = (ParticleEffect) EffectManager.getInstance().getEffectByName(effectName);
 	this.yOffset = yOffset;
 	this.stepsPerTick = stepsPerTick;
@@ -31,7 +34,7 @@ public class InteractHookParticlePlayer implements InteractHook
 	this.pitch = pitch;
     }
 
-    public InteractHookParticlePlayer(Map<String, Object> config) {
+    public InteractHookTargetLocationParticlePlayer(Map<String, Object> config) {
         String effectName = (String) config.get("effect");
         this.effect = (ParticleEffect) EffectManager.getInstance().getEffectByName(effectName);
         this.yOffset = (double) config.get("yOffset");
@@ -53,22 +56,25 @@ public class InteractHookParticlePlayer implements InteractHook
     }
 
     public String getInfo() {
-        return "ParticlePlayer: " + effect.getName();
+        return "TargetLocationParticlePlayer: " + effect.getName();
     }
     
-    public void process(PlayerInteractEvent rawEvent) {
-        PlayerInteractEvent event = (PlayerInteractEvent) rawEvent;
-	Location loc = event.getPlayer().getLocation().clone();
-	loc.setY(loc.getY() + yOffset);
-	if(fixedPitch) loc.setPitch((float)pitch);
-	new ParticleEffectTimedRunnable(Effects.getInstance(), effect, stepsPerTick, speed, loc).runTaskTimer(Effects.getInstance(), 1, 1);
+    public void process(PlayerInteractEvent event) {
+	Player player = event.getPlayer();
+        Entity target = PlayerUtil.findTargetEntity(player, player.getNearbyEntities(10, 10, 10), 1000);
+        if(target == null) return;
+        Location loc = target.getLocation().clone();
+        loc.setY(loc.getY() + yOffset);
+        if(fixedPitch) loc.setPitch((float)pitch);
+        new ParticleEffectTimedRunnable(Effects.getInstance(), effect, stepsPerTick, speed, loc).runTaskTimer(Effects.getInstance(), 1, 1);
     }
 
     public boolean usesEffect(Effect effect) {
-        return effect == this.effect; // TODO, this needs an overhaul anyways
+        return (effect == this.effect);
     }
 
     public boolean alwaysActive() {
         return false;
     }
+
 }

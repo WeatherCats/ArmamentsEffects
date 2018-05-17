@@ -9,7 +9,9 @@ public class SerializationRegistration
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookCancelEvent.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookParticlePlayer.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookPlayerLocation.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookTargetEntity.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookTargetLocation.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookTargetLocationParticlePlayer.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.ParticleEffect.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.ParticleEffectComponent.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.ParticleEffectTimelineEntry.class);

@@ -8,14 +8,13 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.util.Vector;
 import org.cubeville.effects.managers.Effect;
 import org.cubeville.effects.managers.EffectManager;
 import org.cubeville.effects.managers.EffectWithLocation;
 import org.cubeville.effects.util.Conversions;
+import org.cubeville.effects.util.PlayerUtil;
 
 @SerializableAs("InteractHookTargetLocation")
 public class InteractHookTargetLocation implements InteractHook
@@ -67,25 +66,7 @@ public class InteractHookTargetLocation implements InteractHook
     
     public void process(PlayerInteractEvent event) {
 	Player player = event.getPlayer();
-	List<Entity> nbe = player.getNearbyEntities(10, 10, 10);
-	Entity target = null;
-	double minangle = 1000;
-	for(Entity e: nbe) {
-	    if(!e.isDead()) {
-		double dist = e.getLocation().distance(player.getLocation());
-		if(dist < 10) {
-		    if(e.getType() == EntityType.PLAYER || e.getType() == EntityType.VILLAGER || e.getType() == EntityType.PIG || e.getType() == EntityType.COW || e.getType() == EntityType.SHEEP || e.getType() == EntityType.CHICKEN || e.getType() == EntityType.HORSE || e.getType() == EntityType.MUSHROOM_COW || e.getType() == EntityType.WOLF || e.getType() == EntityType.OCELOT) {
-			Vector targetDirection = e.getLocation().subtract(player.getLocation()).toVector();
-			Vector playerDirection = player.getLocation().getDirection();
-			double angle = playerDirection.angle(targetDirection);
-			if(angle < 0.25 && angle < minangle) {
-			    target = e;
-			    minangle = angle;		    
-			}
-		    }
-		}
-	    }
-	}
+        Entity target = PlayerUtil.findTargetEntity(player, player.getNearbyEntities(10, 10, 10), 1000);
 
         if(target != null) {
             Location loc = target.getLocation();

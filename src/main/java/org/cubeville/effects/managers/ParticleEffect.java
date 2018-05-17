@@ -183,6 +183,14 @@ public class ParticleEffect extends EffectWithLocation
         components.add(component);
     }
 
+    public final void removeComponent(int index) {
+        index--;
+        if(index >= components.size() || index < 0) {
+            throw new RuntimeException("No component " + index + "!");
+        }
+        components.remove(index);
+    }
+    
     public final void setRepeatOffset(final int argRepeatOffset) {
         repeatOffset = argRepeatOffset;
     }

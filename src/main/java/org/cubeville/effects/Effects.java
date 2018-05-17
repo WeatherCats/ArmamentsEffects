@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.cubeville.commons.commands.CommandParser;
 import org.cubeville.effects.commands.EffectCreateParticleCommand;
 import org.cubeville.effects.commands.EffectCreatePiercingCommand;
+import org.cubeville.effects.commands.EffectCreatePotionEffectCommand;
 import org.cubeville.effects.commands.EffectCreateSoundCommand;
 import org.cubeville.effects.commands.EffectListCommand;
 import org.cubeville.effects.commands.EffectModifyParticleCommand;
@@ -24,7 +25,9 @@ import org.cubeville.effects.commands.HookCreateDamageOtherEntityEventAndDamager
 import org.cubeville.effects.commands.HookCreateInteractCancelEventCommand;
 import org.cubeville.effects.commands.HookCreateInteractParticlePlayerCommand;
 import org.cubeville.effects.commands.HookCreateInteractPlayerLocationCommand;
+import org.cubeville.effects.commands.HookCreateInteractTargetEntityCommand;
 import org.cubeville.effects.commands.HookCreateInteractTargetLocationCommand;
+import org.cubeville.effects.commands.HookCreateInteractTargetLocationParticlePlayerCommand;
 import org.cubeville.effects.commands.HookCreateProjectileLaunchParticlePlayerCommand;
 import org.cubeville.effects.commands.HookCreateProjectileLaunchPlayerLocationCommand;
 import org.cubeville.effects.commands.HookListCommand;
@@ -331,6 +334,7 @@ public class Effects extends JavaPlugin {
         commandParser.addCommand(new InfoCommand());
         commandParser.addCommand(new EffectCreateParticleCommand());
         commandParser.addCommand(new EffectCreatePiercingCommand());
+        commandParser.addCommand(new EffectCreatePotionEffectCommand());
         commandParser.addCommand(new EffectCreateSoundCommand());
         commandParser.addCommand(new EffectModifyParticleCommand());
         commandParser.addCommand(new EffectRemove());
@@ -341,7 +345,9 @@ public class Effects extends JavaPlugin {
         commandParser.addCommand(new HookCreateInteractCancelEventCommand());
         commandParser.addCommand(new HookCreateInteractParticlePlayerCommand());
         commandParser.addCommand(new HookCreateInteractPlayerLocationCommand());
+        commandParser.addCommand(new HookCreateInteractTargetEntityCommand());
         commandParser.addCommand(new HookCreateInteractTargetLocationCommand()); 
+        commandParser.addCommand(new HookCreateInteractTargetLocationParticlePlayerCommand()); 
         commandParser.addCommand(new HookCreateProjectileLaunchParticlePlayerCommand());
         commandParser.addCommand(new HookCreateProjectileLaunchPlayerLocationCommand());
         commandParser.addCommand(new HookPermissionSetCommand());
