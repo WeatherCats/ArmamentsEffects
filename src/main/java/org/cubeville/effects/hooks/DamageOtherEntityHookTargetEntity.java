@@ -23,7 +23,7 @@ public class DamageOtherEntityHookTargetEntity implements DamageOtherEntityHook
     
     public Map<String, Object> serialize() {
         Map<String, Object> ret = new HashMap<>();
-        ret.put("effect", effect);
+        ret.put("effect", effect.getName());
         return ret;
     }
 

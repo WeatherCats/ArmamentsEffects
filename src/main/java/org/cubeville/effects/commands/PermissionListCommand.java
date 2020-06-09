@@ -9,25 +9,26 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-import org.cubeville.commons.commands.Command;
+import org.bukkit.command.CommandSender;
+
+import org.cubeville.commons.commands.BaseCommand;
 import org.cubeville.commons.commands.CommandParameterString;
 import org.cubeville.commons.commands.CommandResponse;
 import org.cubeville.effects.registry.Registry;
 
-public class PermissionListCommand extends Command
+public class PermissionListCommand extends BaseCommand
 {
     public PermissionListCommand() {
         super("permission list");
         addOptionalBaseParameter(new CommandParameterString());
     }
 
-    public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) {
+    public CommandResponse execute(CommandSender sender, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) {
         if(baseParameters.size() == 0) { // List available permissions
             List<String> permissions = new ArrayList<String>(Registry.getInstance().getPermissionList().getPermissionList());
             Collections.sort(permissions);
             for(String p: permissions) {
-                player.sendMessage(p);
+                sender.sendMessage(p);
             }
         }
         else {
@@ -35,7 +36,7 @@ public class PermissionListCommand extends Command
             Collections.sort(players);
             for(UUID p: players) {
                 OfflinePlayer op = Bukkit.getOfflinePlayer(p);
-                player.sendMessage(p.toString() + ": " + op.getName());
+                sender.sendMessage(p.toString() + ": " + op.getName());
             }
         }
         return null;

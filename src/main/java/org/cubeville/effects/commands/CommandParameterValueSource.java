@@ -8,9 +8,11 @@ import java.util.Map;
 import org.cubeville.commons.commands.CommandParameterBoolean;
 import org.cubeville.commons.commands.CommandParameterDouble;
 import org.cubeville.commons.commands.CommandParameterList;
+import org.cubeville.commons.commands.CommandParameterListDouble;
 import org.cubeville.commons.commands.CommandParameterType;
 import org.cubeville.effects.managers.sources.value.ConstantValueSource;
 import org.cubeville.effects.managers.sources.value.LinearValueSource;
+import org.cubeville.effects.managers.sources.value.ListValueSource;
 import org.cubeville.effects.managers.sources.value.SinewaveValueSource;
 import org.cubeville.effects.managers.sources.value.ValueSource;
 
@@ -40,6 +42,10 @@ public class CommandParameterValueSource implements CommandParameterType
         sinewaveList.add(new CommandParameterDouble());
         sinewaveList.add(new CommandParameterBoolean());
         parameterLists.put("sinewave", new CommandParameterList(sinewaveList));
+
+        List<CommandParameterType> listList = new ArrayList<>();
+        listList.add(new CommandParameterListDouble(","));
+        parameterLists.put("list", new CommandParameterList(listList));
     }
     
     public boolean isValid(String value) {
@@ -78,6 +84,10 @@ public class CommandParameterValueSource implements CommandParameterType
                                            (double) parameters.get(2),
                                            (double) parameters.get(3),
                                            (boolean) parameters.get(4));
+        }
+        else if(type.equals("list")) {
+            List<Object> parameters = (List<Object>) parameterLists.get("list").getValue(val);
+            return new ListValueSource((List<Double>) parameters.get(0));
         }
         return null;
     }

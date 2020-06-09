@@ -1,14 +1,14 @@
 package org.cubeville.effects.managers;
 
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.cubeville.effects.registry.Registry;
 
 public class EventListener implements Listener
@@ -66,7 +66,7 @@ public class EventListener implements Listener
     public Registry getRegistry() {
         return registry;
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void process(EntityDamageByEntityEvent event) {
         registry.processEntityDamageByEntityEvent(event);
@@ -79,18 +79,22 @@ public class EventListener implements Listener
 
     @EventHandler(priority = EventPriority.LOW)
     public void process(ProjectileLaunchEvent event) {
-            registry.processProjectileLaunchEvent(event);
+        registry.processProjectileLaunchEvent(event);
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    public void process(ProjectileHitEvent event) { 
+    public void process(ProjectileHitEvent event) {
         registry.processProjectileHitEvent(event);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void process(CreatureSpawnEvent event) {
-        if(event.getEntity().getType() == EntityType.HORSE) {
-            System.out.println(event.getEntity().getLocation() + ": " + event.getEntity().getType());
-        }
+    @EventHandler(priority = EventPriority.LOW)
+    public void process(PlayerMoveEvent event) {
+        registry.processMoveEvent(event);
     }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void process(BlockBreakEvent event) {
+        registry.processBlockBreakEvent(event);
+    }
+    
 }

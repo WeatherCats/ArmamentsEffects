@@ -14,7 +14,6 @@ public class PotionEffect extends EffectWithLivingEntity
     
     public PotionEffect(String name, PotionEffectType effectType, int duration, int amplifier) {
         setName(name);
-        System.out.println("New potion effect: Set effect type to " + effectType);
         this.effectType = effectType;
         this.duration = duration;
         this.amplifier = amplifier;
@@ -34,8 +33,6 @@ public class PotionEffect extends EffectWithLivingEntity
 
     public Map<String, Object> serialize() {
         Map<String, Object> ret = getSerializationBase();
-        System.out.println("ret is now: " + ret);
-        System.out.println("Effect type: " + effectType);
         ret.put("effecttype", effectType.getName());
         ret.put("duration", duration);
         ret.put("amplifier", amplifier);

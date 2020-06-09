@@ -32,8 +32,6 @@ public class EffectCreatePotionEffectCommand extends Command
         String name = (String) baseParameters.get(0);
         if(EffectManager.getInstance().getEffectByName(name) != null) throw new CommandExecutionException("Effect with name " + name + " already exists!");
         PotionEffectType effectType = (PotionEffectType) baseParameters.get(1);
-        System.out.println("Effect type: " + effectType);
-        System.out.println("Duration: " + ((int) baseParameters.get(2)));
         PotionEffect effect = new PotionEffect(name, effectType, (int) baseParameters.get(2), (int) baseParameters.get(3));
         EffectManager.getInstance().addEffect(effect);
         CommandUtil.saveConfig();

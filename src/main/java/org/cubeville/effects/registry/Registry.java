@@ -15,16 +15,21 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.projectiles.ProjectileSource;
+
 import org.cubeville.effects.Effects;
+import org.cubeville.effects.hooks.BlockBreakHook;
 import org.cubeville.effects.hooks.DamageOtherEntityHook;
 import org.cubeville.effects.hooks.Hook;
 import org.cubeville.effects.hooks.InteractHook;
+import org.cubeville.effects.hooks.MoveHook;
 import org.cubeville.effects.hooks.ProjectileHitHook;
 import org.cubeville.effects.hooks.ProjectileLaunchHook;
 import org.cubeville.effects.managers.Effect;
@@ -37,7 +42,9 @@ public class Registry implements ConfigurationSerializable
     private Map<String, RegistryHook<DamageOtherEntityHook>> damageOtherEntityEvents;
     private Map<String, RegistryHook<ProjectileLaunchHook>> projectileLaunchEvents;
     private Map<String, RegistryHook<ProjectileHitHook>> projectileHitEvents;
-
+    private Map<String, RegistryHook<MoveHook>> moveEvents;
+    private Map<String, RegistryHook<BlockBreakHook>> blockBreakEvents;
+    
     private Map<String, Map<String, RegistryHook<Hook>>> eventMaps;
 
     static Registry instance;
@@ -52,9 +59,11 @@ public class Registry implements ConfigurationSerializable
 	damageOtherEntityEvents = new HashMap<>();
 	projectileLaunchEvents = new HashMap<>();
         projectileHitEvents = new HashMap<>();
-        
+        moveEvents = new HashMap<>();
+        blockBreakEvents = new HashMap<>();
+
         initializeEventMaps();
-        
+
         instance = this;
         permissionList = new PermissionList();
 
@@ -68,6 +77,10 @@ public class Registry implements ConfigurationSerializable
         damageOtherEntityEvents = (Map<String, RegistryHook<DamageOtherEntityHook>>) config.get("damage");
         projectileLaunchEvents = (Map<String, RegistryHook<ProjectileLaunchHook>>) config.get("projectilelaunch");
         projectileHitEvents = (Map<String, RegistryHook<ProjectileHitHook>>) config.get("projectilehit");
+        moveEvents = (Map<String, RegistryHook<MoveHook>>) config.get("move");
+        if(moveEvents == null) moveEvents = new HashMap<>();
+        blockBreakEvents = (Map<String, RegistryHook<BlockBreakHook>>) config.get("blockbreak");
+        if(blockBreakEvents == null) blockBreakEvents = new HashMap<>();
         initializeEventMaps();
         permissionList = (PermissionList) config.get("permissionList");
         instance = this;
@@ -81,6 +94,8 @@ public class Registry implements ConfigurationSerializable
         eventMaps.put("damage", (Map) damageOtherEntityEvents);
         eventMaps.put("projectilelaunch", (Map) projectileLaunchEvents);
         eventMaps.put("projectilehit", (Map) projectileHitEvents);
+        eventMaps.put("move", (Map) moveEvents);
+        eventMaps.put("blockbreak", (Map) blockBreakEvents);
     }
     
     public static Registry getInstance() {
@@ -146,6 +161,12 @@ public class Registry implements ConfigurationSerializable
         else if(hook instanceof ProjectileLaunchHook) {
             ret = (Map)projectileLaunchEvents;
         }
+        else if(hook instanceof MoveHook) {
+            ret = (Map)moveEvents;
+        }
+        else if(hook instanceof BlockBreakHook) {
+            ret = (Map)blockBreakEvents;
+        }
         return ret;
     }
     
@@ -171,12 +192,50 @@ public class Registry implements ConfigurationSerializable
         }
     }
 
+    public void processMoveEvent(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        String itemName = ItemUtil.getItemName(event.getPlayer().getInventory().getBoots());
+        
+        if(itemName == null) return;
+        if(!moveEvents.containsKey(itemName)) return;
+
+        RegistryHook<MoveHook> rh = moveEvents.get(itemName);
+        boolean isPermitted = rh.isPermitted(event.getPlayer().getUniqueId());
+        for(MoveHook hook: rh.getHooks()) {
+            if(isPermitted || hook.alwaysActive()) {
+                hook.process(event);
+            }
+        }
+    }
+
+    public void processBlockBreakEvent(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        String itemName = ItemUtil.getItemName(event.getPlayer().getInventory().getItemInMainHand());
+        if(itemName != null && blockBreakEvents.containsKey(itemName)) {
+            RegistryHook<BlockBreakHook> rh = blockBreakEvents.get(itemName);
+            boolean isPermitted = rh.isPermitted(player.getUniqueId());
+            for(BlockBreakHook hook: rh.getHooks()) {
+                if(isPermitted || hook.alwaysActive()) {
+                    hook.process(event);
+                }
+            }
+        }
+    }
+    
     public void deregisterInteractEvent(String name, int index) {
         deregisterEvent(interactEvents, name, index);
     }
 
     public void deregisterProjectileLaunchEvent(String name, int index) {
         deregisterEvent(projectileLaunchEvents, name, index);
+    }
+
+    public void deregisterMoveEvent(String name, int index) {
+        deregisterEvent(moveEvents, name, index);
+    }
+
+    public void deregisterBlockBreakEvent(String name, int index) {
+        deregisterEvent(blockBreakEvents, name, index);
     }
     
     public void processEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {

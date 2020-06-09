@@ -11,25 +11,35 @@ import org.bukkit.configuration.serialization.SerializableAs;
 public class SoundEffect extends EffectWithLocation
 {
     private Sound sound;
+    private float pitch;
 
-    public SoundEffect(String name, Sound sound) {
+    public SoundEffect(String name, Sound sound, float pitch) {
 	setName(name);
 	this.sound = sound;
+        this.pitch = pitch;
     }
 
     public SoundEffect(Map<String, Object> config) {
 	sound = Sound.valueOf((String) config.get("sound"));
 	setName((String) config.get("name"));
+        if(config.get("pitch") != null) {
+            double p = (Double) config.get("pitch");
+            pitch = (float) p;
+        }
+        else {
+            pitch = 1F;
+        }
     }
 
     public Map<String, Object> serialize() {
 	Map<String, Object> ret = getSerializationBase();
 	ret.put("sound", sound.toString());
+        ret.put("pitch", pitch);
 	return ret;
     }
     
     public void play(Location location) {
-	location.getWorld().playSound(location, sound, 1F, 1F);
+	location.getWorld().playSound(location, sound, 1F, pitch);
     }
 
     public List<String> getInfo() {

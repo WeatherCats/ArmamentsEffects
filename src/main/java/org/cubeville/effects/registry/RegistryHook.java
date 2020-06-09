@@ -17,7 +17,8 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
     private Map<UUID, PlayerData> playerData;
     private long cooldownTime;
     private String permission;
-
+    private boolean keepInInventory;
+    
     protected class PlayerData {
         PlayerData(boolean hasPermission) { this.hasPermission = hasPermission; }
         private boolean hasPermission;
@@ -28,6 +29,7 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
         hooks = new ArrayList<>();
         playerData = new HashMap<>();
         cooldownTime = 0;
+        keepInInventory = false;
     }
 
     public RegistryHook(Map<String, Object> config) {
@@ -35,6 +37,7 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
         permission = (String) config.get("permission");
         hooks = (List<T>) config.get("hooks");
         playerData = new HashMap<>();
+        if(config.get("keepInInventory") != null) keepInInventory = (boolean) config.get("keepInInventory"); else keepInInventory = false;
     }
     
     public Map<String, Object> serialize() {
@@ -42,6 +45,7 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
         ret.put("cooldownTime", cooldownTime);
         ret.put("permission", permission);
         ret.put("hooks", hooks);
+        ret.put("keepInInventory", keepInInventory);
         return ret;
     }
     
@@ -101,5 +105,13 @@ public class RegistryHook<T extends Hook> implements ConfigurationSerializable
     
     public void clearPermissionCache() {
         playerData = new HashMap<>();        
+    }
+
+    public boolean getKeepInInventory() {
+        return keepInInventory;
+    }
+
+    public void setKeepInInventory(boolean keepInInventory) {
+        this.keepInInventory = keepInInventory;
     }
 }

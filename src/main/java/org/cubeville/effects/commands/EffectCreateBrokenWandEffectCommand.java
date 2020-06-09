@@ -4,25 +4,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
-import org.cubeville.commons.commands.CommandParameterFloat;
-import org.cubeville.commons.commands.CommandParameterEnum;
+import org.cubeville.commons.commands.CommandParameterDouble;
+import org.cubeville.commons.commands.CommandParameterInteger;
 import org.cubeville.commons.commands.CommandParameterString;
 import org.cubeville.commons.commands.CommandResponse;
 import org.cubeville.effects.managers.EffectManager;
-import org.cubeville.effects.managers.SoundEffect;
+import org.cubeville.effects.managers.BrokenWandEffect;
 
-public class EffectCreateSoundCommand extends Command
+public class EffectCreateBrokenWandEffectCommand extends Command
 {
-    public EffectCreateSoundCommand() {
-        super("effect create sound");
+    public EffectCreateBrokenWandEffectCommand() {
+        super("effect create brokenwand");
         addBaseParameter(new CommandParameterString());
-        addBaseParameter(new CommandParameterEnum(Sound.class));
-        addOptionalBaseParameter(new CommandParameterFloat());
+        addBaseParameter(new CommandParameterInteger());
+        addBaseParameter(new CommandParameterInteger());
+        addBaseParameter(new CommandParameterDouble());
+        addBaseParameter(new CommandParameterDouble());
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
@@ -30,14 +31,15 @@ public class EffectCreateSoundCommand extends Command
         if(EffectManager.getInstance().getEffectByName(name) != null) {
             throw new CommandExecutionException("Effect with name " + name + " already exists!");
         };
-        
-        float pitch = 1.0F;
-        if(baseParameters.size() == 3) pitch = (Float) baseParameters.get(2);
 
-        SoundEffect effect = new SoundEffect(name, (Sound) baseParameters.get(1), pitch);
+        BrokenWandEffect effect = new BrokenWandEffect(name,
+                                                       (Integer) baseParameters.get(1),
+                                                       (Integer) baseParameters.get(2),
+                                                       (Double) baseParameters.get(3),
+                                                       (Double) baseParameters.get(4));
         EffectManager.getInstance().addEffect(effect);
         CommandUtil.saveConfig();
-
         return null;
     }
+
 }
