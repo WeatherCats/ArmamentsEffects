@@ -5,21 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
+import org.cubeville.effects.managers.EventListener;
 
 @SerializableAs("ParticleEffect")
 public class ParticleEffect extends EffectWithLocation
 {
-    private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-
     private List<ParticleEffectComponent> components;
     private int stepsLoop;
     private int repeatCount; // 0 = indefinitely, not recommended though
@@ -74,42 +71,32 @@ public class ParticleEffect extends EffectWithLocation
                         nvec = transform(location.getYaw(), location.getPitch(), nvec);
                     }
                     nloc.add(nvec);
-                    PacketContainer particlePacket = protocolManager.createPacket(PacketType.Play.Server.WORLD_PARTICLES);
-                    particlePacket.getParticles().write(0, component.getParticle());
-                    particlePacket.getIntegers().write(0, new Double(component.getCount().getValue(step)).intValue());
-                    particlePacket.getFloat().write(0, (float) nloc.getX());
-                    particlePacket.getFloat().write(1, (float) nloc.getY());
-                    particlePacket.getFloat().write(2, (float) nloc.getZ());
-                    particlePacket.getFloat().write(3, (float) component.getSpreadX().getValue(step));
-                    particlePacket.getFloat().write(4, (float) component.getSpreadY().getValue(step));
-                    particlePacket.getFloat().write(5, (float) component.getSpreadZ().getValue(step));
-                    particlePacket.getFloat().write(6, 1F);
-                    int[] il = {0, 0};
-                    il[0] = component.getMaterial().getId();
-                    particlePacket.getIntegerArrays().write(0, il);
-                    //particlePacket.getBooleans().write(0, true);
-                    sendParticlePackets(nloc, particlePacket);
+
+                    if(component.getParticle() == Particle.REDSTONE) {
+                        int red = (int) (Math.round(component.getColourRed().getValue(step) * 255));
+                        if(red < 0) red = 0;
+                        if(red > 255) red = 255;
+                        int green = (int) (Math.round(component.getColourGreen().getValue(step) * 255));
+                        if(green < 0) green = 0;
+                        if(green > 255) green = 255;
+                        int blue = (int) (Math.round(component.getColourBlue().getValue(step) * 255));
+                        if(blue < 0) blue = 0;
+                        if(blue > 255) blue = 255;
+                        float size = (float) component.getSize().getValue(step);
+                        Particle.DustOptions dustoptions = new Particle.DustOptions(Color.fromRGB(red, green, blue), size);
+                        nloc.getWorld().spawnParticle(component.getParticle(), nloc.getX(), nloc.getY(), nloc.getZ(), (int)(component.getCount().getValue(step)),
+                                                      component.getSpreadX().getValue(step), component.getSpreadY().getValue(step), component.getSpreadZ().getValue(step),
+                                                      dustoptions);
+                    }
+                    else {
+                        nloc.getWorld().spawnParticle(component.getParticle(), nloc.getX(), nloc.getY(), nloc.getZ(), (int)(component.getCount().getValue(step)),
+                                                      component.getSpreadX().getValue(step), component.getSpreadY().getValue(step), component.getSpreadZ().getValue(step));
+                    }
                 }
             }
         }
         
         return hasStep(step + 1);
-    }
-
-    private void sendParticlePackets(Location location, PacketContainer particlePacket)
-    {
-        try {
-            // TODO: Clone the packet?
-            List<Player> players = getNearbyPlayers(location);
-            if(players != null && players.size() != 0 && !players.isEmpty()) {
-                for(Player player: players) {
-                    protocolManager.sendServerPacket(player, particlePacket.deepClone());
-                }
-            }
-        }
-        catch(InvocationTargetException e) {
-            throw new RuntimeException("Cannot send packet " + particlePacket, e);
-        }
     }
 
     private List<Player> getNearbyPlayers(Location location)

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.util.Vector;
 
 import org.cubeville.commons.commands.Command;
@@ -30,8 +31,6 @@ import org.cubeville.effects.managers.sources.coordinate.ConstantCoordinateSourc
 import org.cubeville.effects.managers.sources.coordinate.CoordinateSource;
 import org.cubeville.effects.managers.sources.coordinate.RandomCoordinateSource;
 import org.cubeville.effects.managers.sources.value.ValueSource;
-
-import com.comphenix.protocol.wrappers.EnumWrappers.Particle;
 
 public class ParticleCommandHelper
 {
@@ -78,6 +77,10 @@ public class ParticleCommandHelper
         command.addParameter("material", true, new CommandParameterEnum(Material.class));
         command.addParameter("timeline+", true, new CommandParameterListInteger(3));
         command.addParameter("timeline-", true, new CommandParameterInteger());
+        command.addParameter("red", true, new CommandParameterValueSource());
+        command.addParameter("green", true, new CommandParameterValueSource());
+        command.addParameter("blue", true, new CommandParameterValueSource());
+        command.addParameter("size", true, new CommandParameterValueSource());
     }
     
     public static void setEffectValues(ParticleEffect effect, Map<String, Object> parameters) {
@@ -220,5 +223,10 @@ public class ParticleCommandHelper
             }
         }
 
+        if(parameters.containsKey("red"))   component.setColourRed(   (ValueSource) parameters.get("red")  );
+        if(parameters.containsKey("green")) component.setColourGreen( (ValueSource) parameters.get("green"));
+        if(parameters.containsKey("blue"))  component.setColourBlue(  (ValueSource) parameters.get("blue") );
+        if(parameters.containsKey("size"))  component.setSize(        (ValueSource) parameters.get("size") );
     }
 }
+

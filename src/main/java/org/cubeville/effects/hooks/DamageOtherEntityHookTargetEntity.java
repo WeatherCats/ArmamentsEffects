@@ -3,12 +3,14 @@ package org.cubeville.effects.hooks;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.cubeville.effects.managers.Effect;
 import org.cubeville.effects.managers.EffectManager;
 import org.cubeville.effects.managers.EffectWithLivingEntity;
 
+@SerializableAs("DamageOtherEntityHookTargetEntity")
 public class DamageOtherEntityHookTargetEntity implements DamageOtherEntityHook
 {
     EffectWithLivingEntity effect;

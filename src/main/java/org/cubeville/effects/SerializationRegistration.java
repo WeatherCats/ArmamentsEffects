@@ -12,7 +12,9 @@ public class SerializationRegistration
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.DamageOtherEntityHookTargetEntity.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookCancelEvent.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookParticlePlayer.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookPlayer.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookPlayerLocation.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookRemoveItem.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookTargetEntity.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookTargetLocation.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.InteractHookTargetLocationParticlePlayer.class);
@@ -24,6 +26,7 @@ public class SerializationRegistration
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.ParticleEffectComponent.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.ParticleEffectTimelineEntry.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.PiercingEffect.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.managers.PotionEffect.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.SoundEffect.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.modifier.CoordinateModifierMove.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.modifier.CoordinateModifierRotate.class);
@@ -36,6 +39,7 @@ public class SerializationRegistration
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.sources.value.LinearValueSource.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.sources.value.ListValueSource.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.sources.value.SinewaveValueSource.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.managers.sources.value.RandomValueSource.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.registry.RegistryHook.class);
     }
 }

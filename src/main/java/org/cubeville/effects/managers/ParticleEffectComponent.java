@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.util.Vector;
@@ -14,8 +15,6 @@ import org.cubeville.effects.managers.sources.coordinate.ConstantCoordinateSourc
 import org.cubeville.effects.managers.sources.coordinate.CoordinateSource;
 import org.cubeville.effects.managers.sources.value.ConstantValueSource;
 import org.cubeville.effects.managers.sources.value.ValueSource;
-
-import com.comphenix.protocol.wrappers.EnumWrappers.Particle;
 
 @SerializableAs("ParticleEffectComponent")
 public class ParticleEffectComponent implements ConfigurationSerializable
@@ -26,6 +25,10 @@ public class ParticleEffectComponent implements ConfigurationSerializable
     private ValueSource spreadX;
     private ValueSource spreadY;
     private ValueSource spreadZ;
+    private ValueSource size;
+    private ValueSource colourRed;
+    private ValueSource colourGreen;
+    private ValueSource colourBlue;
     private Material material;
     private boolean directionalCoordinates;
     private List<CoordinateModifier> modifiers;
@@ -55,6 +58,22 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	directionalCoordinates = (boolean) config.get("directionalCoordinates");
 	modifiers = (List<CoordinateModifier>) config.get("modifiers");
 	timeline = (List<ParticleEffectTimelineEntry>) config.get("timeline");
+        if(config.get("colourRed") != null)
+            colourRed = (ValueSource) config.get("colourRed");
+        else
+            colourRed = new ConstantValueSource(0);
+        if(config.get("colourGreen") != null)
+            colourGreen = (ValueSource) config.get("colourGreen");
+        else
+            colourGreen = new ConstantValueSource(0);
+        if(config.get("colourBlue") != null)
+            colourBlue = (ValueSource) config.get("colourBlue");
+        else
+            colourBlue = new ConstantValueSource(0);
+        if(config.get("size") != null)
+            size = (ValueSource) config.get("size");
+        else
+            size = new ConstantValueSource(1);
     }
 
     public Map<String, Object> serialize() {
@@ -69,6 +88,10 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	ret.put("directionalCoordinates", directionalCoordinates);
 	ret.put("modifiers", modifiers);
 	ret.put("timeline", timeline);
+        ret.put("colourRed", colourRed);
+        ret.put("colourGreen", colourGreen);
+        ret.put("colourBlue", colourBlue);
+	ret.put("size", size);
 	return ret;
     }
 
@@ -99,6 +122,12 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	ret.add("  SpreadY: " + spreadY.getInfo());
 	ret.add("  SpreadZ: " + spreadZ.getInfo());
 	ret.add("  Material: " + material);
+        if(particle == Particle.REDSTONE) {
+            ret.add("  Red: " + colourRed.getInfo());
+            ret.add("  Green: " + colourGreen.getInfo());
+            ret.add("  Blue: " + colourBlue.getInfo());
+            ret.add("  Size: " + size.getInfo());
+        }
 	if(modifiers.size() > 0) {
 	    ret.add("  Modifiers:");
 	    for(CoordinateModifier modifier: modifiers) {
@@ -112,15 +141,12 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	    }
 	}
 	return ret;
+        // TODO: Add colour and size for redstone particle, could remove material where it's not relevant
     }
     
     public final List<CoordinateModifier> getModifiers() {
 	return modifiers;
     }
-    
-    //public final void addModifier(CoordinateModifier modifier) {
-    //getModifiers().add(modifier);
-    //}
     
     public final CoordinateSource getCoordinates() {
 	return coordinates;
@@ -201,4 +227,37 @@ public class ParticleEffectComponent implements ConfigurationSerializable
     public final List<ParticleEffectTimelineEntry> getTimeline() {
 	return timeline;
     }
+
+    public final ValueSource getColourRed() {
+        return colourRed;
+    }
+
+    public final void setColourRed(ValueSource colourRed) {
+        this.colourRed = colourRed;
+    }
+    
+    public final ValueSource getColourGreen() {
+        return colourGreen;
+    }
+
+    public final void setColourGreen(ValueSource colourGreen) {
+        this.colourGreen = colourGreen;
+    }
+    
+    public final ValueSource getColourBlue() {
+        return colourBlue;
+    }
+
+    public final void setColourBlue(ValueSource colourBlue) {
+        this.colourBlue = colourBlue;
+    }
+    
+    public final ValueSource getSize() {
+        return size;
+    }
+
+    public final void setSize(ValueSource size) {
+        this.size = size;
+    }
+    
 }

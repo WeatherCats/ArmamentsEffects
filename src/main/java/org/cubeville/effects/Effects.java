@@ -9,38 +9,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.SoundCategory;
+import org.bukkit.Sound;
 
 import org.cubeville.commons.commands.CommandParser;
 import org.cubeville.effects.commands.*;
-import org.cubeville.effects.effects.AE_EffectArrow;
-import org.cubeville.effects.effects.AE_EffectCommand;
-import org.cubeville.effects.effects.AE_EffectDisarm;
-import org.cubeville.effects.effects.AE_EffectDrain;
-import org.cubeville.effects.effects.AE_EffectExplode;
-import org.cubeville.effects.effects.AE_EffectFireworkParticle;
-import org.cubeville.effects.effects.AE_EffectInstakill;
-import org.cubeville.effects.effects.AE_EffectKillParticles;
-import org.cubeville.effects.effects.AE_EffectLightning;
-import org.cubeville.effects.effects.AE_EffectManager;
-import org.cubeville.effects.effects.AE_EffectPacketParticles;
-import org.cubeville.effects.effects.AE_EffectParticle;
-import org.cubeville.effects.effects.AE_EffectPiercing;
-import org.cubeville.effects.effects.AE_EffectPotionRightClick;
-import org.cubeville.effects.effects.AE_EffectPotions;
-import org.cubeville.effects.effects.AE_EffectRemoveAilment;
-import org.cubeville.effects.effects.AE_EffectRideable;
-import org.cubeville.effects.effects.AE_EffectShoot;
-import org.cubeville.effects.effects.AE_EffectSound;
-import org.cubeville.effects.effects.AE_EffectSpawn;
-import org.cubeville.effects.effects.AE_EffectStats;
-import org.cubeville.effects.effects.AE_EffectStun;
-import org.cubeville.effects.effects.AE_EffectTeleport;
-import org.cubeville.effects.effects.AE_EffectTnT;
-import org.cubeville.effects.effects.AE_EffectVelocity;
-import org.cubeville.effects.effects.AE_EffectWeb;
-import org.cubeville.effects.managers.EffectManager;
-import org.cubeville.effects.managers.EventListener;
 import org.cubeville.effects.registry.Registry;
+import org.cubeville.effects.managers.EventListener;
+import org.cubeville.effects.managers.EffectManager;
 
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -66,151 +42,11 @@ public class Effects extends JavaPlugin {
         EffectManager e = new EffectManager();
         e.addExampleEffects();
         initializeCommands();
-        
-        final AE_EffectManager listener = new AE_EffectManager(this);
-        
-        pm.registerEvents(listener, this);
 
         eventListener = new EventListener();
         pm.registerEvents(eventListener, this);
 
         loadEffects(null);
-
-        // arrow
-        AE_EffectArrow arrow = new AE_EffectArrow(this);
-        listener.registerEffect("arrow", arrow);
-        listener.registerEffect("fire", arrow);
-
-        // command
-        AE_EffectCommand command = new AE_EffectCommand();
-        listener.registerEffect("command", command);
-        listener.registerEffect("send", command);
-        
-        // drain
-        AE_EffectDrain drain = new AE_EffectDrain(this);
-        listener.registerEffect("drain", drain);
-        listener.registerEffect("leech", drain);
-        
-        // disarm
-        AE_EffectDisarm disarm = new AE_EffectDisarm();
-        listener.registerEffect("disarm", disarm);
-        listener.registerEffect("unarm", disarm);
-        
-        // durability
-        // AE_EffectDurability durability = new AE_EffectDurability();
-        // listener.registerEffect("durability", durability);
-
-        // explode
-        AE_EffectExplode explode = new AE_EffectExplode();
-        listener.registerEffect("explode", explode);
-        listener.registerEffect("boom", explode);
-        
-        // firework particle
-        AE_EffectFireworkParticle firework = new AE_EffectFireworkParticle(this);
-        listener.registerEffect("firework", firework);
-        listener.registerEffect("fireworkparticle", firework);
-        
-        // homing arrow
-        // AE_EffectHomingArrow ha = new AE_EffectHomingArrow(this);
-        // listener.registerEffect("Homing", ha);
-        // listener.registerEffect("Seeking", ha);
-
-        // instakill
-        AE_EffectInstakill instakill = new AE_EffectInstakill();
-        listener.registerEffect("instakill", instakill);
-        listener.registerEffect("slay", instakill);
-
-        // instapotion
-        AE_EffectPotionRightClick potright = new AE_EffectPotionRightClick();
-        listener.registerEffect("instapot", potright);
-        listener.registerEffect("poteffect", potright);
-        
-        // kill particles
-        AE_EffectKillParticles killparticles = new AE_EffectKillParticles(this);
-        listener.registerEffect("killallparticles", killparticles);
-        listener.registerEffect("killparticles", killparticles);
-        
-        // lightning
-        AE_EffectLightning lightning = new AE_EffectLightning(this);
-        listener.registerEffect("lightning", lightning);
-        listener.registerEffect("thunder", lightning);
-        
-        // piercing
-        AE_EffectPiercing piercing = new AE_EffectPiercing();
-        listener.registerEffect("piercing", piercing);
-        listener.registerEffect("penetration", piercing);
-        
-        // potions
-        AE_EffectPotions potions = new AE_EffectPotions();
-        listener.registerEffect("inflict", potions);
-        listener.registerEffect("apply", potions);
-        
-        // rideable
-        AE_EffectRideable rideable = new AE_EffectRideable(this);
-        listener.registerEffect("rideable", rideable);
-        listener.registerEffect("ride", rideable);
-
-        // shoot
-        AE_EffectShoot shoot = new AE_EffectShoot();
-        listener.registerEffect("shoot", shoot);
-        listener.registerEffect("launch", shoot);
-        listener.registerEffect("cast", shoot);
-
-        // sound
-        AE_EffectSound sound = new AE_EffectSound();
-        listener.registerEffect("playsound", sound);
-        listener.registerEffect("play", sound);
-
-        // spawnmob
-        AE_EffectSpawn spawn = new AE_EffectSpawn();
-        listener.registerEffect("spawn", spawn);
-        listener.registerEffect("summon", spawn);
-        
-        // stats
-        AE_EffectStats stats = new AE_EffectStats();
-        listener.registerEffect("stats", stats);
-        listener.registerEffect("numbers", stats);
-
-        // stun
-        AE_EffectStun stun = new AE_EffectStun();
-        listener.registerEffect("stun", stun);
-        listener.registerEffect("stop", stun);
-        
-        // tnt
-        AE_EffectTnT tnt = new AE_EffectTnT(this);
-        listener.registerEffect("tnt", tnt);
-        listener.registerEffect("primedtnt", tnt);
-
-        // velocity
-        AE_EffectVelocity velocity = new AE_EffectVelocity();
-        listener.registerEffect("velocity", velocity);
-        listener.registerEffect("speed", velocity);
-
-        // web
-        AE_EffectWeb web = new AE_EffectWeb(this);
-        listener.registerEffect("web", web);
-        listener.registerEffect("trap", web);
-
-        // particle
-        AE_EffectParticle particle = new AE_EffectParticle(this);
-        listener.registerEffect("particle", particle);
-        listener.registerEffect("display", particle);
-        
-        // packet particles
-        AE_EffectPacketParticles packetParticles = new AE_EffectPacketParticles(this);
-        listener.registerEffect("packetparticle", packetParticles);
-        listener.registerEffect("packetparticles", packetParticles);
-
-        // remove ailment
-        AE_EffectRemoveAilment heal = new AE_EffectRemoveAilment();
-        listener.registerEffect("heal", heal);
-        listener.registerEffect("cure", heal);
-
-        // teleport
-        AE_EffectTeleport teleport = new AE_EffectTeleport();
-        listener.registerEffect("teleport", teleport);
-        listener.registerEffect("move", teleport);
-
     }
     
     @Override
@@ -256,6 +92,19 @@ public class Effects extends JavaPlugin {
                 // //     }, 0);
                 return true;
             }
+	    else if((args.length == 2 || args.length == 3) && args[0].equals("playsound")) {
+		Sound sound = Sound.valueOf(args[1].toUpperCase());
+		if(sound == null) {
+		    sender.sendMessage("§cSound not found.");
+		    return true;
+		}
+		float pitch = 1.0f;
+		if(args.length == 3) pitch = Float.valueOf(args[2]);
+		Player player = (Player) sender;
+		player.playSound(player.getLocation(), sound, SoundCategory.MASTER, 1.0f, pitch);
+		sender.sendMessage("§aPlaying sound " + sound.toString());
+		return true;
+	    }
             else if(args.length == 1 && args[0].equals("save")) { // TODO: deprecated
                 saveEffects();
                 return true;
@@ -311,6 +160,8 @@ public class Effects extends JavaPlugin {
         commandParser.addCommand(new EffectCreatePotionEffectCommand());
         commandParser.addCommand(new EffectCreateSoundCommand());
         commandParser.addCommand(new EffectModifyParticleCommand());
+        commandParser.addCommand(new EffectModifyPotionEffectCommand());
+        commandParser.addCommand(new EffectModifySoundCommand());
         commandParser.addCommand(new EffectRemove());
         commandParser.addCommand(new EffectRemovecomponent());
         commandParser.addCommand(new HookCooldownCommand());
@@ -321,7 +172,9 @@ public class Effects extends JavaPlugin {
         commandParser.addCommand(new HookCreateDamageOtherEntityLivingEntityCommand());
         commandParser.addCommand(new HookCreateInteractCancelEventCommand());
         commandParser.addCommand(new HookCreateInteractParticlePlayerCommand());
+        commandParser.addCommand(new HookCreateInteractPlayerCommand());
         commandParser.addCommand(new HookCreateInteractPlayerLocationCommand());
+        commandParser.addCommand(new HookCreateInteractRemoveItemCommand());
         commandParser.addCommand(new HookCreateInteractTargetEntityCommand());
         commandParser.addCommand(new HookCreateInteractTargetLocationCommand()); 
         commandParser.addCommand(new HookCreateInteractTargetLocationParticlePlayerCommand()); 

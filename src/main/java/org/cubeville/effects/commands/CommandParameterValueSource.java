@@ -13,6 +13,7 @@ import org.cubeville.commons.commands.CommandParameterType;
 import org.cubeville.effects.managers.sources.value.ConstantValueSource;
 import org.cubeville.effects.managers.sources.value.LinearValueSource;
 import org.cubeville.effects.managers.sources.value.ListValueSource;
+import org.cubeville.effects.managers.sources.value.RandomValueSource;
 import org.cubeville.effects.managers.sources.value.SinewaveValueSource;
 import org.cubeville.effects.managers.sources.value.ValueSource;
 
@@ -21,6 +22,9 @@ public class CommandParameterValueSource implements CommandParameterType
     // constant(3.0)
     // linear(1.0,0.01)
     // sinewave(0,36,0.0,1.0,false)
+    // random(0.0,10.0)
+    // list(1,2,3,4,5)
+    
     Map<String, CommandParameterList> parameterLists;
 
     public CommandParameterValueSource() {
@@ -46,6 +50,11 @@ public class CommandParameterValueSource implements CommandParameterType
         List<CommandParameterType> listList = new ArrayList<>();
         listList.add(new CommandParameterListDouble(","));
         parameterLists.put("list", new CommandParameterList(listList));
+
+	List<CommandParameterType> randomList = new ArrayList<>();
+	randomList.add(new CommandParameterDouble());
+	randomList.add(new CommandParameterDouble());
+	parameterLists.put("random", new CommandParameterList(randomList));
     }
     
     public boolean isValid(String value) {
@@ -89,6 +98,10 @@ public class CommandParameterValueSource implements CommandParameterType
             List<Object> parameters = (List<Object>) parameterLists.get("list").getValue(val);
             return new ListValueSource((List<Double>) parameters.get(0));
         }
+	else if(type.equals("random")) {
+	    List<Object> parameters = (List<Object>) parameterLists.get("random").getValue(val);
+	    return new RandomValueSource((double) parameters.get(0), (double) parameters.get(1));
+	}
         return null;
     }
 }

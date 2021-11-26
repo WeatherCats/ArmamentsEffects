@@ -35,6 +35,7 @@ public class ParticlePlayerCommand extends BaseCommand
         addBaseParameter(new CommandParameterVector()); // location
         addBaseParameter(new CommandParameterDouble()); // yaw
         addBaseParameter(new CommandParameterDouble()); // pitch
+	addFlag("silent");
     }
 
     public CommandResponse execute(CommandSender player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
@@ -57,7 +58,12 @@ public class ParticlePlayerCommand extends BaseCommand
         if(world == null) throw new CommandExecutionException("World " + world + " does not exist!");
         Location loc = new Location(world, location.getX(), location.getY(), location.getZ(), yaw, pitch);
         new ParticleEffectTimedRunnable(Effects.getInstance(), effect, stepsPerTick, speed, loc).runTaskTimer(Effects.getInstance(), 1, 1);
-        
-        return null;
+
+	if(flags.contains("silent")) {
+	    return new CommandResponse("");
+	}
+	else {
+	    return null;
+	}
     }
 }

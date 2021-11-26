@@ -3,9 +3,11 @@ package org.cubeville.effects.managers;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffectType;
 
+@SerializableAs("PotionEffect")
 public class PotionEffect extends EffectWithLivingEntity
 {
     PotionEffectType effectType;
@@ -20,6 +22,12 @@ public class PotionEffect extends EffectWithLivingEntity
         printinfo();
     }
 
+    public void modify(PotionEffectType effectType, int duration, int amplifier) {
+        this.effectType = effectType;
+        this.duration = duration;
+        this.amplifier = amplifier;
+    }
+    
     private void printinfo()
     {
         System.out.println("EFFECT TYPE: " + effectType);

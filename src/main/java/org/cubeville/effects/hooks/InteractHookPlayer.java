@@ -4,9 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.configuration.serialization.SerializableAs;
 import org.cubeville.effects.managers.Effect;
+import org.cubeville.effects.managers.EffectManager;
 import org.cubeville.effects.managers.EffectWithLivingEntity;
 
+@SerializableAs("InteractHookPlayer")
 public class InteractHookPlayer implements InteractHook
 {
     EffectWithLivingEntity effect;
@@ -15,8 +18,13 @@ public class InteractHookPlayer implements InteractHook
         this.effect = (EffectWithLivingEntity) effect;
     }
 
+    public InteractHookPlayer(Map<String, Object> config) {
+	effect = (EffectWithLivingEntity) EffectManager.getInstance().getEffectByName((String) config.get("effect"));
+    }
+    
     public Map<String, Object> serialize() {
         Map<String, Object> ret = new HashMap<>();
+	ret.put("effect", effect.getName());
         return ret;
     }
 

@@ -19,6 +19,11 @@ public class SoundEffect extends EffectWithLocation
         this.pitch = pitch;
     }
 
+    public void modify(Sound sound, float pitch) {
+	this.sound = sound;
+	this.pitch = pitch;
+    }
+    
     public SoundEffect(Map<String, Object> config) {
 	sound = Sound.valueOf((String) config.get("sound"));
 	setName((String) config.get("name"));

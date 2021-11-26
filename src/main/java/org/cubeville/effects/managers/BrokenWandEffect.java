@@ -64,8 +64,8 @@ public class BrokenWandEffect extends EffectWithLivingEntity
                 Block hblock = world.getBlockAt(x, y + 1, z);
                 lbs = lblock.isEmpty();
                 hbs = hblock.isEmpty();
-                if(lbs) lblock.setType(Material.WEB);
-                if(hbs) hblock.setType(Material.WEB);
+                //if(lbs) lblock.setType(Material.WEB);
+                //if(hbs) hblock.setType(Material.WEB);
             }
             Bukkit.getScheduler().scheduleSyncDelayedTask(Effects.getInstance(), new Runnable() {
                     public void run() {

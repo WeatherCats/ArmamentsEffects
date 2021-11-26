@@ -32,6 +32,7 @@ public class CommandWithLocationEffect extends EffectWithLocation
     public void play(Location location) {
         String c = command.replace("%world%", location.getWorld().getName());
         c = c.replace("%location%", location.getX() + "," + location.getY() + "," + location.getZ());
+	c = c.replace("%locationyp%", location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getYaw() + "," + location.getPitch());
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c);
     }
 

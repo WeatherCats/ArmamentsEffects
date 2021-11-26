@@ -33,8 +33,7 @@ public class BlockBreakHookParticlePlayer implements BlockBreakHook
 	this.speed = speed;
 	this.pitch = pitch;
         blockTypes = new ArrayList<>();
-        blockTypes.add(Material.LEAVES);
-        blockTypes.add(Material.LEAVES_2);
+        blockTypes.add(Material.ACACIA_LEAVES);
     }
 
     public BlockBreakHookParticlePlayer(Map<String, Object> config) {
@@ -44,8 +43,7 @@ public class BlockBreakHookParticlePlayer implements BlockBreakHook
         speed = (double) config.get("speed");
         pitch = (double) config.get("pitch");
         blockTypes = new ArrayList<>();
-        blockTypes.add(Material.LEAVES);
-        blockTypes.add(Material.LEAVES_2);
+        blockTypes.add(Material.ACACIA_LEAVES);
     }
 
     public Map<String, Object> serialize() {
