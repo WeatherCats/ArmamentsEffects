@@ -22,7 +22,7 @@ public class EffectModifyParticleCommand extends Command {
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters)
-    throws CommandExecutionException {
+        throws CommandExecutionException {
         if(parameters.size() == 0) throw new CommandExecutionException("No modification parameters.");
         ParticleEffect effect = (ParticleEffect) baseParameters.get(0);
         ParticleCommandHelper.setEffectValues(effect, parameters);

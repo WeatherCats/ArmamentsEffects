@@ -29,7 +29,11 @@ public class ParticleEffectComponent implements ConfigurationSerializable
     private ValueSource colourRed;
     private ValueSource colourGreen;
     private ValueSource colourBlue;
+    private ValueSource colourToRed;
+    private ValueSource colourToGreen;
+    private ValueSource colourToBlue;
     private Material material;
+    private ValueSource speed;
     private boolean directionalCoordinates;
     private List<CoordinateModifier> modifiers;
     private List<ParticleEffectTimelineEntry> timeline;
@@ -41,12 +45,13 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	spreadX = new ConstantValueSource(0);
         spreadY = new ConstantValueSource(0);
         spreadZ = new ConstantValueSource(0);
+        speed = new ConstantValueSource(0);
 	material = Material.AIR;
 	directionalCoordinates = true;
 	modifiers = new ArrayList<>();
 	timeline = new ArrayList<>();
     }
-    
+
     public ParticleEffectComponent(Map<String, Object> config) {
 	coordinates = (CoordinateSource) config.get("coordinates");
 	particle = Particle.valueOf((String) config.get("particle"));
@@ -58,6 +63,7 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	directionalCoordinates = (boolean) config.get("directionalCoordinates");
 	modifiers = (List<CoordinateModifier>) config.get("modifiers");
 	timeline = (List<ParticleEffectTimelineEntry>) config.get("timeline");
+
         if(config.get("colourRed") != null)
             colourRed = (ValueSource) config.get("colourRed");
         else
@@ -70,10 +76,29 @@ public class ParticleEffectComponent implements ConfigurationSerializable
             colourBlue = (ValueSource) config.get("colourBlue");
         else
             colourBlue = new ConstantValueSource(0);
+
+        if(config.get("colourToRed") != null)
+            colourToRed = (ValueSource) config.get("colourToRed");
+        else
+            colourToRed = new ConstantValueSource(0);
+        if(config.get("colourToGreen") != null)
+            colourToGreen = (ValueSource) config.get("colourToGreen");
+        else
+            colourToGreen = new ConstantValueSource(0);
+        if(config.get("colourToBlue") != null)
+            colourToBlue = (ValueSource) config.get("colourToBlue");
+        else
+            colourToBlue = new ConstantValueSource(0);
+
         if(config.get("size") != null)
             size = (ValueSource) config.get("size");
         else
             size = new ConstantValueSource(1);
+
+        if(config.get("speed") != null)
+            speed = (ValueSource) config.get("speed");
+        else
+            speed = new ConstantValueSource(0);
     }
 
     public Map<String, Object> serialize() {
@@ -91,7 +116,11 @@ public class ParticleEffectComponent implements ConfigurationSerializable
         ret.put("colourRed", colourRed);
         ret.put("colourGreen", colourGreen);
         ret.put("colourBlue", colourBlue);
+        ret.put("colourToRed", colourToRed);
+        ret.put("colourToGreen", colourToGreen);
+        ret.put("colourToBlue", colourToBlue);
 	ret.put("size", size);
+	ret.put("speed", speed);
 	return ret;
     }
 
@@ -121,11 +150,19 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	ret.add("  SpreadX: " + spreadX.getInfo());
 	ret.add("  SpreadY: " + spreadY.getInfo());
 	ret.add("  SpreadZ: " + spreadZ.getInfo());
-	ret.add("  Material: " + material);
-        if(particle == Particle.REDSTONE) {
+        if(particle == Particle.ITEM_CRACK || particle == Particle.BLOCK_CRACK || particle == Particle.BLOCK_DUST || particle == Particle.FALLING_DUST) {
+            ret.add("  Material: " + material);
+        }
+        ret.add("  Speed: " + speed.getInfo());
+        if(particle == Particle.REDSTONE || particle == Particle.DUST_COLOR_TRANSITION) {
             ret.add("  Red: " + colourRed.getInfo());
             ret.add("  Green: " + colourGreen.getInfo());
             ret.add("  Blue: " + colourBlue.getInfo());
+            if(particle == Particle.DUST_COLOR_TRANSITION) {
+                ret.add("  To Red: " + colourToRed.getInfo());
+                ret.add("  To Green: " + colourToGreen.getInfo());
+                ret.add("  To Blue: " + colourToBlue.getInfo());
+            }
             ret.add("  Size: " + size.getInfo());
         }
 	if(modifiers.size() > 0) {
@@ -141,7 +178,6 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	    }
 	}
 	return ret;
-        // TODO: Add colour and size for redstone particle, could remove material where it's not relevant
     }
     
     public final List<CoordinateModifier> getModifiers() {
@@ -252,6 +288,30 @@ public class ParticleEffectComponent implements ConfigurationSerializable
         this.colourBlue = colourBlue;
     }
     
+    public final ValueSource getColourToRed() {
+        return colourToRed;
+    }
+
+    public final void setColourToRed(ValueSource colourToRed) {
+        this.colourToRed = colourToRed;
+    }
+    
+    public final ValueSource getColourToGreen() {
+        return colourToGreen;
+    }
+
+    public final void setColourToGreen(ValueSource colourToGreen) {
+        this.colourToGreen = colourToGreen;
+    }
+    
+    public final ValueSource getColourToBlue() {
+        return colourToBlue;
+    }
+
+    public final void setColourToBlue(ValueSource colourToBlue) {
+        this.colourToBlue = colourToBlue;
+    }
+    
     public final ValueSource getSize() {
         return size;
     }
@@ -259,5 +319,13 @@ public class ParticleEffectComponent implements ConfigurationSerializable
     public final void setSize(ValueSource size) {
         this.size = size;
     }
-    
+
+    public final void setSpeed(ValueSource speed) {
+        this.speed = speed;
+    }
+
+    public final ValueSource getSpeed() {
+        return speed;
+    }
+
 }

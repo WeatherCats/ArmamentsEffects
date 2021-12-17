@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import org.cubeville.effects.managers.EventListener;
@@ -72,7 +73,9 @@ public class ParticleEffect extends EffectWithLocation
                     }
                     nloc.add(nvec);
 
-                    if(component.getParticle() == Particle.REDSTONE) {
+                    double speed = (double) component.getSpeed().getValue(step);
+                    
+                    if(component.getParticle() == Particle.REDSTONE || component.getParticle() == Particle.DUST_COLOR_TRANSITION) {
                         int red = (int) (Math.round(component.getColourRed().getValue(step) * 255));
                         if(red < 0) red = 0;
                         if(red > 255) red = 255;
@@ -83,14 +86,40 @@ public class ParticleEffect extends EffectWithLocation
                         if(blue < 0) blue = 0;
                         if(blue > 255) blue = 255;
                         float size = (float) component.getSize().getValue(step);
-                        Particle.DustOptions dustoptions = new Particle.DustOptions(Color.fromRGB(red, green, blue), size);
+
+                        Particle.DustOptions dustoptions;
+                        if(component.getParticle() == Particle.DUST_COLOR_TRANSITION) {
+                            int tored = (int) (Math.round(component.getColourToRed().getValue(step) * 255));
+                            if(tored < 0) tored = 0;
+                            if(tored > 255) tored = 255;
+                            int togreen = (int) (Math.round(component.getColourToGreen().getValue(step) * 255));
+                            if(togreen < 0) togreen = 0;
+                            if(togreen > 255) togreen = 255;
+                            int toblue = (int) (Math.round(component.getColourToBlue().getValue(step) * 255));
+                            if(toblue < 0) toblue = 0;
+                            if(toblue > 255) toblue = 255;
+                            dustoptions = new Particle.DustTransition(Color.fromRGB(red, green, blue), Color.fromRGB(tored, togreen, toblue), size);
+                        }
+                        else 
+                            dustoptions = new Particle.DustOptions(Color.fromRGB(red, green, blue), size);
+
                         nloc.getWorld().spawnParticle(component.getParticle(), nloc.getX(), nloc.getY(), nloc.getZ(), (int)(component.getCount().getValue(step)),
                                                       component.getSpreadX().getValue(step), component.getSpreadY().getValue(step), component.getSpreadZ().getValue(step),
-                                                      dustoptions);
+                                                      speed, dustoptions);
+                    }
+                    else if(component.getParticle() == Particle.ITEM_CRACK) {
+                        nloc.getWorld().spawnParticle(component.getParticle(), nloc.getX(), nloc.getY(), nloc.getZ(), (int)(component.getCount().getValue(step)),
+                                                      component.getSpreadX().getValue(step), component.getSpreadY().getValue(step), component.getSpreadZ().getValue(step),
+                                                      speed, new ItemStack(component.getMaterial()));
+                    }
+                    else if(component.getParticle() == Particle.BLOCK_DUST || component.getParticle() == Particle.BLOCK_CRACK || component.getParticle() == Particle.FALLING_DUST) {
+                        nloc.getWorld().spawnParticle(component.getParticle(), nloc.getX(), nloc.getY(), nloc.getZ(), (int)(component.getCount().getValue(step)),
+                                                      component.getSpreadX().getValue(step), component.getSpreadY().getValue(step), component.getSpreadZ().getValue(step),
+                                                      speed, component.getMaterial().createBlockData());
                     }
                     else {
                         nloc.getWorld().spawnParticle(component.getParticle(), nloc.getX(), nloc.getY(), nloc.getZ(), (int)(component.getCount().getValue(step)),
-                                                      component.getSpreadX().getValue(step), component.getSpreadY().getValue(step), component.getSpreadZ().getValue(step));
+                                                      component.getSpreadX().getValue(step), component.getSpreadY().getValue(step), component.getSpreadZ().getValue(step), speed);
                     }
                 }
             }

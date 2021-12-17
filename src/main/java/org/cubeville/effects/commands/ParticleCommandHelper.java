@@ -80,7 +80,11 @@ public class ParticleCommandHelper
         command.addParameter("red", true, new CommandParameterValueSource());
         command.addParameter("green", true, new CommandParameterValueSource());
         command.addParameter("blue", true, new CommandParameterValueSource());
+        command.addParameter("tored", true, new CommandParameterValueSource());
+        command.addParameter("togreen", true, new CommandParameterValueSource());
+        command.addParameter("toblue", true, new CommandParameterValueSource());
         command.addParameter("size", true, new CommandParameterValueSource());
+        command.addParameter("speed", true, new CommandParameterValueSource());
     }
     
     public static void setEffectValues(ParticleEffect effect, Map<String, Object> parameters) {
@@ -223,10 +227,14 @@ public class ParticleCommandHelper
             }
         }
 
-        if(parameters.containsKey("red"))   component.setColourRed(   (ValueSource) parameters.get("red")  );
-        if(parameters.containsKey("green")) component.setColourGreen( (ValueSource) parameters.get("green"));
-        if(parameters.containsKey("blue"))  component.setColourBlue(  (ValueSource) parameters.get("blue") );
-        if(parameters.containsKey("size"))  component.setSize(        (ValueSource) parameters.get("size") );
+        if(parameters.containsKey("red"))   component.setColourRed(      (ValueSource) parameters.get("red")    );
+        if(parameters.containsKey("green")) component.setColourGreen(    (ValueSource) parameters.get("green")  );
+        if(parameters.containsKey("blue"))  component.setColourBlue(     (ValueSource) parameters.get("blue")   );
+        if(parameters.containsKey("tored"))   component.setColourToRed(  (ValueSource) parameters.get("tored")  );
+        if(parameters.containsKey("togreen")) component.setColourToGreen((ValueSource) parameters.get("togreen"));
+        if(parameters.containsKey("toblue"))  component.setColourToBlue( (ValueSource) parameters.get("toblue") );
+        if(parameters.containsKey("size"))  component.setSize(           (ValueSource) parameters.get("size")   );
+        if(parameters.containsKey("speed")) component.setSpeed(          (ValueSource) parameters.get("speed")  );
     }
 }
 
