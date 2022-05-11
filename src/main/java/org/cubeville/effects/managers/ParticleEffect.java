@@ -74,7 +74,7 @@ public class ParticleEffect extends EffectWithLocation
                     nloc.add(nvec);
 
                     double speed = (double) component.getSpeed().getValue(step);
-                    
+
                     if(component.getParticle() == Particle.REDSTONE || component.getParticle() == Particle.DUST_COLOR_TRANSITION) {
                         int red = (int) (Math.round(component.getColourRed().getValue(step) * 255));
                         if(red < 0) red = 0;

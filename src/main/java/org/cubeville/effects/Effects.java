@@ -1,5 +1,7 @@
 package org.cubeville.effects;
 
+import java.util.ArrayList;
+
 import java.lang.reflect.Method;
 
 import org.bukkit.Bukkit;
@@ -22,6 +24,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
+import java.util.List;
 
 public class Effects extends JavaPlugin {
 
@@ -92,17 +95,28 @@ public class Effects extends JavaPlugin {
                 // //     }, 0);
                 return true;
             }
-	    else if((args.length == 2 || args.length == 3) && args[0].equals("playsound")) {
-		Sound sound = Sound.valueOf(args[1].toUpperCase());
-		if(sound == null) {
-		    sender.sendMessage("§cSound not found.");
-		    return true;
-		}
-		float pitch = 1.0f;
-		if(args.length == 3) pitch = Float.valueOf(args[2]);
+	    else if(args.length >= 2 && args[0].equals("playsound")) {
+                List<Sound> soundlist = new ArrayList<>();
+                List<Float> pitchlist = new ArrayList<>();
+
+                for(int i = 1; i < args.length; i++) {
+                    if(i % 2 == 1) {
+                        Sound sound = Sound.valueOf(args[i].toUpperCase());
+                        soundlist.add(sound);
+                    }
+                    else {
+                        pitchlist.add(Float.valueOf(args[i]));
+                    }
+                }
+
+                if(pitchlist.size() < soundlist.size()) pitchlist.add(1.0f);
+
 		Player player = (Player) sender;
-		player.playSound(player.getLocation(), sound, SoundCategory.MASTER, 1.0f, pitch);
-		sender.sendMessage("§aPlaying sound " + sound.toString());
+
+                for(int i = 0; i < soundlist.size(); i++) {
+                    player.playSound(player.getLocation(), soundlist.get(i), SoundCategory.MASTER, 1.0f, pitchlist.get(i));
+                    sender.sendMessage("§aPlaying.");
+                }
 		return true;
 	    }
             else if(args.length == 1 && args[0].equals("save")) { // TODO: deprecated
