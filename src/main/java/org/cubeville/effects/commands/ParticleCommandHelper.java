@@ -85,6 +85,8 @@ public class ParticleCommandHelper
         command.addParameter("toblue", true, new CommandParameterValueSource());
         command.addParameter("size", true, new CommandParameterValueSource());
         command.addParameter("speed", true, new CommandParameterValueSource());
+        command.addParameter("blockcollisioncheck", true, new CommandParameterBoolean());
+        command.addParameter("entitycollisioncheck", true, new CommandParameterBoolean());
     }
     
     public static void setEffectValues(ParticleEffect effect, Map<String, Object> parameters) {
@@ -227,14 +229,15 @@ public class ParticleCommandHelper
             }
         }
 
-        if(parameters.containsKey("red"))   component.setColourRed(      (ValueSource) parameters.get("red")    );
-        if(parameters.containsKey("green")) component.setColourGreen(    (ValueSource) parameters.get("green")  );
-        if(parameters.containsKey("blue"))  component.setColourBlue(     (ValueSource) parameters.get("blue")   );
-        if(parameters.containsKey("tored"))   component.setColourToRed(  (ValueSource) parameters.get("tored")  );
-        if(parameters.containsKey("togreen")) component.setColourToGreen((ValueSource) parameters.get("togreen"));
-        if(parameters.containsKey("toblue"))  component.setColourToBlue( (ValueSource) parameters.get("toblue") );
-        if(parameters.containsKey("size"))  component.setSize(           (ValueSource) parameters.get("size")   );
-        if(parameters.containsKey("speed")) component.setSpeed(          (ValueSource) parameters.get("speed")  );
+        if(parameters.containsKey("red"))     component.setColourRed(      (ValueSource) parameters.get("red")    );
+        if(parameters.containsKey("green"))   component.setColourGreen(    (ValueSource) parameters.get("green")  );
+        if(parameters.containsKey("blue"))    component.setColourBlue(     (ValueSource) parameters.get("blue")   );
+        if(parameters.containsKey("tored"))   component.setColourToRed(    (ValueSource) parameters.get("tored")  );
+        if(parameters.containsKey("togreen")) component.setColourToGreen(  (ValueSource) parameters.get("togreen"));
+        if(parameters.containsKey("toblue"))  component.setColourToBlue(   (ValueSource) parameters.get("toblue") );
+        if(parameters.containsKey("size"))    component.setSize(           (ValueSource) parameters.get("size")   );
+        if(parameters.containsKey("speed"))   component.setSpeed(          (ValueSource) parameters.get("speed")  );
+        if(parameters.containsKey("blockcollisioncheck")) component.setBlockCollisionCheck((Boolean) parameters.get("blockcollisioncheck"));
+        if(parameters.containsKey("entitycollisioncheck")) component.setEntityCollisionCheck((Boolean) parameters.get("entitycollisioncheck"));
     }
 }
-

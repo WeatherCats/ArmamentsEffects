@@ -66,7 +66,7 @@ public class InteractHookTargetLocationParticlePlayer implements InteractHook
         Location loc = target.getLocation().clone();
         loc.setY(loc.getY() + yOffset);
         if(fixedPitch) loc.setPitch((float)pitch);
-        new ParticleEffectTimedRunnable(Effects.getInstance(), effect, stepsPerTick, speed, loc).runTaskTimer(Effects.getInstance(), 1, 1);
+        new ParticleEffectTimedRunnable(Effects.getInstance(), player, effect, stepsPerTick, speed, loc).runTaskTimer(Effects.getInstance(), 1, 1);
     }
 
     public boolean usesEffect(Effect effect) {

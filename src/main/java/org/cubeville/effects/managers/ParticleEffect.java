@@ -1,23 +1,29 @@
 package org.cubeville.effects.managers;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.block.Block;
+import org.bukkit.block.data.type.GlassPane;
+import org.bukkit.block.data.type.Slab;
 import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import org.cubeville.effects.managers.EventListener;
+import org.cubeville.effects.pluginhook.PluginHookManager;
 
 @SerializableAs("ParticleEffect")
 public class ParticleEffect extends EffectWithLocation
 {
+    private static List<Material> noCollisionBlocks = Arrays.asList(Material.CHAIN, Material.IRON_BARS, Material.LIGHT_BLUE_CARPET, Material.LIGHT_GRAY_CARPET, Material.LIME_CARPET, Material.MAGENTA_CARPET, Material.ORANGE_CARPET, Material.PINK_CARPET, Material.PURPLE_CARPET, Material.RED_CARPET, Material.WHITE_CARPET, Material.YELLOW_CARPET, Material.GREEN_CARPET, Material.GRAY_CARPET, Material.BROWN_CARPET, Material.BLACK_CARPET, Material.CYAN_CARPET , Material.TWISTING_VINES);
+    
     private List<ParticleEffectComponent> components;
     private int stepsLoop;
     private int repeatCount; // 0 = indefinitely, not recommended though
@@ -56,15 +62,22 @@ public class ParticleEffect extends EffectWithLocation
     }
 
     public void play(Location location) {
-        play(0, location);
+        play(0, location, null);
     }
 
-    public boolean play(int step, Location location) {
+    public boolean play(int step, Location location, Player player) {
         if(!hasStep(step)) return false;
 
         int localStep = step % getStepsLoop();
+
+        boolean blockCollisionDetected = false;
+        boolean entityCollisionDetected = false;
+        
         for(ParticleEffectComponent component: components) {
             if(component.isActive(localStep)) {
+                boolean blockCollisionCheck = component.getBlockCollisionCheck();
+                boolean entityCollisionCheck = component.getEntityCollisionCheck();
+                
                 for(Vector vec: component.getModifiedCoordinates(localStep)) {
                     Location nloc = location.clone();
                     Vector nvec = vec.clone();
@@ -73,6 +86,58 @@ public class ParticleEffect extends EffectWithLocation
                     }
                     nloc.add(nvec);
 
+                    if(blockCollisionCheck) {
+                        Block block = location.getWorld().getBlockAt(nloc);
+                        if(block.getType() != Material.AIR) {
+                            if(!noCollisionBlocks.contains(block.getType())) {
+                                boolean collision = false;
+                                if(block.getBlockData() instanceof Slab) {
+                                    Slab slab = (Slab) block.getBlockData();
+                                    if(slab.getType() == Slab.Type.DOUBLE) collision = true;
+                                    else {
+                                        double f = nloc.getY() - Math.floor(nloc.getY());
+                                        if(slab.getType() == Slab.Type.BOTTOM) {
+                                            if(f < 0.5) collision = true;
+                                        }
+                                        else {
+                                            if(f >= 0.5) collision = true;
+                                        }
+                                    }
+                                }
+                                else if(block.getBlockData() instanceof GlassPane) {
+                                    if(((GlassPane) block.getBlockData()).getFaces().size() > 0)
+                                        collision = true;
+                                }
+                                else {
+                                    collision = true;
+                                }
+                                if(collision) {
+                                    if(player != null && blockCollisionDetected == false) PluginHookManager.onBlockCollisionEvent(player, block);
+                                    blockCollisionDetected = true;
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                    if(entityCollisionCheck) {
+                        List<Player> entities = nloc.getWorld().getPlayers(); // TODO: Not going to deal with bats' hitboxes for now, can be added later
+                        // TODO: Also not going to deal with flying / swimming / ..., for now only standing and sneaking is supported, until I find manage to get hitboxes from minecraft itself
+                        for(Player entity: entities) {
+                            if(entity == player) continue;
+                            Vector emin = entity.getLocation().toVector();
+                            emin.subtract(new Vector(0.5f, 0.0f, 0.5f));
+                            Vector emax = entity.getLocation().toVector();
+                            emax.add(new Vector(0.5f, player.isSneaking() ? 1.5f : 1.8f, 0.5f));
+                            if(nloc.toVector().isInAABB(emin, emax)) {
+                                if(player != null && entityCollisionDetected == false) PluginHookManager.onEntityCollisionEvent(player, entity);
+                                entityCollisionDetected = true;
+                                break;
+                            }
+                        }
+                        if(entityCollisionDetected) continue;
+                    }
+                    
                     double speed = (double) component.getSpeed().getValue(step);
 
                     if(component.getParticle() == Particle.REDSTONE || component.getParticle() == Particle.DUST_COLOR_TRANSITION) {
@@ -124,7 +189,8 @@ public class ParticleEffect extends EffectWithLocation
                 }
             }
         }
-        
+
+        if(blockCollisionDetected || entityCollisionDetected) return false;
         return hasStep(step + 1);
     }
 

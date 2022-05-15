@@ -1,6 +1,7 @@
 package org.cubeville.effects.managers;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.cubeville.effects.registry.ProjectileTrackerAction;
@@ -10,11 +11,16 @@ public class ParticleEffectProjectileRunnable extends BukkitRunnable implements 
 {
     private final Projectile projectile;
     private final ParticleEffect effect;
+    private final Player player;
     private int step;
     
     public ParticleEffectProjectileRunnable(ParticleEffect effect, Projectile projectile) {
         this.projectile = projectile;
         this.effect = effect;
+        if(projectile.getShooter() instanceof Player)
+            player = (Player) projectile.getShooter();
+        else
+            player = null;
         step = 0;
         Registry.getInstance().addProjectileHitAction(projectile, this);
     }
@@ -42,7 +48,7 @@ public class ParticleEffectProjectileRunnable extends BukkitRunnable implements 
         Location loc = projectile.getLocation();
         loc.setYaw(360 - loc.getYaw());
         loc.setPitch(-loc.getPitch());
-        if(!effect.play(step, loc)) {
+        if(!effect.play(step, loc, player)) {
             abort();
             return;
         }

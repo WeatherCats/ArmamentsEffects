@@ -1,30 +1,30 @@
 package org.cubeville.effects;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import java.lang.reflect.Method;
 
 import org.bukkit.Bukkit;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.SoundCategory;
-import org.bukkit.Sound;
 
 import org.cubeville.commons.commands.CommandParser;
 import org.cubeville.effects.commands.*;
 import org.cubeville.effects.registry.Registry;
 import org.cubeville.effects.managers.EventListener;
 import org.cubeville.effects.managers.EffectManager;
-
-import org.bukkit.entity.Firework;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Location;
-import java.util.List;
+import org.cubeville.effects.pluginhook.PluginHookManager;
 
 public class Effects extends JavaPlugin {
 
@@ -32,6 +32,7 @@ public class Effects extends JavaPlugin {
     private CommandParser commandParser;
     private final PluginManager pm = Bukkit.getPluginManager();
     private EventListener eventListener;
+    private PluginHookManager pluginHookManager;
     
     public static Effects getInstance() {
 	return instance;
@@ -43,13 +44,18 @@ public class Effects extends JavaPlugin {
 
 	SerializationRegistration.init();
         EffectManager e = new EffectManager();
-        e.addExampleEffects();
         initializeCommands();
 
         eventListener = new EventListener();
         pm.registerEvents(eventListener, this);
 
+        pluginHookManager = new PluginHookManager();
+        
         loadEffects(null);
+    }
+
+    public PluginHookManager getPluginHookManager() {
+        return pluginHookManager;
     }
     
     @Override

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.cubeville.effects.Effects;
 import org.cubeville.effects.managers.Effect;
@@ -58,10 +59,11 @@ public class InteractHookParticlePlayer implements InteractHook
     
     public void process(PlayerInteractEvent rawEvent) {
         PlayerInteractEvent event = (PlayerInteractEvent) rawEvent;
-	Location loc = event.getPlayer().getLocation().clone();
+        Player player = event.getPlayer();
+	Location loc = player.getLocation().clone();
 	loc.setY(loc.getY() + yOffset);
 	if(fixedPitch) loc.setPitch((float)pitch);
-	new ParticleEffectTimedRunnable(Effects.getInstance(), effect, stepsPerTick, speed, loc).runTaskTimer(Effects.getInstance(), 1, 1);
+	new ParticleEffectTimedRunnable(Effects.getInstance(), player, effect, stepsPerTick, speed, loc).runTaskTimer(Effects.getInstance(), 1, 1);
     }
 
     public boolean usesEffect(Effect effect) {

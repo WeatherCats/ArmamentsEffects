@@ -37,7 +37,9 @@ public class ParticleEffectComponent implements ConfigurationSerializable
     private boolean directionalCoordinates;
     private List<CoordinateModifier> modifiers;
     private List<ParticleEffectTimelineEntry> timeline;
-
+    private boolean blockCollisionCheck;
+    private boolean entityCollisionCheck;
+    
     public ParticleEffectComponent() {
 	coordinates = new ConstantCoordinateSource();
 	particle = Particle.VILLAGER_HAPPY;
@@ -50,6 +52,8 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	directionalCoordinates = true;
 	modifiers = new ArrayList<>();
 	timeline = new ArrayList<>();
+        blockCollisionCheck = false;
+        entityCollisionCheck = false;
     }
 
     public ParticleEffectComponent(Map<String, Object> config) {
@@ -99,6 +103,16 @@ public class ParticleEffectComponent implements ConfigurationSerializable
             speed = (ValueSource) config.get("speed");
         else
             speed = new ConstantValueSource(0);
+
+        if(config.get("blockCollisionCheck") != null)
+            blockCollisionCheck = (boolean) config.get("blockCollisionCheck");
+        else
+            blockCollisionCheck = false;
+
+        if(config.get("entityCollisionCheck") != null)
+            entityCollisionCheck = (boolean) config.get("entityCollisionCheck");
+        else
+            entityCollisionCheck = false;
     }
 
     public Map<String, Object> serialize() {
@@ -121,6 +135,8 @@ public class ParticleEffectComponent implements ConfigurationSerializable
         ret.put("colourToBlue", colourToBlue);
 	ret.put("size", size);
 	ret.put("speed", speed);
+        ret.put("blockCollisionCheck", blockCollisionCheck);
+        ret.put("entityCollisionCheck", entityCollisionCheck);
 	return ret;
     }
 
@@ -177,6 +193,12 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 		ret.add("    " + e.getStepStart() + "-" + (e.getStepStart() + e.getStepCount()) + "x" + e.getStepRepeat());
 	    }
 	}
+        if(blockCollisionCheck || entityCollisionCheck) {
+            String l = "  Collision checks: ";
+            if(blockCollisionCheck) l += "Blocks";
+            if(blockCollisionCheck && entityCollisionCheck) l += " and ";
+            if(entityCollisionCheck) l += "Entities";
+        }
 	return ret;
     }
     
@@ -328,4 +350,19 @@ public class ParticleEffectComponent implements ConfigurationSerializable
         return speed;
     }
 
+    public final void setBlockCollisionCheck(boolean blockCollisionCheck) {
+        this.blockCollisionCheck = blockCollisionCheck;
+    }
+    
+    public final boolean getBlockCollisionCheck() {
+        return blockCollisionCheck;
+    }
+
+    public final void setEntityCollisionCheck(boolean entityCollisionCheck) {
+        this.entityCollisionCheck = entityCollisionCheck;
+    }
+    
+    public final boolean getEntityCollisionCheck() {
+        return entityCollisionCheck;
+    }
 }
