@@ -24,6 +24,7 @@ public class HookCreateInteractParticlePlayerCommand extends Command
         addParameter("speed", true, new CommandParameterDouble());
         addParameter("step", true, new CommandParameterDouble());
         addParameter("yoffset", true, new CommandParameterDouble());
+        addParameter("ysneakshift", true, new CommandParameterDouble());
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
@@ -40,7 +41,9 @@ public class HookCreateInteractParticlePlayerCommand extends Command
         boolean fixedpitch = parameters.containsKey("fixedpitch");
         double fixedpitchval = 0.0;
         if(fixedpitch) fixedpitchval = (double) parameters.get("fixedpitch");
-        Registry.getInstance().registerEvent(itemName, new InteractHookParticlePlayer(effect.getName(), yoffset, speed, step, fixedpitch, fixedpitchval));
+        double ysneakshift = 0.0;
+        if(parameters.get("ysneakshift") != null) ysneakshift = (double) parameters.get("ysneakshift");
+        Registry.getInstance().registerEvent(itemName, new InteractHookParticlePlayer(effect.getName(), yoffset, speed, step, fixedpitch, fixedpitchval, ysneakshift));
         CommandUtil.saveConfig();
 
         return new CommandResponse("Hook created.");
