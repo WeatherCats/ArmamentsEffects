@@ -12,14 +12,18 @@ public class PluginHook
     private Vector regionMin;
     private Vector regionMax;
     private PluginHookEventReceiver eventReceiver;
+    private int id;
     
-    public PluginHook(World world, Vector regionMin, Vector regionMax, PluginHookEventReceiver eventReceiver) {
+    public PluginHook(World world, Vector regionMin, Vector regionMax, PluginHookEventReceiver eventReceiver, int id) {
         this.world = world;
         this.regionMin = regionMin;
         this.regionMax = regionMax;
         this.eventReceiver = eventReceiver;
+        this.id = id;
     }
 
+    public int getId() { return id; }
+    
     public void onBlockCollisionEvent(Player player, Block block) {
         if(block.getLocation().toVector().isInAABB(regionMin, regionMax)) {
             eventReceiver.onBlockCollisionEvent(player, block);

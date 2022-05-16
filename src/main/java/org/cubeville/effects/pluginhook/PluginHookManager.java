@@ -19,9 +19,19 @@ public class PluginHookManager
         pluginHooks = new ArrayList<>();
     }
 
-    public void hook(World world, Vector regionMin, Vector regionMax, PluginHookEventReceiver eventReceiver) {
-        pluginHooks.add(new PluginHook(world, regionMin, regionMax, eventReceiver));
+    public void hook(World world, Vector regionMin, Vector regionMax, PluginHookEventReceiver eventReceiver, int id) {
+        pluginHooks.add(new PluginHook(world, regionMin, regionMax, eventReceiver, id));
     }
+
+    public void unhook(int id) {
+        for(int i = 0; i < pluginHooks.size(); i++) {
+            if(pluginHooks.get(i).getId() == id) {
+                pluginHooks.remove(i);
+                break;
+            }
+        }
+    }
+
     
     public static void onBlockCollisionEvent(Player player, Block block) {
         for(PluginHook h: instance.pluginHooks) {

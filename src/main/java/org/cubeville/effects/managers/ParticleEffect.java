@@ -125,10 +125,11 @@ public class ParticleEffect extends EffectWithLocation
                         // TODO: Also not going to deal with flying / swimming / ..., for now only standing and sneaking is supported, until I find manage to get hitboxes from minecraft itself
                         for(Player entity: entities) {
                             if(entity == player) continue;
+                            if(entity.hasMetadata("vanished")) continue;
                             Vector emin = entity.getLocation().toVector();
                             emin.subtract(new Vector(0.5f, 0.0f, 0.5f));
                             Vector emax = entity.getLocation().toVector();
-                            emax.add(new Vector(0.5f, player.isSneaking() ? 1.5f : 1.8f, 0.5f));
+                            emax.add(new Vector(0.5f, entity.isSneaking() ? 1.5f : 1.9f, 0.5f));
                             if(nloc.toVector().isInAABB(emin, emax)) {
                                 if(player != null && entityCollisionDetected == false) PluginHookManager.onEntityCollisionEvent(player, entity);
                                 entityCollisionDetected = true;
