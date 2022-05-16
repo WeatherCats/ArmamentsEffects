@@ -13,14 +13,17 @@ public class PluginHookManager
 {
     List<PluginHook> pluginHooks;
     private static PluginHookManager instance;
-
+    int hookIdCount = 0;
+    
     public PluginHookManager() {
         instance = this;
         pluginHooks = new ArrayList<>();
     }
 
-    public void hook(World world, Vector regionMin, Vector regionMax, PluginHookEventReceiver eventReceiver, int id) {
+    public int hook(World world, Vector regionMin, Vector regionMax, PluginHookEventReceiver eventReceiver) {
+        int id = hookIdCount++;
         pluginHooks.add(new PluginHook(world, regionMin, regionMax, eventReceiver, id));
+        return id;
     }
 
     public void unhook(int id) {
@@ -31,7 +34,6 @@ public class PluginHookManager
             }
         }
     }
-
     
     public static void onBlockCollisionEvent(Player player, Block block) {
         for(PluginHook h: instance.pluginHooks) {
