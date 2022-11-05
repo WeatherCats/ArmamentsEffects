@@ -27,7 +27,7 @@ public class RemoveLivingEntityEffect extends EffectWithLivingEntity
             entity.remove();
     }
 
-    public List<String> getInfo() {
+    public List<String> getInfo(boolean detailed) {
         return getInfoBase();
     }
 

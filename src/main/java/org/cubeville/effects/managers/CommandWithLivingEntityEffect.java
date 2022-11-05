@@ -4,21 +4,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.serialization.SerializableAs;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 
-@SerializableAs("CommandWithLocationEffect")
-public class CommandWithLocationEffect extends EffectWithLocation
+@SerializableAs("CommandWithLivingEntityEffect")
+public class CommandWithLivingEntityEffect extends EffectWithLivingEntity
 {
     private String command;
     
-    public CommandWithLocationEffect(String name, String command) {
+    public CommandWithLivingEntityEffect(String name, String command) {
         setName(name);
         this.command = command;
     }
 
-    public CommandWithLocationEffect(Map<String, Object> config) {
+    public CommandWithLivingEntityEffect(Map<String, Object> config) {
         command = (String) config.get("command");
         setName((String) config.get("name"));
     }
@@ -29,10 +29,13 @@ public class CommandWithLocationEffect extends EffectWithLocation
         return ret;
     }
 
-    public void play(Location location) {
-        String c = command.replace("%world%", location.getWorld().getName());
-        c = c.replace("%location%", location.getX() + "," + location.getY() + "," + location.getZ());
-	c = c.replace("%locationyp%", location.getX() + "," + location.getY() + "," + location.getZ() + "," + location.getYaw() + "," + location.getPitch());
+    public void play(LivingEntity entity) {
+        String c = command;        
+        if(c.contains("%player%") && (entity instanceof Player)) {
+            Player p = (Player) entity;
+            c = c.replace("%player%", p.getName());
+        }
+        System.out.println("Running command: " + c);
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), c);
     }
 
@@ -44,9 +47,5 @@ public class CommandWithLocationEffect extends EffectWithLocation
 
     public String getType() {
         return "Command";
-    }
-
-    public void modify(String command) {
-        this.command = command;
     }
 }

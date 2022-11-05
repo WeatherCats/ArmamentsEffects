@@ -57,7 +57,7 @@ public class EffectManager implements ConfigurationSerializable
         }
         return ret;
     }
-    
+
     public Effect getEffectById(int id) {
         return effects.get(id);
     }
@@ -68,9 +68,9 @@ public class EffectManager implements ConfigurationSerializable
         return effects.get(id);
     }
 
-    public List<String> getEffectInfo(String name) {
+    public List<String> getEffectInfo(String name, boolean detailed) {
         Effect effect = getEffectByName(name);
         if(effect == null) return null;
-        return effect.getInfo();
+        return effect.getInfo(detailed);
     }
 }

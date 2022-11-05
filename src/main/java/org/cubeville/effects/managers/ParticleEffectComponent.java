@@ -158,9 +158,18 @@ public class ParticleEffectComponent implements ConfigurationSerializable
 	return false;
     }
 
-    public List<String> getInfo() {
+    public int getLocationOffset(int step) {
+        for(ParticleEffectTimelineEntry tle: timeline) {
+            if(step >= tle.getStepStart() && step < tle.getStepStart() + tle.getStepCount()) {
+                return tle.getLocationOffset();
+            }
+        }
+        return 0;
+    }
+    
+    public List<String> getInfo(boolean detailed) {
 	List<String> ret = new ArrayList<>();
-	ret.add("  Source: " + coordinates.getInfo());
+	ret.add("  Source: " + coordinates.getInfo(detailed));
 	ret.add("  Particle: " + particle);
 	ret.add("  Count: " + count.getInfo());
 	ret.add("  SpreadX: " + spreadX.getInfo());
@@ -198,10 +207,11 @@ public class ParticleEffectComponent implements ConfigurationSerializable
             if(blockCollisionCheck) l += "Blocks";
             if(blockCollisionCheck && entityCollisionCheck) l += " and ";
             if(entityCollisionCheck) l += "Entities";
+            ret.add(l);
         }
 	return ret;
     }
-    
+
     public final List<CoordinateModifier> getModifiers() {
 	return modifiers;
     }

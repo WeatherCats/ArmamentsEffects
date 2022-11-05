@@ -75,7 +75,7 @@ public class ParticleCommandHelper
         }
         command.addParameter("modifier-", true, new CommandParameterInteger());
         command.addParameter("material", true, new CommandParameterEnum(Material.class));
-        command.addParameter("timeline+", true, new CommandParameterListInteger(3));
+        command.addParameter("timeline+", true, new CommandParameterListInteger(4));
         command.addParameter("timeline-", true, new CommandParameterInteger());
         command.addParameter("red", true, new CommandParameterValueSource());
         command.addParameter("green", true, new CommandParameterValueSource());
@@ -219,7 +219,8 @@ public class ParticleCommandHelper
             int tstart = p.get(0);
             int tcount = p.get(1);
             int trepeat = p.get(2);
-            component.getTimeline().add(new ParticleEffectTimelineEntry(tstart, trepeat, tcount));
+            int tlocoffset = p.get(3);
+            component.getTimeline().add(new ParticleEffectTimelineEntry(tstart, trepeat, tcount, tlocoffset));
         }
 
         if(parameters.containsKey("timeline-")) {

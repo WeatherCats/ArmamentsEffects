@@ -62,17 +62,40 @@ public class ConstantCoordinateSource implements CoordinateSource
             vertices.set(i, nv);
         }
     }
-        
+
     public List<Vector> getVertices(int step, int nr) {
 	return vertices;
     }
 
-    public String getInfo() {
+    public String getInfo(boolean detailed) {
 	String ret = "Constant (";
-	for(int i = 0; i < vertices.size(); i++) {
-	    if(i > 0) ret += ", ";
-	    ret += String.format("%.2f", vertices.get(i).getX()) + "/" + String.format("%.2f", vertices.get(i).getY()) + "/" + String.format("%.2f", vertices.get(i).getZ());
-	}
+        if(vertices.size() <= 5 || detailed) {
+            for(int i = 0; i < vertices.size(); i++) {
+                if(i > 0) ret += "§r, ";
+                if(i % 2 == 1) ret += "§7";
+                ret += String.format("%.2f", vertices.get(i).getX()) + "/" + String.format("%.2f", vertices.get(i).getY()) + "/" + String.format("%.2f", vertices.get(i).getZ());
+            }
+        }
+        else {
+            Vector min = vertices.get(0).clone();
+            Vector max = vertices.get(0).clone();
+            for(int i = 1; i < vertices.size(); i++) {
+                Vector v = vertices.get(i);
+                if(v.getX() < min.getX()) min.setX(v.getX());
+                if(v.getX() > max.getX()) max.setX(v.getX());
+                if(v.getY() < min.getY()) min.setY(v.getY());
+                if(v.getY() > max.getY()) max.setY(v.getY());
+                if(v.getZ() < min.getZ()) min.setZ(v.getZ());
+                if(v.getZ() > max.getZ()) max.setZ(v.getZ());
+            }
+            ret += vertices.size() + " vertices between " +
+                String.format("%.2f", min.getX()) + "/" +
+                String.format("%.2f", min.getY()) + "/" +
+                String.format("%.2f", min.getZ()) + " and " +
+                String.format("%.2f", max.getX()) + "/" +
+                String.format("%.2f", max.getY()) + "/" +
+                String.format("%.2f", max.getZ());
+        }
         ret += ")";
 	return ret;
     }

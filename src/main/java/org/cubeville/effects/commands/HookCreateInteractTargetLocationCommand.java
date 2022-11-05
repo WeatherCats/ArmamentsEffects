@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.cubeville.commons.commands.Command;
 import org.cubeville.commons.commands.CommandExecutionException;
 import org.cubeville.commons.commands.CommandResponse;
+import org.cubeville.commons.commands.CommandParameterDouble;
 import org.cubeville.effects.hooks.InteractHookTargetLocation;
 import org.cubeville.effects.managers.Effect;
 import org.cubeville.effects.managers.EffectWithLocation;
@@ -22,6 +23,8 @@ public class HookCreateInteractTargetLocationCommand extends Command
         addBaseParameter(new CommandParameterListEffect(EffectWithLocation.class));
         addOptionalBaseParameter(new CommandParameterListEffect(EffectWithLocation.class));
         addFlag("fixedpitch");
+        addParameter("zoffset", true, new CommandParameterDouble());
+        addFlag("origindir");
     }
 
     public CommandResponse execute(Player player, Set<String> flags, Map<String, Object> parameters, List<Object> baseParameters) throws CommandExecutionException {
@@ -34,9 +37,14 @@ public class HookCreateInteractTargetLocationCommand extends Command
         }
 
         boolean fixedPitch = flags.contains("fixedpitch");
+
+        double zoffset = 0.0;
+        if(parameters.containsKey("zoffset")) zoffset = (Double) parameters.get("zoffset");
+
+        boolean origindir = flags.contains("origindir");
         
         String itemName = ItemUtil.safeGetItemInMainHandName(player);        
-        Registry.getInstance().registerEvent(itemName, new InteractHookTargetLocation((List<Effect>) baseParameters.get(0), noTargetParameters, fixedPitch));
+        Registry.getInstance().registerEvent(itemName, new InteractHookTargetLocation((List<Effect>) baseParameters.get(0), noTargetParameters, fixedPitch, zoffset, origindir));
         CommandUtil.saveConfig();
         return null;
     }

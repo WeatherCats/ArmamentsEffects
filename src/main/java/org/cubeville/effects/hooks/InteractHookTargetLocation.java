@@ -10,6 +10,8 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
+
 import org.cubeville.effects.managers.Effect;
 import org.cubeville.effects.managers.EffectManager;
 import org.cubeville.effects.managers.EffectWithLocation;
@@ -22,8 +24,10 @@ public class InteractHookTargetLocation implements InteractHook
     List<Effect> effects;
     List<Effect> noTargetEffects;
     boolean fixedPitch = false;
-
-    public InteractHookTargetLocation(List<Effect> effects, List<Effect> noTargetEffects, boolean fixedPitch) {
+    double zoffset = 0.0;
+    boolean origindir = false;
+    
+    public InteractHookTargetLocation(List<Effect> effects, List<Effect> noTargetEffects, boolean fixedPitch, double zoffset, boolean origindir) {
 	this.effects = new ArrayList<>();
 	for(Effect effect: effects) {
 	    if(effect instanceof EffectWithLocation) this.effects.add((EffectWithLocation) effect);
@@ -33,6 +37,8 @@ public class InteractHookTargetLocation implements InteractHook
 	    if(effect instanceof EffectWithLocation) this.noTargetEffects.add((EffectWithLocation) effect);
 	}
         this.fixedPitch = fixedPitch;
+        this.zoffset = zoffset;
+        this.origindir = origindir;
     }
 
     public InteractHookTargetLocation(Map<String, Object> config) {
@@ -47,6 +53,12 @@ public class InteractHookTargetLocation implements InteractHook
         if(config.containsKey("fixedPitch")) {
             fixedPitch = (boolean)config.get("fixedPitch");
         }
+        if(config.containsKey("zoffset")) {
+            zoffset = (Double) config.get("zoffset");
+        }
+        if(config.containsKey("origindir")) {
+            origindir = (Boolean) config.get("origindir");
+        }
     }
     
     public Map<String, Object> serialize() {
@@ -54,6 +66,8 @@ public class InteractHookTargetLocation implements InteractHook
         ret.put("effects", Conversions.getListOfEffectNames(effects));
         ret.put("noTargetEffects", Conversions.getListOfEffectNames(noTargetEffects));
         ret.put("fixedPitch", fixedPitch);
+        ret.put("zoffset", zoffset);
+        ret.put("origindir", origindir);
         return ret;
     }
 
@@ -69,8 +83,14 @@ public class InteractHookTargetLocation implements InteractHook
         Entity target = PlayerUtil.findTargetEntity(player, player.getNearbyEntities(10, 10, 10), 1000);
 
         if(target != null) {
-            Location loc = target.getLocation();
+            Location loc = target.getLocation().clone();
             if(fixedPitch) loc.setPitch(0);
+            if(origindir) {
+                Vector dir = player.getLocation().toVector().subtract(loc.toVector());
+                loc.setDirection(dir);
+            }
+            Vector dir = loc.getDirection().multiply(zoffset);
+            loc.add(dir);
 	    for(Effect effect: effects) {
 		((EffectWithLocation) effect).play(loc);
 	    }

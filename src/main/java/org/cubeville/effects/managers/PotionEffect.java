@@ -47,7 +47,7 @@ public class PotionEffect extends EffectWithLivingEntity
         return ret;
     }
 
-    public List<String> getInfo() {
+    public List<String> getInfo(boolean detailed) {
         List<String> ret = getInfoBase();
         ret.add("PotionEffect: " + effectType.getName());
         return ret;

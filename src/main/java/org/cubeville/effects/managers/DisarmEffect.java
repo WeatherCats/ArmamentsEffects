@@ -28,7 +28,7 @@ public class DisarmEffect extends EffectWithLivingEntity {
     }
 
     @Override
-    public List<String> getInfo() {
+    public List<String> getInfo(boolean detailed) {
         List<String> ret = getInfoBase();
         if (offhand) ret.add("Disarm: offhand");
         else ret.add("Disarm: mainhand");

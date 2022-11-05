@@ -15,33 +15,48 @@ public class InteractHookPlayerLocation implements InteractHook
 {
     EffectWithLocation effect;
     boolean fixedPitch = false;
-    
-    public InteractHookPlayerLocation(Effect effect, boolean fixedPitch) {
+    double yoffset = 0.0;
+    double offset = 0.0;
+
+    public InteractHookPlayerLocation(Effect effect, boolean fixedPitch, double yoffset, double offset) {
 	this.effect = (EffectWithLocation) effect;
         this.fixedPitch = fixedPitch;
+        this.yoffset = yoffset;
+        this.offset = offset;
     }
 
     public InteractHookPlayerLocation(Map<String, Object> config) {
         effect = (EffectWithLocation) EffectManager.getInstance().getEffectByName((String) config.get("effect"));
-        if(config.containsKey("fixedPitch")) {
+        if(config.containsKey("fixedPitch"))
             fixedPitch = (boolean)config.get("fixedPitch");
-        }
+        if(config.containsKey("yoffset")) 
+            yoffset = (double) config.get("yoffset");
+        if(config.containsKey("offset"))
+            offset = (double) config.get("offset");
     }
     
     public Map<String, Object> serialize() {
         Map<String, Object> ret = new HashMap<>();
         ret.put("effect", effect.getName());
         ret.put("fixedPitch", fixedPitch);
+        ret.put("offset", offset);
+        ret.put("yoffset", yoffset);
         return ret;
     }
 
     public String getInfo() {
-        return "PlayerLocation: " + effect.getName() + (fixedPitch ? " (fixed pitch)" : "");
+        String info = "PlayerLocation: " + effect.getName();
+        if(fixedPitch) info += ", fp";
+        if(yoffset != 0.0) info += ", yo = " + yoffset;
+        if(offset != 0.0) info += ", o = " + offset;
+        return info;
     }
-    
+
     public void process(PlayerInteractEvent event) {
         Location loc = event.getPlayer().getLocation();
         if(fixedPitch) loc.setPitch(0);
+        loc.setY(loc.getY() + yoffset);
+        loc.add(loc.getDirection().multiply(offset));
 	effect.play(loc);
     }
 

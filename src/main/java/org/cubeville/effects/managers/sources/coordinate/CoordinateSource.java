@@ -8,5 +8,5 @@ import org.bukkit.util.Vector;
 public interface CoordinateSource extends ConfigurationSerializable
 {
     public List<Vector> getVertices(int step, int nr);
-    public String getInfo();
+    public String getInfo(boolean detailed);
 }

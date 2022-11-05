@@ -46,7 +46,7 @@ public class RandomCoordinateSource implements CoordinateSource
 	return ret;
     }
 
-    public String getInfo() {
+    public String getInfo(boolean detailed) {
 	return "Random " + count;
     }
 }

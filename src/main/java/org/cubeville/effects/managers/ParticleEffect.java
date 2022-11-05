@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftLivingEntity;
+
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.block.data.type.Slab;
@@ -62,10 +64,10 @@ public class ParticleEffect extends EffectWithLocation
     }
 
     public void play(Location location) {
-        play(0, location, null);
+        play(0, new StaticParticleEffectLocationCalculator(location), null);
     }
 
-    public boolean play(int step, Location location, Player player) {
+    public boolean play(int step, ParticleEffectLocationCalculator locationCalculator, Player player) {
         if(!hasStep(step)) return false;
 
         int localStep = step % getStepsLoop();
@@ -77,6 +79,8 @@ public class ParticleEffect extends EffectWithLocation
             if(component.isActive(localStep)) {
                 boolean blockCollisionCheck = component.getBlockCollisionCheck();
                 boolean entityCollisionCheck = component.getEntityCollisionCheck();
+
+                Location location = locationCalculator.getLocationForStep(step - component.getLocationOffset(localStep));
                 
                 for(Vector vec: component.getModifiedCoordinates(localStep)) {
                     Location nloc = location.clone();
@@ -124,6 +128,7 @@ public class ParticleEffect extends EffectWithLocation
                         List<Player> entities = nloc.getWorld().getPlayers(); // TODO: Not going to deal with bats' hitboxes for now, can be added later
                         // TODO: Also not going to deal with flying / swimming / ..., for now only standing and sneaking is supported, until I find manage to get hitboxes from minecraft itself
                         for(Player entity: entities) {
+                            //((CraftLivingEntity) entity).getHandle().getBoundingBoxForCulling();
                             if(entity == player) continue;
                             if(entity.hasMetadata("vanished")) continue;
                             Vector emin = entity.getLocation().toVector();
@@ -225,13 +230,15 @@ public class ParticleEffect extends EffectWithLocation
             .add(forward.multiply(vec.getZ()));
     }
 
-    public List<String> getInfo() {
+    public List<String> getInfo(boolean detailed) {
         List<String> ret = getInfoBase();
         ret.add("Length: " + stepsLoop);
         ret.add("Repeat: " + repeatCount);
+
+        int count = 0;
         for(ParticleEffectComponent component: components) {
-            ret.add("* Component:");
-            ret.addAll(component.getInfo());
+            ret.add("§e* Component: " + (++count) + "§r");
+            ret.addAll(component.getInfo(detailed));
         }
         return ret;
     }

@@ -47,8 +47,8 @@ public class ParticleEffectProjectileRunnable extends BukkitRunnable implements 
         }
         Location loc = projectile.getLocation();
         loc.setYaw(360 - loc.getYaw());
-        loc.setPitch(-loc.getPitch());
-        if(!effect.play(step, loc, player)) {
+        loc.setPitch(-loc.getPitch());        
+        if(!effect.play(step, new StaticParticleEffectLocationCalculator(loc), player)) {
             abort();
             return;
         }

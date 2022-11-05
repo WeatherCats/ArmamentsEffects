@@ -65,7 +65,7 @@ public class CircleCoordinateSource implements CoordinateSource
 	return ret;
     }
 
-    public String getInfo() {
+    public String getInfo(boolean detailed) {
 	return "Circle " + startAngle + "-" + endAngle + "," + stepAngle + "; r=" + radius + (xz ? " xz" : "xy") + ", o" + offset;
     }
 }

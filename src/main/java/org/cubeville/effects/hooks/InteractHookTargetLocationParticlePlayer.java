@@ -8,6 +8,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 import org.cubeville.effects.Effects;
 import org.cubeville.effects.managers.Effect;
 import org.cubeville.effects.managers.EffectManager;
@@ -24,14 +25,16 @@ public class InteractHookTargetLocationParticlePlayer implements InteractHook
     private double speed;
     private boolean fixedPitch;
     private double pitch;
-
-    public InteractHookTargetLocationParticlePlayer(String effectName, double yOffset, double stepsPerTick, double speed, boolean fixedPitch, double pitch) {
+    private boolean originDir;
+    
+    public InteractHookTargetLocationParticlePlayer(String effectName, double yOffset, double stepsPerTick, double speed, boolean fixedPitch, double pitch, boolean originDir) {
 	this.effect = (ParticleEffect) EffectManager.getInstance().getEffectByName(effectName);
 	this.yOffset = yOffset;
 	this.stepsPerTick = stepsPerTick;
 	this.speed = speed;
 	this.fixedPitch = fixedPitch;
 	this.pitch = pitch;
+        this.originDir = originDir;
     }
 
     public InteractHookTargetLocationParticlePlayer(Map<String, Object> config) {
@@ -42,6 +45,12 @@ public class InteractHookTargetLocationParticlePlayer implements InteractHook
         this.speed = (double) config.get("speed");
         this.fixedPitch = (boolean) config.get("fixedPitch");
         this.pitch = (double) config.get("pitch");
+        if(config.get("originDir") != null) {
+            this.originDir = (boolean) config.get("originDir");
+        }
+        else {
+            this.originDir = false;
+        }
     }
     
     public Map<String, Object> serialize() {
@@ -52,21 +61,32 @@ public class InteractHookTargetLocationParticlePlayer implements InteractHook
         ret.put("speed", speed);
         ret.put("pitch", pitch);
         ret.put("fixedPitch", fixedPitch);
+        ret.put("originDir", originDir);
         return ret;
     }
 
     public String getInfo() {
-        return "TargetLocationParticlePlayer: " + effect.getName();
+        String info = "TargetLocationParticlePlayer: " + effect.getName();
+        if(fixedPitch) info += ", fp = " + pitch;
+        if(yOffset != 0.0) info += ", yo = " + yOffset;
+        if(stepsPerTick != 1.0) info += ", step = " + stepsPerTick;
+        if(speed != 1.0) info += ", speed = " + speed;
+        if(originDir) info += ", od";
+        return info;
     }
-    
+
     public void process(PlayerInteractEvent event) {
 	Player player = event.getPlayer();
         Entity target = PlayerUtil.findTargetEntity(player, player.getNearbyEntities(10, 10, 10), 1000);
         if(target == null) return;
         Location loc = target.getLocation().clone();
         loc.setY(loc.getY() + yOffset);
+        if(originDir) {
+            Vector dir = player.getLocation().toVector().subtract(loc.toVector());
+            loc.setDirection(dir);
+        }
         if(fixedPitch) loc.setPitch((float)pitch);
-        new ParticleEffectTimedRunnable(Effects.getInstance(), player, effect, stepsPerTick, speed, loc).runTaskTimer(Effects.getInstance(), 1, 1);
+        new ParticleEffectTimedRunnable(Effects.getInstance(), player, effect, stepsPerTick, speed, loc, false, false, false).runTaskTimer(Effects.getInstance(), 1, 1);
     }
 
     public boolean usesEffect(Effect effect) {

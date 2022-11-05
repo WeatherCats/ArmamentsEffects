@@ -40,7 +40,7 @@ public class SitEffect extends EffectWithLivingEntity
         }
     }
 
-    public List<String> getInfo() {
+    public List<String> getInfo(boolean detailed) {
         return getInfoBase();
     }
 

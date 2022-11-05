@@ -21,6 +21,7 @@ public class SerializationRegistration
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.MoveHookPlayerLocation.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.ProjectileLaunchHookParticlePlayer.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.ProjectileLaunchHookPlayerLocation.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.managers.CommandWithLivingEntityEffect.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.CommandWithLocationEffect.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.ParticleEffect.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.ParticleEffectComponent.class);
