@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 @SerializableAs("RemoveLivingEntityEffect")
 public class RemoveLivingEntityEffect extends EffectWithLivingEntity
@@ -22,7 +23,7 @@ public class RemoveLivingEntityEffect extends EffectWithLivingEntity
         return getSerializationBase();
     }
 
-    public void play(LivingEntity entity) {
+    public void play(LivingEntity entity, Event event) {
         if(!(entity instanceof Player))
             entity.remove();
     }

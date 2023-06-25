@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffectType;
 
 @SerializableAs("PotionEffect")
@@ -53,7 +54,7 @@ public class PotionEffect extends EffectWithLivingEntity
         return ret;
     }
 
-    public void play(LivingEntity entity) {
+    public void play(LivingEntity entity, Event event) {
         entity.addPotionEffect(new org.bukkit.potion.PotionEffect(effectType, duration, amplifier));
     }
 

@@ -166,3 +166,14 @@ target/
 target/classes/kipperorigin/armamentseffects/effects/AE_EffectParticle$1.class
 *.class
 target/classes/kipperorigin/armamentseffects/effects/AE_EffectParticle$1.class
+*.classpath
+.project
+*.prefs
+target/
+target
+/target
+/target/
+.idea
+CVTools.iml
+.DS_Store
+

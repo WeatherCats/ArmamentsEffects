@@ -34,7 +34,7 @@ public class DamageOtherEntityHookTargetEntity implements DamageOtherEntityHook
     }
     
     public void process(EntityDamageByEntityEvent event) {
-        effect.play((LivingEntity) event.getEntity());
+        effect.play((LivingEntity) event.getEntity(), event);
     }
 
     public boolean usesEffect(Effect effect) {

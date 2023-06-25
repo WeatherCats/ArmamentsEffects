@@ -40,7 +40,7 @@ public class InteractHookTargetEntity implements InteractHook
 
         if(target == null) return;
 
-        effect.play(target);
+        effect.play(target, event);
     }
 
     public boolean usesEffect(Effect effect) {

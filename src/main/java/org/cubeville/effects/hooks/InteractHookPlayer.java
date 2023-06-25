@@ -8,6 +8,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.cubeville.effects.managers.Effect;
 import org.cubeville.effects.managers.EffectManager;
 import org.cubeville.effects.managers.EffectWithLivingEntity;
+import org.cubeville.effects.managers.SpawnFrogWithLivingEntityEffect;
 
 @SerializableAs("InteractHookPlayer")
 public class InteractHookPlayer implements InteractHook
@@ -33,7 +34,7 @@ public class InteractHookPlayer implements InteractHook
     }
 
     public void process(PlayerInteractEvent event) {
-        effect.play(event.getPlayer());
+        effect.play(event.getPlayer(), event);
     }
 
     public boolean usesEffect(Effect effect) {

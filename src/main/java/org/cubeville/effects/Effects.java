@@ -21,6 +21,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.cubeville.commons.commands.CommandParser;
 import org.cubeville.effects.commands.*;
+import org.cubeville.effects.commands.EffectImportComponent;
+import org.cubeville.effects.commands.HookCreateInteractTargetEntityCommand;
 import org.cubeville.effects.registry.Registry;
 import org.cubeville.effects.managers.EventListener;
 import org.cubeville.effects.managers.EffectManager;
@@ -215,5 +217,6 @@ public class Effects extends JavaPlugin {
         commandParser.addCommand(new PermissionAddCommand());
         commandParser.addCommand(new PermissionListCommand());
         commandParser.addCommand(new PermissionRemoveCommand());
+        commandParser.addCommand(new EffectCreateSpawnFrogWithLivingEntityCommand());
     }
 }

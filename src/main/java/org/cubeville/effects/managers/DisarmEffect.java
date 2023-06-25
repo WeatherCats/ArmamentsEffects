@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 public class DisarmEffect extends EffectWithLivingEntity {
 
@@ -41,7 +42,7 @@ public class DisarmEffect extends EffectWithLivingEntity {
     }
 
     @Override
-    public void play(LivingEntity entity) {
+    public void play(LivingEntity entity, Event event) {
         if (!(entity instanceof Player)) return;
         Player player = (Player) entity;
         if (offhand) {

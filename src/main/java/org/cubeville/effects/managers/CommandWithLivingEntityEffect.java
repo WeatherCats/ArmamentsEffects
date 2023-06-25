@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 @SerializableAs("CommandWithLivingEntityEffect")
 public class CommandWithLivingEntityEffect extends EffectWithLivingEntity
@@ -29,7 +30,7 @@ public class CommandWithLivingEntityEffect extends EffectWithLivingEntity
         return ret;
     }
 
-    public void play(LivingEntity entity) {
+    public void play(LivingEntity entity, Event event) {
         String c = command;        
         if(c.contains("%player%") && (entity instanceof Player)) {
             Player p = (Player) entity;

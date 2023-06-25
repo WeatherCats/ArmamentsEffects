@@ -9,6 +9,7 @@ import org.bukkit.configuration.serialization.SerializableAs;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.Event;
 
 @SerializableAs("SitEffect")
 public class SitEffect extends EffectWithLivingEntity
@@ -21,7 +22,7 @@ public class SitEffect extends EffectWithLivingEntity
         return new HashMap<>();
     }
 
-    public void play(LivingEntity entity) {
+    public void play(LivingEntity entity, Event event) {
         if(entity.isInsideVehicle()) {
             Entity carrier = entity.getVehicle();
             //if(carrier instanceof Arrow) {

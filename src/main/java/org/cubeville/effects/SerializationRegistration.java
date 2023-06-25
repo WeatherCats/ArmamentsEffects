@@ -42,5 +42,6 @@ public class SerializationRegistration
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.sources.value.SinewaveValueSource.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.sources.value.RandomValueSource.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.registry.RegistryHook.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.managers.SpawnFrogWithLivingEntityEffect.class);
     }
 }

@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.util.Vector;
 
 import org.cubeville.effects.Effects;
@@ -49,7 +50,7 @@ public class BrokenWandEffect extends EffectWithLivingEntity
         return ret;
     }
 
-    public void play(LivingEntity entity) {
+    public void play(LivingEntity entity, Event event) {
         if(!(entity instanceof Player)) return;
         if(rnd.nextInt(100) < webProbability) { // webbed
             final int x = entity.getLocation().getBlockX();
