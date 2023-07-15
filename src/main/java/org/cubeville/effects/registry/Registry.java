@@ -167,6 +167,9 @@ public class Registry implements ConfigurationSerializable
         else if(hook instanceof BlockBreakHook) {
             ret = (Map)blockBreakEvents;
         }
+        else if(hook instanceof ProjectileHitHook) {
+            ret = (Map)projectileHitEvents;
+        }
         return ret;
     }
     
@@ -228,6 +231,10 @@ public class Registry implements ConfigurationSerializable
 
     public void deregisterProjectileLaunchEvent(String name, int index) {
         deregisterEvent(projectileLaunchEvents, name, index);
+    }
+
+    public void deregisterProjectileHitEvent(String name, int index) {
+        deregisterEvent(projectileHitEvents, name, index);
     }
 
     public void deregisterMoveEvent(String name, int index) {
@@ -337,7 +344,7 @@ public class Registry implements ConfigurationSerializable
     }
 
     public void processProjectileHitEvent(ProjectileHitEvent event) {
-        Projectile projectile = event.getEntity();
+        /*Projectile projectile = event.getEntity();
         UUID uuid = projectile.getUniqueId();
         if(projectileHitActions.containsKey(uuid)) {
             for(ProjectileTrackerAction action: projectileHitActions.get(uuid)) {
@@ -345,11 +352,21 @@ public class Registry implements ConfigurationSerializable
             }
         }
         if(projectileDamageActions.containsKey(uuid)) {
-            Bukkit.getScheduler().runTask(Effects.getInstance(), new Runnable() {
-                    public void run() {
-                        projectileDamageActions.remove(uuid);
-                    }
-                });
+            Bukkit.getScheduler().runTask(Effects.getInstance(), () -> projectileDamageActions.remove(uuid));
+        }*/
+        if(!(event.getEntity().getShooter() instanceof Player)) return;
+        Player player = (Player) event.getEntity().getShooter();
+        String itemName = ItemUtil.getItemName(player.getInventory().getItemInMainHand());
+        if(itemName == null) return;
+
+        if(projectileHitEvents.containsKey(itemName)) {
+            RegistryHook<ProjectileHitHook> rh = projectileHitEvents.get(itemName);
+            boolean isPermitted = rh.isPermitted(player.getUniqueId());
+            for(ProjectileHitHook hook : rh.getHooks()) {
+                if(isPermitted || hook.alwaysActive()) {
+                    hook.process(event);
+                }
+            }
         }
     }
 

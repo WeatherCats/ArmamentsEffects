@@ -1,6 +1,7 @@
 package org.cubeville.effects;
 
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.cubeville.effects.hooks.ProjectileLaunchHookCancelEvent;
 
 public class SerializationRegistration
 {
@@ -21,6 +22,8 @@ public class SerializationRegistration
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.MoveHookPlayerLocation.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.ProjectileLaunchHookParticlePlayer.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.ProjectileLaunchHookPlayerLocation.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.ProjectileLaunchHookCancelEvent.class);
+        ConfigurationSerialization.registerClass(org.cubeville.effects.hooks.ProjectileHitHookHitLocation.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.CommandWithLivingEntityEffect.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.CommandWithLocationEffect.class);
         ConfigurationSerialization.registerClass(org.cubeville.effects.managers.ParticleEffect.class);
