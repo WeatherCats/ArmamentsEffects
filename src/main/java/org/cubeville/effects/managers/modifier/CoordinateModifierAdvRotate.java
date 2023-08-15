@@ -61,7 +61,7 @@ public class CoordinateModifierAdvRotate implements CoordinateModifier
     }
 
     public String getInfo() {
-	return "Advanced Rotate " + direction + " " + source.getInfo();
+	return "Advanced Rotate " + direction + ": " + source.getInfo();
     }
 
 }
